@@ -21,6 +21,8 @@ For these instructions we will use a scenario in which you start working on a tt
 
 ## Getting started
 
+### Repositories setup
+
 We highly recommend that you keep your analysis code in a git repository, while (optionally) downloading updates in the TEA framework from our repository. In order to do that:
 
 1. Create your analysis repository on github (go to your profile -> repositories -> new, pick a suitable name and create). Don't add any README, licence or gitignore.
@@ -53,6 +55,28 @@ git pull --rebase upstream main
 ```
 
 Keep in mind that if you modify parts for the framework itself, you will have to resolve conflicts when updating TEA.
+
+### Conda environment
+
+To make sure you're using supported versions of Python and ROOT, we recommend to craete a conda environment for TEA:
+
+```bash
+conda create -c conda-forge --name tea root python=3.8
+conda activate tea
+```
+
+### Building and running the project
+
+Building TEA together with your analysis files is very straighforward:
+
+```
+mkdir build
+cd build
+cmake ..
+make -j
+```
+
+Once compiled, you can execute any of the apps directly from the `build` directory, e.g. `./skimmer ../configs/skimmer_config.py`.
 
 ## General concepts
 
