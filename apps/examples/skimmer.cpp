@@ -8,7 +8,6 @@
 #include "ExtensionsHelpers.hpp"
 #include "EventWriter.hpp"
 #include "CutFlowManager.hpp"
-#include "TTAlpsSelections.hpp"
 
 using namespace std;
 
@@ -23,18 +22,17 @@ int main(int argc, char **argv) {
   auto eventReader = make_shared<EventReader>(configPath);
   auto eventWriter = make_shared<EventWriter>(configPath, eventReader);
   auto cutFlowManager = make_unique<CutFlowManager>(eventReader, eventWriter);
-  auto ttAlpsSelections = make_unique<TTAlpsSelections>(configPath);
-
+  
   for (int i_event = 0; i_event < eventReader->GetNevents(); i_event++) {    
     auto event = eventReader->GetEvent(i_event);
 
     cutFlowManager->UpdateCutFlow("0_initial");
 
-    if(!ttAlpsSelections->PassesTriggerSelections(event)) continue;
-    cutFlowManager->UpdateCutFlow("1_trigger");
+    // if(!ttAlpsSelections->PassesTriggerSelections(event)) continue;
+    // cutFlowManager->UpdateCutFlow("1_trigger");
 
-    if(!ttAlpsSelections->PassesSingleLeptonSelections(event)) continue;
-    cutFlowManager->UpdateCutFlow("2_singleLeptonTTbar");
+    // if(!ttAlpsSelections->PassesSingleLeptonSelections(event)) continue;
+    // cutFlowManager->UpdateCutFlow("2_singleLeptonTTbar");
     
     eventWriter->AddCurrentEvent("Events");
   }

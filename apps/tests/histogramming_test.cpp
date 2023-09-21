@@ -25,9 +25,8 @@ int main() {
 
   for (int iEvent = 0; iEvent < 1000; iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
-    auto ttAlpsEvent = asTTAlpsEvent(event);
-
-    info() << ttAlpsEvent->GetTTbarEventCategory() << endl;
+    // auto ttAlpsEvent = asTTAlpsEvent(event);
+    // info() << ttAlpsEvent->GetTTbarEventCategory() << endl;
 
     auto muons = event->GetCollection("Muon");
 

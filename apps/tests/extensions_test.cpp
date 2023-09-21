@@ -23,9 +23,9 @@ int main() {
   for (int iEvent = 0; iEvent < 10; iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
 
-    auto ttAlpsEvent = asTTAlpsEvent(event);
+    // auto ttAlpsEvent = asTTAlpsEvent(event);
 
-    info() << ttAlpsEvent->GetTTbarEventCategory() << endl;
+    // info() << ttAlpsEvent->GetTTbarEventCategory() << endl;
 
     // auto physicsObjects = event->GetCollection("GenPart");
 
