@@ -55,6 +55,7 @@ git pull --rebase upstream main
 ```
 
 Keep in mind that if you modify parts for the framework itself, you will have to resolve conflicts when updating TEA.
+You can (and should!) modify README.md though - it will be ignored when pulling changes from upstream.
 
 ### Conda environment
 
