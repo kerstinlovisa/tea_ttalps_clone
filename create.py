@@ -81,7 +81,7 @@ def main():
     ),
     "app":(
       ("templates/app.template.cpp", f"apps/{args.path}/{class_name}.cpp"),
-      ("templates/config.template.py", f"configs/{args.path}/{class_name}.py"),
+      ("templates/config.template.py", f"configs/{args.path}/{class_name}_config.py"),
     ),
   }
   
