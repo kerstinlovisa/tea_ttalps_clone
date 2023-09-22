@@ -1,3 +1,3 @@
-theme: Architect
+theme: Hacker
 
 #### Welcome to TEA documentation website!
