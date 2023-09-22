@@ -4,13 +4,18 @@ from ROOT import TFile
 import importlib
 import sys
 
-def main():
 
+def getConfig():
   configPath = sys.argv[1]
   if (".py" in configPath):
     configPath = configPath[:-3]
   config = importlib.import_module(configPath)
-  
+  return config
+
+
+def main():
+
+  config = getConfig()
   plotter = HistogramPlotter(config)
   
   names = ("signal", "background", "data")
