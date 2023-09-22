@@ -4,6 +4,7 @@
 #include "EventReader.hpp"
 #include "HistogramsHandler.hpp"
 #include "TTAlpsHistogramFiller.hpp"
+#include "ExtensionsHelpers.hpp"
 
 using namespace std;
 
@@ -32,8 +33,16 @@ int main(int argc, char **argv) {
 
     histogramsFiller->FillDefaultVariables(event);
     histogramsFiller->FillCustomTTAlpsVariables(event);
-  }
 
+    auto ttAlpsEvent = asTTAlpsEvent(event);
+    string ttbarCategory = ttAlpsEvent->GetTTbarEventCategory();
+    histogramsFiller->FillTriggerVariables(event, "inclusive");
+    histogramsFiller->FillTriggerVariables(event, ttbarCategory);
+    histogramsFiller->FillTriggerVariablesPerTriggerSet(event, "inclusive");
+    histogramsFiller->FillTriggerVariablesPerTriggerSet(event, ttbarCategory);
+  }
+  
+  histogramsFiller->FillTriggerEfficiencies();
   histogramsFiller->FillCutFlow(cutFlowManager);
   histogramsHandler->SaveHistograms();
 
