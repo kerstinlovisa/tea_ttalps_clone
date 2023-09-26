@@ -3,6 +3,9 @@
 //  Created by Jeremi Niedziela on 04/08/2023.
 
 #include "Event.hpp"
+#include "Helpers.hpp"
+
+using namespace std;
 
 #include "Helpers.hpp"
 
