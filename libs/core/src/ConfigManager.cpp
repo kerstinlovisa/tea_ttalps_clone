@@ -110,6 +110,16 @@ void ConfigManager::GetValue<int>(std::string name, int &outputValue) {
 }
 
 template <>
+void ConfigManager::GetValue<bool>(std::string name, bool &outputValue) {
+  PyObject *pythonValue = GetPythonValue(name);
+  if (!pythonValue || (!PyUnicode_Check(pythonValue) && !PyBool_Check(pythonValue))) {
+    error() << "Failed retriving python value (int)\n";
+    return;
+  }
+  outputValue = PyLong_AsLong(pythonValue);
+}
+
+template <>
 void ConfigManager::GetValue<float>(std::string name, float &outputValue) {
   PyObject *pythonValue = GetPythonValue(name);
   if (!pythonValue || !PyFloat_Check(pythonValue)) {
