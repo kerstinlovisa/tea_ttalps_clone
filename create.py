@@ -22,18 +22,18 @@ def replace_string_in_file(file_path, old_string, new_string):
 
 def insert_cast(class_name, type):
   
-  file_path = "libs/extensions/include/ExtensionsHelpers.hpp"
+  file_path = "libs/user_extensions/include/UserExtensionsHelpers.hpp"
   
   old_string = "#include \"PhysicsObject.hpp\""
   new_string = f"#include \"{class_name}.hpp\"\n"
   new_string += "#include \"PhysicsObject.hpp\""
   replace_string_in_file(file_path, old_string, new_string)
   
-  old_string = "#endif /* ExtensionsHelpers_hpp */"
+  old_string = "#endif /* UserExtensionsHelpers_hpp */"
   new_string = f"inline std::shared_ptr<{class_name}> as{class_name}(const std::shared_ptr<{type}> physicsObject) {{\n"
   new_string += f"  return std::make_shared<{class_name}>(physicsObject);\n"
   new_string += "}\n\n"
-  new_string += "#endif /* ExtensionsHelpers_hpp */"
+  new_string += "#endif /* UserExtensionsHelpers_hpp */"
   
   replace_string_in_file(file_path, old_string, new_string)
   print(f"Added conversion from {type} to {class_name} in libs/extensions/include/ExtensionsHelpers.hpp")
