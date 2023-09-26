@@ -28,22 +28,32 @@ int main(int argc, char **argv) {
 
   auto histogramsFiller = make_unique<TTAlpsHistogramFiller>(configPath, histogramsHandler);
 
+  bool runDefaultHistograms, runTriggerHistograms;
+  config->GetValue("runDefaultHistograms", runDefaultHistograms);
+  config->GetValue("runTriggerHistograms", runTriggerHistograms);
+
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
 
-    histogramsFiller->FillDefaultVariables(event);
-    histogramsFiller->FillCustomTTAlpsVariables(event);
+    if (runDefaultHistograms) {
+      histogramsFiller->FillDefaultVariables(event);
+      histogramsFiller->FillCustomTTAlpsVariables(event);
+    }
 
-    auto ttAlpsEvent = asTTAlpsEvent(event);
-    string ttbarCategory = ttAlpsEvent->GetTTbarEventCategory();
-    histogramsFiller->FillTriggerVariables(event, "inclusive");
-    histogramsFiller->FillTriggerVariables(event, ttbarCategory);
-    histogramsFiller->FillTriggerVariablesPerTriggerSet(event, "inclusive");
-    histogramsFiller->FillTriggerVariablesPerTriggerSet(event, ttbarCategory);
+    if (runTriggerHistograms) {
+      auto ttAlpsEvent = asTTAlpsEvent(event);
+      string ttbarCategory = ttAlpsEvent->GetTTbarEventCategory();
+      histogramsFiller->FillTriggerVariables(event, "inclusive");
+      histogramsFiller->FillTriggerVariables(event, ttbarCategory);
+      histogramsFiller->FillTriggerVariablesPerTriggerSet(event, "inclusive");
+      histogramsFiller->FillTriggerVariablesPerTriggerSet(event, ttbarCategory);
+    }
   }
+
+
+  if(runTriggerHistograms) histogramsFiller->FillTriggerEfficiencies();
+  if(runDefaultHistograms) histogramsFiller->FillCutFlow(cutFlowManager);
   
-  histogramsFiller->FillTriggerEfficiencies();
-  histogramsFiller->FillCutFlow(cutFlowManager);
   histogramsHandler->SaveHistograms();
 
   return 0;
