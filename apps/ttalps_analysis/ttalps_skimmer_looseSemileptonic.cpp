@@ -3,7 +3,7 @@
 #include "Event.hpp"
 #include "EventReader.hpp"
 #include "EventWriter.hpp"
-#include "ExtensionsHelpers.hpp"
+#include "UserExtensionsHelpers.hpp"
 #include "HistogramsHandler.hpp"
 #include "Profiler.hpp"
 #include "TTAlpsSelections.hpp"
@@ -26,6 +26,8 @@ int main(int argc, char **argv) {
   auto eventReader = make_shared<EventReader>(configPath);
   auto eventWriter = make_shared<EventWriter>(configPath, eventReader);
   auto cutFlowManager = make_shared<CutFlowManager>(eventReader, eventWriter);
+  
+  auto eventProcessor = make_unique<EventProcessor>(configPath);
   auto ttAlpsSelections = make_unique<TTAlpsSelections>(configPath);
   
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
@@ -33,7 +35,7 @@ int main(int argc, char **argv) {
 
     cutFlowManager->UpdateCutFlow("initial");
 
-    if(!ttAlpsSelections->PassesTriggerSelections(event)) continue;
+    if(!eventProcessor->PassesTriggerSelections(event)) continue;
     cutFlowManager->UpdateCutFlow("trigger");
 
     if(!ttAlpsSelections->PassesLooseSemileptonicSelections(event, cutFlowManager)) continue;
