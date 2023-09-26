@@ -4,8 +4,6 @@
 
 #include "EventProcessor.hpp"
 
-#include "ExtensionsHelpers.hpp"
-
 using namespace std;
 
 EventProcessor::EventProcessor(string configPath) {
@@ -13,19 +11,48 @@ EventProcessor::EventProcessor(string configPath) {
     config = std::make_unique<ConfigManager>(configPath);
     try {
       config->GetVector("triggerSelection", triggerNames);
-    }
-    catch (const Exception& e){
+    } catch (const Exception &e) {
       warn() << "Couldn't read triggerSelection from config file ";
       warn() << "(which may be fine if you're not tyring to apply trigger selectinon)\n";
     }
 
     try {
       config->GetSelections(eventSelections);
-    }
-    catch (const Exception& e){
+    } catch (const Exception &e) {
       warn() << "Couldn't read eventSelections from config file ";
     }
   }
+}
+
+bool EventProcessor::PassesTriggerSelections(const shared_ptr<Event> event) {
+  for (auto &triggerName : triggerNames) {
+    bool passes = false;
+    try {
+      passes = event->Get(triggerName);
+    } catch (Exception &) {
+      if (find(triggerWarningsPrinted.begin(), triggerWarningsPrinted.end(), triggerName) == triggerWarningsPrinted.end()) {
+        warn() << "Trigger not present: " << triggerName << "\n";
+        triggerWarningsPrinted.push_back(triggerName);
+      }
+    }
+    if (passes) return true;
+  }
+  return false;
+}
+
+bool EventProcessor::PassesEventSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  for (auto &[cutName, cutValues] : eventSelections) {
+    if (cutName == "MET_pt") {
+      float metPt = event->Get("MET_pt");
+      if (!inRange(metPt, cutValues)) return false;
+      cutFlowManager->UpdateCutFlow("MetPt");
+    } else {
+      if (!inRange(event->GetCollectionSize(cutName.substr(1)), cutValues)) return false;
+      cutFlowManager->UpdateCutFlow(cutName);
+    }
+  }
+
+  return true;
 }
 
 float EventProcessor::GetMaxPt(shared_ptr<Event> event, string collectionName) {
@@ -49,34 +76,4 @@ float EventProcessor::GetHt(shared_ptr<Event> event, string collectionName) {
   return ht;
 }
 
-void EventProcessor::AddExtraCollections(shared_ptr<Event> event) {
-  map<string, ExtraCollection> extraEventCollections;
-  config->GetExtraEventCollections(extraEventCollections);
 
-  for (auto &[name, extraCollection] : extraEventCollections) {
-    auto newCollection = make_shared<PhysicsObjects>();
-
-    for (auto inputCollectionName : extraCollection.inputCollections) {
-      auto inputCollection = event->GetCollection(inputCollectionName);
-
-      int n = 0;
-      for (auto physicsObject : *inputCollection) {
-        n++;
-
-        bool passes = true;
-
-        for (auto &[branchName, cuts] : extraCollection.selections) {
-          float value = physicsObject->Get(branchName);
-
-          if (value < cuts.first || value > cuts.second) {
-            passes = false;
-            break;
-          }
-        }
-
-        if (passes) newCollection->push_back(physicsObject);
-      }
-    }
-    event->AddExtraCollection(name, newCollection);
-  }
-}

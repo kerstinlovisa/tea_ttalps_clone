@@ -7,11 +7,9 @@
 
 #include "ConfigManager.hpp"
 #include "Event.hpp"
-#include "GenParticle.hpp"
 #include "Helpers.hpp"
 #include "PhysicsObject.hpp"
-
-struct FinalState;
+#include "CutFlowManager.hpp"
 
 class EventProcessor {
  public:
@@ -20,17 +18,14 @@ class EventProcessor {
   float GetMaxPt(std::shared_ptr<Event> event, std::string collectionName);
   float GetHt(std::shared_ptr<Event> event, std::string collectionName);
 
- protected:
-  std::vector<std::string> triggerNames;
-  std::map<std::string, std::pair<float, float>> eventSelections;
-  
-  void AddExtraCollections(std::shared_ptr<Event> event);
+  bool PassesTriggerSelections(const std::shared_ptr<Event> event);
+  bool PassesEventSelections(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
 
  private:
   std::unique_ptr<ConfigManager> config;
-
-  std::vector<int> GetTopIndices(std::shared_ptr<Event> event);
-  std::vector<int> GetBottomIndices(std::shared_ptr<Event> event);
+  std::vector<std::string> triggerNames;
+  std::map<std::string, std::pair<float, float>> eventSelections;
+  std::vector<std::string> triggerWarningsPrinted;
 };
 
 #endif /* EventProcessor_hpp */

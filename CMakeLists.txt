@@ -21,11 +21,13 @@ find_package(Python3 REQUIRED)
 find_package(PythonLibs REQUIRED)
 
 set(LIBRARIES_DIR libs)
-set(LIBRARIES 
-    core
-    extensions
-    histogramming
-)
+
+if(TARGET user_extensions)
+    set(LIBRARIES  core extensions histogramming user_extensions)
+else()
+    set(LIBRARIES  core extensions histogramming)
+endif()
+
 foreach(LIBRARY ${LIBRARIES})
     add_subdirectory("${LIBRARIES_DIR}/${LIBRARY}")
     include_directories("${LIBRARIES_DIR}/${LIBRARY}/include")
@@ -41,6 +43,11 @@ foreach(APP_SOURCE ${APP_SOURCES})
     get_filename_component(APP_NAME ${APP_SOURCE} NAME_WE)
     add_executable(${APP_NAME} ${APP_SOURCE})
     target_link_libraries(${APP_NAME} core extensions histogramming ${ROOT_LIBRARIES} ${PYTHON_LIBRARIES})
+
+    if(TARGET user_extensions)
+        target_link_libraries(${APP_NAME} user_extensions)
+    endif()
+
     set_property(TARGET ${APP_NAME} PROPERTY CXX_STANDARD 17)
     install(TARGETS ${APP_NAME} DESTINATION .)
 endforeach()
