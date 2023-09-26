@@ -30,10 +30,8 @@ def main():
   input_files = {}
   
   for name, file_info in config.files.items():
-    file_name, file_type = file_info
-    input_path = config.input_paths[file_type]
-    skim = config.skim
-    input_files[name] = TFile.Open(input_path+"/"+name+"/"+skim+"/"+file_name, "READ")
+    file_path, file_type = file_info
+    input_files[name] = TFile.Open(file_path, "READ")
 
     plotter.addHistsToStacks(input_files, name, hists, legends, file_type)
     plotter.addHistsToStacks(input_files, name, hists_eff, legends_eff, file_type, True)

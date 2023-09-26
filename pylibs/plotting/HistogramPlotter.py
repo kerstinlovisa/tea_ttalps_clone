@@ -194,13 +194,13 @@ class HistogramPlotter:
     cross_section = 0
     
     for sample_name, file_info in self.config.files.items():
-      file_name, file_type = file_info
+      file_path, file_type = file_info
       
       if file_type != "background":
         continue
       
-      input_path = self.config.input_paths[file_type]
-      file = TFile.Open(input_path+"/"+sample_name+"/"+self.config.skim+"/"+file_name, "READ")
+      
+      file = TFile.Open(file_path, "READ")
 
       hist_name, _ = next(iter(self.config.variables.items()))
       hist = file.Get(hist_name) 

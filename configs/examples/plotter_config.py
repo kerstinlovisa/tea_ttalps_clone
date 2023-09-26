@@ -4,20 +4,14 @@ from ROOT import TColor
 base_path = "../samples/"
 skim = ""
 
-input_paths = {
-  "signal": f"{base_path}/signals/",
-  "background": f"{base_path}/backgrounds/",
-  "data": f"{base_path}/collision_data/",
-}
-
 output_path = "../plots"
 
 # data&signals must be listed after backgrounds for now
 files = {
   #name                  filename     type(signal/background)
-  "my_background": ("nanoAOD_hists.root", "background"),
-  "my_signal": ("nanoAOD_hists.root", "signal"),
-  "my_data": ("nanoAOD_hists.root", "data"),
+  "my_background": (f"{base_path}/backgrounds/nanoAOD_hists.root", "background"),
+  "my_signal": (f"{base_path}/signals/nanoAOD_hists.root", "signal"),
+  "my_data": (f"{base_path}/data/nanoAOD_hists.root", "data"),
 }
 
 luminosity_2018 = 63670. # pb^-1
