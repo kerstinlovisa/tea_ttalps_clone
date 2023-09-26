@@ -1,7 +1,8 @@
 import ROOT
 from ROOT import TColor
 
-base_path = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/"
+base_path = "../samples/"
+skim = ""
 
 input_paths = {
   "signal": f"{base_path}/signals/",
@@ -11,44 +12,35 @@ input_paths = {
 
 output_path = "../plots"
 
-skim = "skimmed_looseSemileptonic"
-
 # data&signals must be listed after backgrounds for now
 files = {
   #name                  filename     type(signal/background)
-  "ttZJets": ("EB2F627D-0570-7C4C-A561-C29B6E4F123A_hists.root", "background"),
-  "ttHToMuMu": ("D41A5AFC-EC31-A64F-9E87-6F1C22ED6DCB_hists.root", "background"),
-  
-  "tta_mAlp-0p35GeV": ("tta_mAlp-0p35GeV_nEvents-100000_hists.root", "signal"),
-  "SingleMuon2018": ("36ED9511-D46A-0C4F-A485-C2DF1C874906_hists.root", "data"),
+  "my_background": ("nanoAOD_hists.root", "background"),
+  "my_signal": ("nanoAOD_hists.root", "signal"),
+  "my_data": ("nanoAOD_hists.root", "data"),
 }
 
 luminosity_2018 = 63670. # pb^-1
 
 cross_sections = {
   #name                   cross section [pb]
-  "ttZJets": 0.4611,
-  "ttHToMuMu": 0.5269, 
-  "tta_mAlp-0p35GeV": 1,
-  "SingleMuon2018": 1,
+  "my_background": 0.4, 
+  "my_signal": 1,
+  "my_data": 1,
 }
 
 lines = {
   #name                   color
-  "ttZJets": [41, ROOT.kSolid],
-  "ttHToMuMu": [50, ROOT.kSolid],
-  
-  "tta_mAlp-0p35GeV": [TColor.GetColor(230, 159, 0), ROOT.kSolid],
-  "SingleMuon2018": [ROOT.kBlack, ROOT.kSolid],
+  "my_background": [41, ROOT.kSolid],
+  "my_signal": [TColor.GetColor(230, 159, 0), ROOT.kSolid],
+  "my_data": [ROOT.kBlack, ROOT.kSolid],
 } 
 
 legends = {
-  #name                   color
-  "ttZJets": "ttZJets",
-  "ttHToMuMu": "ttHToMuMu",
-
-  "tta_mAlp-0p35GeV":"tta_mAlp-0p35GeV",
-  "SingleMuon2018": "SingleMuon2018",
+  #name                   title
+  "my_background": "my_background",
+  "my_signal":"my_signal",
+  "my_data": "my_data",
 }
 
 legend_types = {

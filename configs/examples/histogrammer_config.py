@@ -1,8 +1,8 @@
 nEvents = -1
 printEveryNevents = 1000
 
-inputFilePath = "/afs/desy.de/user/l/lrygaard/TTALP/ttalps_cms/tta_mAlp-0p35GeV_skimmed_looseSemileptonic.root"
-histogramsOutputFilePath = "./tta_mAlp-0p35GeV_nEvents-100000.root"
+inputFilePath = "../samples/signals/nanoAOD_example.root"
+histogramsOutputFilePath = "../samples/signals/nanoAOD_hists.root"
 
 defaultHistParams = {
 # key              collection    variable      bins    xmin     xmax    outputdir  

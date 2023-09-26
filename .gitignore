@@ -3,3 +3,6 @@ build/*
 plots/*
 
 .vscode/*
+
+samples/signals/*_hists.root
+samples/signals/*/*
