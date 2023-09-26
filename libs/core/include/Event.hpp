@@ -9,6 +9,7 @@
 #include "Multitype.hpp"
 #include "PhysicsObject.hpp"
 #include "Logger.hpp"
+#include "ConfigManager.hpp"
 
 class Event {
  public:
@@ -39,11 +40,7 @@ class Event {
     exit(1);
   }
 
-  inline void AddExtraCollection(std::string name, std::shared_ptr<PhysicsObjects> collection) {
-    
-
-    extraCollections.insert({name, collection});
-  }
+  void AddExtraCollections(std::shared_ptr<ConfigManager> config);
 
  private:
   inline UInt_t GetUint(std::string branchName) { return valuesUint[branchName]; }

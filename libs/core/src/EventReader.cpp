@@ -9,7 +9,7 @@
 using namespace std;
 
 EventReader::EventReader(string configPath) : currentEvent(make_shared<Event>()) {
-  config = make_unique<ConfigManager>(configPath);
+  config = make_shared<ConfigManager>(configPath);
 
   config->GetValue("nEvents", maxEvents);
   config->GetValue("printEveryNevents", printEveryNevents);
@@ -19,6 +19,7 @@ EventReader::EventReader(string configPath) : currentEvent(make_shared<Event>())
   config->GetValue("inputFilePath", inputFilePath);
 
   inputFile = TFile::Open(inputFilePath.c_str());
+
   SetupBranches(inputFilePath);
 }
 
@@ -176,5 +177,8 @@ shared_ptr<Event> EventReader::GetEvent(int iEvent) {
       }
     }
   }
+
+  currentEvent->AddExtraCollections(config);
+
   return currentEvent;
 }

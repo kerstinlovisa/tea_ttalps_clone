@@ -18,7 +18,7 @@ public:
   std::shared_ptr<Event> GetEvent(int iEvent);
 
 private:
-  std::unique_ptr<ConfigManager> config;
+  std::shared_ptr<ConfigManager> config;
 
   int maxEvents;
   int printEveryNevents;

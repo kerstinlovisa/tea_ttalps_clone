@@ -72,7 +72,6 @@ void CutFlowManager::SaveCutFlow() {
     info() << "Input file doesn't contain CutFlow directory yet... will create a new one in the output file.\n";
     eventWriter->outFile->mkdir("CutFlow");
   } 
-  eventWriter->outFile->mkdir("CutFlow");
   eventWriter->outFile->cd("CutFlow");
 
   for (auto &[cutName, sumOfWeights] : weightsAfterCuts) {
