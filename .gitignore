@@ -4,5 +4,5 @@ plots/*
 
 .vscode/*
 
-samples/signals/*_hists.root
-samples/signals/*/*
+samples/*/*_hists.root
+samples/*/*/*
