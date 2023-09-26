@@ -3,11 +3,15 @@
 //  Created by Jeremi Niedziela on 04/08/2023.
 
 #include "Event.hpp"
+
 #include "Helpers.hpp"
 
 using namespace std;
 
-Event::Event() {}
+Event::Event(shared_ptr<ConfigManager> config) 
+{
+  config->GetExtraEventCollections(extraCollectionsDescriptions);
+}
 
 Event::~Event() {}
 
@@ -26,11 +30,8 @@ void Event::Reset() {
   extraCollections.clear();
 }
 
-void Event::AddExtraCollections(shared_ptr<ConfigManager> config) {
-  map<string, ExtraCollection> extraEventCollections;
-  config->GetExtraEventCollections(extraEventCollections);
-
-  for (auto &[name, extraCollection] : extraEventCollections) {
+void Event::AddExtraCollections() {
+  for (auto &[name, extraCollection] : extraCollectionsDescriptions) {
     auto newCollection = make_shared<PhysicsObjects>();
 
     for (auto inputCollectionName : extraCollection.inputCollections) {

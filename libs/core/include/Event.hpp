@@ -13,7 +13,7 @@
 
 class Event {
  public:
-  Event();
+  Event(std::shared_ptr<ConfigManager> config);
   ~Event();
 
   void Reset();
@@ -40,7 +40,7 @@ class Event {
     exit(1);
   }
 
-  void AddExtraCollections(std::shared_ptr<ConfigManager> config);
+  void AddExtraCollections();
 
  private:
   inline UInt_t GetUint(std::string branchName) { return valuesUint[branchName]; }
@@ -66,6 +66,8 @@ class Event {
 
   std::map<std::string, std::shared_ptr<PhysicsObjects>> collections;
   std::map<std::string, std::shared_ptr<PhysicsObjects>> extraCollections;
+
+  std::map<std::string, ExtraCollection> extraCollectionsDescriptions;
 
   friend class EventReader;
   template <typename T>

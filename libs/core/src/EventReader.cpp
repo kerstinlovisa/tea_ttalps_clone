@@ -8,7 +8,7 @@
 
 using namespace std;
 
-EventReader::EventReader(string configPath) : currentEvent(make_shared<Event>()) {
+EventReader::EventReader(string configPath) {
   config = make_shared<ConfigManager>(configPath);
 
   config->GetValue("nEvents", maxEvents);
@@ -18,6 +18,7 @@ EventReader::EventReader(string configPath) : currentEvent(make_shared<Event>())
   string inputFilePath;
   config->GetValue("inputFilePath", inputFilePath);
 
+  currentEvent = make_shared<Event>(config);
   inputFile = TFile::Open(inputFilePath.c_str());
 
   SetupBranches(inputFilePath);
@@ -178,7 +179,7 @@ shared_ptr<Event> EventReader::GetEvent(int iEvent) {
     }
   }
 
-  currentEvent->AddExtraCollections(config);
+  currentEvent->AddExtraCollections();
 
   return currentEvent;
 }
