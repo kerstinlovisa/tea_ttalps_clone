@@ -4,7 +4,7 @@
 #include "EventReader.hpp"
 #include "HistogramsHandler.hpp"
 #include "TTAlpsHistogramFiller.hpp"
-#include "ExtensionsHelpers.hpp"
+#include "UserExtensionsHelpers.hpp"
 
 using namespace std;
 

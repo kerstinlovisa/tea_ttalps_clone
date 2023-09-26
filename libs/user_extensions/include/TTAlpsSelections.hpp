@@ -12,9 +12,9 @@
 #include "Helpers.hpp"
 #include "PhysicsObject.hpp"
 
-class TTAlpsSelections : public EventProcessor {
+class TTAlpsSelections {
  public:
-  TTAlpsSelections(std::string configPath = "") : EventProcessor(configPath) {}
+  TTAlpsSelections(std::string configPath = "");
 
   // Very inclusive semileptonic tt selections. Requires:
   // - at least one good lepton (allows for additional leptons)
@@ -37,14 +37,13 @@ class TTAlpsSelections : public EventProcessor {
   // - at least 4 good jets
   // - at least 1 good b-tagged jet
   // - some amount of MET
-  bool PassesSingleLeptonSelections(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager=nullptr);
+  bool PassesSingleLeptonSelections(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager = nullptr);
 
   bool PassesDileptonSelections(const std::shared_ptr<Event> event);
   bool PassesHadronSelections(const std::shared_ptr<Event> event);
-  bool PassesTriggerSelections(const std::shared_ptr<Event> event);
 
  private:
-  std::vector<std::string> triggerWarningsPrinted;
+  std::map<std::string, std::pair<float, float>> eventSelections;
 };
 
 #endif /* TTAlpsSelections_hpp */

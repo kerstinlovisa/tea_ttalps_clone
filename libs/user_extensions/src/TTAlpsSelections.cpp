@@ -8,28 +8,22 @@
 
 using namespace std;
 
-bool TTAlpsSelections::PassesTriggerSelections(const shared_ptr<Event> event) {
-  for (auto &triggerName : triggerNames) {
-    bool passes = false;
+TTAlpsSelections::TTAlpsSelections(string configPath){
+  if (configPath != "") {
+    auto config = std::make_unique<ConfigManager>(configPath);
+    
     try {
-      passes = event->Get(triggerName);
-    } catch (Exception &) {
-      if (find(triggerWarningsPrinted.begin(), triggerWarningsPrinted.end(), triggerName) == triggerWarningsPrinted.end()) {
-        warn() << "Trigger not present: " << triggerName << "\n";
-        triggerWarningsPrinted.push_back(triggerName);
-      }
+      config->GetSelections(eventSelections);
+    } catch (const Exception &e) {
+      warn() << "Couldn't read eventSelections from config file ";
     }
-    if (passes) return true;
   }
-  return false;
 }
 
 bool TTAlpsSelections::PassesLooseSemileptonicSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   float metPt = event->Get("MET_pt");
   if (!inRange(metPt, eventSelections["MET_pt"])) return false;
   cutFlowManager->UpdateCutFlow("MetPt");
-
-  AddExtraCollections(event);
 
   if (!inRange(event->GetCollectionSize("GoodLeptons"), eventSelections["nGoodLeptons"])) return false;
   cutFlowManager->UpdateCutFlow("nGoodLeptons");
@@ -46,8 +40,6 @@ bool TTAlpsSelections::PassesLooseSemileptonicSelections(const shared_ptr<Event>
 bool TTAlpsSelections::PassesSignalLikeSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   float metPt = event->Get("MET_pt");
   if (!inRange(metPt, eventSelections["MET_pt"])) return false;
-
-  AddExtraCollections(event);
 
   if (!inRange(event->GetCollectionSize("GoodLeptons"), eventSelections["nGoodLeptons"])) return false;
   if (!inRange(event->GetCollectionSize("GoodBtaggedJets"), eventSelections["nGoodBtaggedJets"])) return false;
@@ -69,8 +61,6 @@ bool TTAlpsSelections::PassesSignalLikeSelections(const shared_ptr<Event> event,
 bool TTAlpsSelections::PassesSingleLeptonSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   float metPt = event->Get("MET_pt");
   if (!inRange(metPt, eventSelections["MET_pt"])) return false;
-
-  AddExtraCollections(event);
 
   if (!inRange(event->GetCollectionSize("GoodLeptons"), eventSelections["nGoodLeptons"])) return false;
   if (!inRange(event->GetCollectionSize("GoodBtaggedJets"), eventSelections["nGoodBtaggedJets"])) return false;
