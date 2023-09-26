@@ -1,3 +1,5 @@
+from skimmer_config import extraEventCollections
+
 nEvents = -1
 printEveryNevents = 1000
 
