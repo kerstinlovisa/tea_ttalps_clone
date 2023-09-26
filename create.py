@@ -68,16 +68,16 @@ def main():
   
   files_to_copy = {
     "PhysicsObject": (
-      ("templates/PhysicsObject.template.cpp", f"libs/extensions/src/{class_name}.cpp"),
-      ("templates/PhysicsObject.template.hpp", f"libs/extensions/include/{class_name}.hpp"),
+      ("templates/PhysicsObject.template.cpp", f"libs/user_extensions/src/{class_name}.cpp"),
+      ("templates/PhysicsObject.template.hpp", f"libs/user_extensions/include/{class_name}.hpp"),
     ),
     "HistogramFiller": (
-      ("templates/HistogramFiller.template.cpp", f"libs/extensions/src/{class_name}.cpp"),
-      ("templates/HistogramFiller.template.hpp", f"libs/extensions/include/{class_name}.hpp"),
+      ("templates/HistogramFiller.template.cpp", f"libs/user_extensions/src/{class_name}.cpp"),
+      ("templates/HistogramFiller.template.hpp", f"libs/user_extensions/include/{class_name}.hpp"),
     ),
     "Event": (
-      ("templates/Event.template.cpp", f"libs/extensions/src/{class_name}.cpp"),
-      ("templates/Event.template.hpp", f"libs/extensions/include/{class_name}.hpp"),
+      ("templates/Event.template.cpp", f"libs/user_extensions/src/{class_name}.cpp"),
+      ("templates/Event.template.hpp", f"libs/user_extensions/include/{class_name}.hpp"),
     ),
     "app":(
       ("templates/app.template.cpp", f"apps/{args.path}/{class_name}.cpp"),
