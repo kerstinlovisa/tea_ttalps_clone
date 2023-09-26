@@ -2,7 +2,7 @@ nEvents = 100
 printEveryNevents = 1000
 
 runDefaultHistograms = False
-runEfficiencyHistograms = True
+runTriggerHistograms = True
 
 basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds/"
 # basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/signals/"
