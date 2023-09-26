@@ -22,12 +22,14 @@ int main(int argc, char **argv) {
   auto eventReader = make_shared<EventReader>(configPath);
   auto eventWriter = make_shared<EventWriter>(configPath, eventReader);
   auto cutFlowManager = make_shared<CutFlowManager>(eventReader, eventWriter);
+  
+  auto eventProcessor = make_unique<EventProcessor>(configPath);
   auto ttAlpsSelections = make_unique<TTAlpsSelections>(configPath);
 
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
 
-    if(!ttAlpsSelections->PassesTriggerSelections(event)) continue;
+    if(!eventProcessor->PassesTriggerSelections(event)) continue;
     if(!ttAlpsSelections->PassesSignalLikeSelections(event, cutFlowManager)) continue;
     
     eventWriter->AddCurrentEvent("Events");
