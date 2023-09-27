@@ -67,6 +67,7 @@ class Event {
   std::map<std::string, std::shared_ptr<PhysicsObjects>> collections;
   std::map<std::string, std::shared_ptr<PhysicsObjects>> extraCollections;
 
+  bool hasExtraCollections = true;
   std::map<std::string, ExtraCollection> extraCollectionsDescriptions;
 
   friend class EventReader;

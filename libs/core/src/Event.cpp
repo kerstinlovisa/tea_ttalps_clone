@@ -10,7 +10,13 @@ using namespace std;
 
 Event::Event(shared_ptr<ConfigManager> config) 
 {
-  config->GetExtraEventCollections(extraCollectionsDescriptions);
+  try{
+    config->GetExtraEventCollections(extraCollectionsDescriptions);
+  }
+  catch(...){
+    info() << "No extra event collections found" <<endl;
+    hasExtraCollections = false;
+  }
 }
 
 Event::~Event() {}
@@ -31,6 +37,8 @@ void Event::Reset() {
 }
 
 void Event::AddExtraCollections() {
+  if(!hasExtraCollections) return;
+
   for (auto &[name, extraCollection] : extraCollectionsDescriptions) {
     auto newCollection = make_shared<PhysicsObjects>();
 
