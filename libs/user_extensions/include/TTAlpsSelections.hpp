@@ -14,7 +14,7 @@
 
 class TTAlpsSelections {
  public:
-  TTAlpsSelections(std::string configPath = "");
+  TTAlpsSelections(std::shared_ptr<ConfigManager> _config=nullptr);
 
   // Very inclusive semileptonic tt selections. Requires:
   // - at least one good lepton (allows for additional leptons)

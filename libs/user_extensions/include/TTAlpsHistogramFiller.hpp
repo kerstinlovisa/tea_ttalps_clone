@@ -9,7 +9,7 @@
 
 class TTAlpsHistogramFiller {
  public:
-  TTAlpsHistogramFiller(std::string configPath, std::shared_ptr<HistogramsHandler> histogramsHandler_);
+  TTAlpsHistogramFiller(std::shared_ptr<ConfigManager> _config, std::shared_ptr<HistogramsHandler> histogramsHandler_);
   ~TTAlpsHistogramFiller();
 
   void FillTriggerEfficiencies();
