@@ -6,32 +6,30 @@
 
 using namespace std;
 
-TTAlpsHistogramFiller::TTAlpsHistogramFiller(string configPath, shared_ptr<HistogramsHandler> histogramsHandler_)
+TTAlpsHistogramFiller::TTAlpsHistogramFiller(shared_ptr<ConfigManager> _config, shared_ptr<HistogramsHandler> histogramsHandler_)
     : histogramsHandler(histogramsHandler_) {
-  auto configManager = std::make_unique<ConfigManager>(configPath);
-
   eventProcessor = make_unique<EventProcessor>();
 
   try {
-    configManager->GetMap("triggerSets", triggerSets);
+    _config->GetMap("triggerSets", triggerSets);
     for (auto it = triggerSets.begin(); it != triggerSets.end(); ++it) triggerNames.push_back(it->first);
   }
   catch (const Exception& e){
     warn() << "Couldn't read triggerSets from config file ";
-    warn() << "(which may be fine if you're not trying to apply trigger selection)\n";
+    warn() << "(which may be fine if you're not trying to apply trigger selection)" << endl;
   }
 
   try {
-    configManager->GetMap("defaultHistVariables", defaultHistVariables);
+    _config->GetMap("defaultHistVariables", defaultHistVariables);
   }
   catch (const Exception& e){
-    warn() << "Couldn't read defaultHistVariables from config file - no default histograms will be included";
+    warn() << "Couldn't read defaultHistVariables from config file - no default histograms will be included" << endl;
   }
   try {
-    configManager->GetMap("ttalpsHistVariables", ttalpsHistVariables);
+    _config->GetMap("ttalpsHistVariables", ttalpsHistVariables);
   }
   catch (const Exception& e){
-    warn() << "Couldn't read ttalpsHistVariables from config file - no custom ttalps histograms will be included";
+    warn() << "Couldn't read ttalpsHistVariables from config file - no custom ttalps histograms will be included" << endl;
   }
 
 }

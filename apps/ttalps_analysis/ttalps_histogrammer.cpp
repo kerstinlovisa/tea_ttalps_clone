@@ -19,14 +19,14 @@ int main(int argc, char **argv) {
   CheckArgs(argc, argv);
 
   string configPath = argv[1];
-  auto config = make_unique<ConfigManager>(configPath);
+  auto config = make_shared<ConfigManager>(configPath);
 
-  auto eventReader = make_shared<EventReader>(configPath);
+  auto eventReader = make_shared<EventReader>(config);
   auto cutFlowManager = make_shared<CutFlowManager>(eventReader);
-  auto histogramsHandler = make_shared<HistogramsHandler>(configPath);
+  auto histogramsHandler = make_shared<HistogramsHandler>(config);
   histogramsHandler->SetupHistograms();
 
-  auto histogramsFiller = make_unique<TTAlpsHistogramFiller>(configPath, histogramsHandler);
+  auto histogramsFiller = make_unique<TTAlpsHistogramFiller>(config, histogramsHandler);
 
   bool runDefaultHistograms, runTriggerHistograms;
   config->GetValue("runDefaultHistograms", runDefaultHistograms);
