@@ -17,6 +17,7 @@
 !templates/
 
 !.gitignore_user
+!update_tea.sh
 
 # bin/*
 # build/*
