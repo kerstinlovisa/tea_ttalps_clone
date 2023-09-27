@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
 
   // Pass the path to config file as an argument to the app
   string configPath = argv[1];
-  auto config = make_unique<ConfigManager>(configPath);
+  auto config = make_shared<ConfigManager>(configPath);
 
   // Create event reader and writer, which will handle input/output trees for you
   auto eventReader = make_shared<EventReader>(config);
