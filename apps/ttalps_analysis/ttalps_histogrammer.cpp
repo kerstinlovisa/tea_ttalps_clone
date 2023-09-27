@@ -4,6 +4,7 @@
 #include "EventReader.hpp"
 #include "HistogramsHandler.hpp"
 #include "TTAlpsHistogramFiller.hpp"
+#include "HistogramsFiller.hpp"
 #include "UserExtensionsHelpers.hpp"
 
 using namespace std;
@@ -26,7 +27,8 @@ int main(int argc, char **argv) {
   auto histogramsHandler = make_shared<HistogramsHandler>(config);
   histogramsHandler->SetupHistograms();
 
-  auto histogramsFiller = make_unique<TTAlpsHistogramFiller>(config, histogramsHandler);
+  auto histogramFiller = make_unique<HistogramsFiller>(config, histogramsHandler);
+  auto ttalpsHistogramsFiller = make_unique<TTAlpsHistogramFiller>(config, histogramsHandler);
 
   bool runDefaultHistograms, runTriggerHistograms;
   config->GetValue("runDefaultHistograms", runDefaultHistograms);
@@ -36,23 +38,22 @@ int main(int argc, char **argv) {
     auto event = eventReader->GetEvent(iEvent);
 
     if (runDefaultHistograms) {
-      histogramsFiller->FillDefaultVariables(event);
-      histogramsFiller->FillCustomTTAlpsVariables(event);
+      histogramFiller->FillDefaultVariables(event);
+      ttalpsHistogramsFiller->FillCustomTTAlpsVariables(event);
     }
 
     if (runTriggerHistograms) {
       auto ttAlpsEvent = asTTAlpsEvent(event);
       string ttbarCategory = ttAlpsEvent->GetTTbarEventCategory();
-      histogramsFiller->FillTriggerVariables(event, "inclusive");
-      histogramsFiller->FillTriggerVariables(event, ttbarCategory);
-      histogramsFiller->FillTriggerVariablesPerTriggerSet(event, "inclusive");
-      histogramsFiller->FillTriggerVariablesPerTriggerSet(event, ttbarCategory);
+      ttalpsHistogramsFiller->FillTriggerVariables(event, "inclusive");
+      ttalpsHistogramsFiller->FillTriggerVariables(event, ttbarCategory);
+      ttalpsHistogramsFiller->FillTriggerVariablesPerTriggerSet(event, "inclusive");
+      ttalpsHistogramsFiller->FillTriggerVariablesPerTriggerSet(event, ttbarCategory);
     }
   }
 
-
-  if(runTriggerHistograms) histogramsFiller->FillTriggerEfficiencies();
-  if(runDefaultHistograms) histogramsFiller->FillCutFlow(cutFlowManager);
+  if(runTriggerHistograms) ttalpsHistogramsFiller->FillTriggerEfficiencies();
+  if(runDefaultHistograms) histogramFiller->FillCutFlow(cutFlowManager);
   
   histogramsHandler->SaveHistograms();
 

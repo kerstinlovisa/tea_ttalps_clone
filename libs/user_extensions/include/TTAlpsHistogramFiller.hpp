@@ -16,11 +16,8 @@ class TTAlpsHistogramFiller {
   void FillTriggerVariables(const std::shared_ptr<Event> event, std::string prefix = "", std::string suffix = "");
   void FillTriggerVariablesPerTriggerSet(const std::shared_ptr<Event> event, std::string ttbarCategory = "");
 
-  void FillDefaultVariables(const std::shared_ptr<Event> event);
   void FillLeadingPt(const std::shared_ptr<Event> event, std::string histName, std::vector<std::string> variableLocation);
   void FillAllSubLeadingPt(const std::shared_ptr<Event> event, std::string histName, std::vector<std::string> variableLocation);
-
-  void FillCutFlow(const std::shared_ptr<CutFlowManager> cutFlowManager);
 
   void FillCustomTTAlpsVariables(const std::shared_ptr<Event> event);
 
