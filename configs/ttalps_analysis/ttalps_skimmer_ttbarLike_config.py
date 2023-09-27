@@ -1,6 +1,11 @@
 nEvents = -1
 printEveryNevents = 1000
 
+applyLooseSkimming = False
+applyTTbarLikeSkimming = True
+applySignalLikeSkimming = False
+
+
 basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds/"
 # basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/signals/"
 # basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data/"
