@@ -27,19 +27,19 @@ int main(int argc, char **argv) {
   auto config = make_unique<ConfigManager>(configPath);
 
   // Create event reader and writer, which will handle input/output trees for you
-  auto eventReader = make_shared<EventReader>(configPath);
-  auto eventWriter = make_shared<EventWriter>(configPath, eventReader);
+  auto eventReader = make_shared<EventReader>(config);
+  auto eventWriter = make_shared<EventWriter>(config, eventReader);
   
   // Create a CutFlowManager to keep track of how many events passed selections
   auto cutFlowManager = make_shared<CutFlowManager>(eventReader, eventWriter);
 
   // If you want to fill some histograms, use HistogramsHandler to automatically create histograms
   // you need based on the config file, make them accessible to your HistogramFiller and save them at the end
-  auto histogramsHandler = make_shared<HistogramsHandler>(configPath);
+  auto histogramsHandler = make_shared<HistogramsHandler>(config);
   histogramsHandler->SetupHistograms();
 
   // If you also created a HistogramFiller, construct it here to use it later on in the event loop
-  // auto histogramsFiller = make_unique<MyHistogramsFiller>(configPath, histogramsHandler);
+  // auto histogramsFiller = make_unique<MyHistogramsFiller>(config, histogramsHandler);
 
   // In case you're worried about the performance of your app, you can also create a profiler
   Profiler &profiler = Profiler::GetInstance();
