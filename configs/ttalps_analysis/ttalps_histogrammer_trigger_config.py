@@ -1,4 +1,4 @@
-nEvents = 100
+nEvents = -1
 printEveryNevents = 1000
 
 runDefaultHistograms = False
@@ -8,11 +8,11 @@ runTriggerHistograms = True
 # basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/signals/"
 # basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data/"
 
-basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/backgrounds/"
-# basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/signals/"
+# basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/backgrounds/"
+basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/signals/"
 # basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/collision_data/"
 
-sampleName = "ttHToMuMu"
+sampleName = "tta_mAlp-0p35GeV"
 
 skim = ""
 # skim = "skimmed_looseSemileptonic"

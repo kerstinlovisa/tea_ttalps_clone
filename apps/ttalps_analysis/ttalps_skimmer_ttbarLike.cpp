@@ -18,14 +18,14 @@ int main(int argc, char **argv) {
   CheckArgs(argc, argv);
 
   string configPath = argv[1];
-  auto config = make_unique<ConfigManager>(configPath);
+  auto config = make_shared<ConfigManager>(configPath);
 
-  auto eventReader = make_shared<EventReader>(configPath);
-  auto eventWriter = make_shared<EventWriter>(configPath, eventReader);
+  auto eventReader = make_shared<EventReader>(config);
+  auto eventWriter = make_shared<EventWriter>(config, eventReader);
   auto cutFlowManager = make_shared<CutFlowManager>(eventReader, eventWriter);
   
-  auto eventProcessor = make_unique<EventProcessor>(configPath);
-  auto ttAlpsSelections = make_unique<TTAlpsSelections>(configPath);
+  auto eventProcessor = make_unique<EventProcessor>(config);
+  auto ttAlpsSelections = make_unique<TTAlpsSelections>(config);
 
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
