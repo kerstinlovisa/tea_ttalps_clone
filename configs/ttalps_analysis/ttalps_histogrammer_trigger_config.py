@@ -47,7 +47,7 @@ fileNames = {
 
 fileName = fileNames[sampleName]
 inputFilePath = f"{basePath}/{sampleName}/{skim}/{fileName}"
-histsFileName = fileName.replace(".root", "_efficiencyHists.root")
+histsFileName = fileName.replace(".root", "_triggerHists.root")
 histogramsOutputFilePath = f"{basePath}/{sampleName}/{skim}/{histsFileName}"
 
 ttbarCategories = ["inclusive", "hh", "he", "hmu", "htau", "ee", "mumu", "tautau", "emu", "etau", "mutau", "other"]
