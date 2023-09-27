@@ -8,12 +8,10 @@
 
 using namespace std;
 
-TTAlpsSelections::TTAlpsSelections(string configPath){
-  if (configPath != "") {
-    auto config = std::make_unique<ConfigManager>(configPath);
-    
+TTAlpsSelections::TTAlpsSelections(std::shared_ptr<ConfigManager> _config){
+  if (_config) {
     try {
-      config->GetSelections(eventSelections);
+      _config->GetSelections(eventSelections);
     } catch (const Exception &e) {
       warn() << "Couldn't read eventSelections from config file ";
     }
