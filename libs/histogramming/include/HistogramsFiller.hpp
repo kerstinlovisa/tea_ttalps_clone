@@ -13,7 +13,7 @@
 
 class HistogramsFiller {
  public:
-  HistogramsFiller(std::string configPath, std::shared_ptr<HistogramsHandler> histogramsHandler_);
+  HistogramsFiller(std::shared_ptr<ConfigManager> _config, std::shared_ptr<HistogramsHandler> histogramsHandler_);
   ~HistogramsFiller();
 
   void FillDefaultVariables(const std::shared_ptr<Event> event);

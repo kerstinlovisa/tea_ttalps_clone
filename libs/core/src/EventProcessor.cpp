@@ -6,18 +6,17 @@
 
 using namespace std;
 
-EventProcessor::EventProcessor(string configPath) {
-  if (configPath != "") {
-    config = std::make_unique<ConfigManager>(configPath);
+EventProcessor::EventProcessor(shared_ptr<ConfigManager> _config) {
+  if (_config) {
     try {
-      config->GetVector("triggerSelection", triggerNames);
+      _config->GetVector("triggerSelection", triggerNames);
     } catch (const Exception &e) {
-      warn() << "Couldn't read triggerSelection from config file ";
+      warn() << "Couldn't read triggerSelection from _ file ";
       warn() << "(which may be fine if you're not tyring to apply trigger selectinon)\n";
     }
 
     try {
-      config->GetSelections(eventSelections);
+      _config->GetSelections(eventSelections);
     } catch (const Exception &e) {
       warn() << "Couldn't read eventSelections from config file ";
     }

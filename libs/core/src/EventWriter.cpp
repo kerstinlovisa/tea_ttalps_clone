@@ -8,11 +8,10 @@
 
 using namespace std;
 
-EventWriter::EventWriter(string configPath, const std::shared_ptr<EventReader> &eventReader_) : eventReader(eventReader_) {
-  config = make_unique<ConfigManager>(configPath);
-
+EventWriter::EventWriter(std::shared_ptr<ConfigManager> _config, const std::shared_ptr<EventReader> &eventReader_)
+    : eventReader(eventReader_) {
   string outputFilePath;
-  config->GetValue("treeOutputFilePath", outputFilePath);
+  _config->GetValue("treeOutputFilePath", outputFilePath);
 
   SetupOutputTree(outputFilePath);
 }

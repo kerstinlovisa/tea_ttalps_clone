@@ -12,7 +12,7 @@
 
 class EventWriter {
 public:
-  EventWriter(std::string configPath,
+  EventWriter(std::shared_ptr<ConfigManager> _config,
               const std::shared_ptr<EventReader> &eventReader_);
   ~EventWriter();
 
@@ -20,8 +20,6 @@ public:
   void Save();
 
 private:
-  std::unique_ptr<ConfigManager> config;
-
   TFile *outFile;
   std::map<std::string, TTree *> outputTrees;
 

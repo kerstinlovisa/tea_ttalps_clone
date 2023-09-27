@@ -14,11 +14,12 @@ int main(int argc, char **argv) {
   }
 
   string configPath = argv[1];
+  auto config = make_shared<ConfigManager>(configPath);
 
-  auto eventReader = make_shared<EventReader>(configPath);
-  auto histogramsHandler = make_shared<HistogramsHandler>(configPath);
+  auto eventReader = make_shared<EventReader>(config);
+  auto histogramsHandler = make_shared<HistogramsHandler>(config);
   auto cutFlowManager = make_shared<CutFlowManager>(eventReader);
-  auto histogramsFiller = make_unique<HistogramsFiller>(configPath, histogramsHandler);
+  auto histogramsFiller = make_unique<HistogramsFiller>(config, histogramsHandler);
 
   histogramsHandler->SetupHistograms();
 

@@ -10,16 +10,13 @@
 
 using namespace std;
 
-HistogramsHandler::HistogramsHandler(string configPath) {
-  auto configManager = std::make_unique<ConfigManager>(configPath);
-  
-  configManager->GetMap("histTitles", histTitles);
-  configManager->GetMap("histNbins", histNbins);
-  configManager->GetMap("histMin", histMin);
-  configManager->GetMap("histMax", histMax);
-  configManager->GetMap("histOutputDir", histOutputDir);
-
-  configManager->GetValue("histogramsOutputFilePath", outputPath);
+HistogramsHandler::HistogramsHandler(std::shared_ptr<ConfigManager> _config) {
+  _config->GetMap("histTitles", histTitles);
+  _config->GetMap("histNbins", histNbins);
+  _config->GetMap("histMin", histMin);
+  _config->GetMap("histMax", histMax);
+  _config->GetMap("histOutputDir", histOutputDir);
+  _config->GetValue("histogramsOutputFilePath", outputPath);
 }
 
 HistogramsHandler::~HistogramsHandler() {}

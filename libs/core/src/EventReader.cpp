@@ -8,9 +8,7 @@
 
 using namespace std;
 
-EventReader::EventReader(string configPath) {
-  config = make_shared<ConfigManager>(configPath);
-
+EventReader::EventReader(shared_ptr<ConfigManager> _config) : config(_config) {
   config->GetValue("nEvents", maxEvents);
   config->GetValue("printEveryNevents", printEveryNevents);
   if (printEveryNevents == 0) printEveryNevents = -1;

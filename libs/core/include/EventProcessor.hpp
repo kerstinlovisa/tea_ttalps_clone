@@ -13,7 +13,7 @@
 
 class EventProcessor {
  public:
-  EventProcessor(std::string configPath = "");
+  EventProcessor(std::shared_ptr<ConfigManager> _config=nullptr);
   
   float GetMaxPt(std::shared_ptr<Event> event, std::string collectionName);
   float GetHt(std::shared_ptr<Event> event, std::string collectionName);

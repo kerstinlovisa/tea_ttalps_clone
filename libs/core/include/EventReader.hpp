@@ -11,7 +11,7 @@
 
 class EventReader {
 public:
-  EventReader(std::string configPath);
+  EventReader(std::shared_ptr<ConfigManager> _config);
   ~EventReader();
 
   long long GetNevents() const;
