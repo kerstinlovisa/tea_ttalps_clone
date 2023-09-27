@@ -1,8 +1,11 @@
 #!/bin/bash
 
-rm -fr build
-rm -fr bin
-mkdir build
+mkdir -p bin
+mkdir -p build
+
+rm -fr build/*
+rm -fr bin/*
+
 cd build
 cmake ..
 make -j install 
