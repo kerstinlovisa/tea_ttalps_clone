@@ -1,8 +1,27 @@
-bin/*
-build/*
-plots/*
+*
 
-.vscode/*
+!CMakeLists.txt
+!LICENSE
+!apps/examples/
+!apps/tests/
 
-samples/*/*_hists.root
-samples/*/*/*
+!build.sh
+!configs/examples/
+!create.py
+!libs/core/
+!libs/extensions/
+!libs/histogramming/
+
+!pylibs/
+!samples/
+!templates/
+
+
+# bin/*
+# build/*
+# plots/*
+
+# .vscode/*
+
+# samples/*/*_hists.root
+# samples/*/*/*
