@@ -1,15 +1,19 @@
 nEvents = -1
 printEveryNevents = 1000
 
-basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds/"
+applyLooseSkimming = True
+applyTTbarLikeSkimming = False
+applySignalLikeSkimming = False
+
+# basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds/"
 # basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/signals/"
 # basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data/"
 
 # basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/backgrounds/"
-# basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/signals/"
+basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/signals/"
 # basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/collision_data/"
 
-sampleName = "TTbar_inclusive"
+sampleName = "tta_mAlp-0p35GeV"
 
 fileNames = {
     "TTbar_inclusive": "FCA55055-C8F3-C44B-8DCC-6DCBC0B8B992.root",
