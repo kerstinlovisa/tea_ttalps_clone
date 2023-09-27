@@ -5,13 +5,12 @@
 
 using namespace std;
 
-TemplateName::TemplateName(string configPath, shared_ptr<HistogramsHandler> histogramsHandler_)
+TemplateName::TemplateName(std::shared_ptr<ConfigManager> _config, shared_ptr<HistogramsHandler> histogramsHandler_)
     : histogramsHandler(histogramsHandler_) {
-  auto configManager = make_unique<ConfigManager>(configPath);
-
+  
   // Here you can get some parameters from the config file
   // map<string, vector<string>> triggerSets;
-  // configManager->GetMap("triggerSets", triggerSets);
+  // _config->GetMap("triggerSets", triggerSets);
 
   eventProcessor = make_unique<EventProcessor>();
 }
