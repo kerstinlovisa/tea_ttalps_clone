@@ -16,6 +16,7 @@
 !samples/
 !templates/
 
+!.gitignore_user
 
 # bin/*
 # build/*
