@@ -14,7 +14,7 @@ class SampleType(Enum):
 class Sample:
   name: str = ""
   file_path: str = ""
-  sample_type: SampleType = SampleType.background
+  type: SampleType = SampleType.background
   cross_section: float = 1.0
   line_color: int = ROOT.kBlack
   line_style: int = ROOT.kSolid
