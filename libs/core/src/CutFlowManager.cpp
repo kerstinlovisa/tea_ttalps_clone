@@ -21,15 +21,13 @@ CutFlowManager::CutFlowManager(shared_ptr<EventReader> eventReader_, shared_ptr<
 
     while ((key = dynamic_cast<TKey *>(nextKey()))) {
       TObject *obj = key->ReadObj();
-      auto hist = (TH1D*)obj;
+      auto hist = (TH1D *)obj;
       weightsAfterCuts[key->GetName()] = hist->GetBinContent(1);
       delete obj;
       currentIndex++;
     }
   }
-  if(!eventWriter_) {
-    info() << "No eventWriter given for CutFlowManager\n";
-  }
+  if (!eventWriter_) info() << "No eventWriter given for CutFlowManager\n";
 }
 
 CutFlowManager::~CutFlowManager() {}
@@ -47,12 +45,12 @@ void CutFlowManager::UpdateCutFlow(string cutName) {
       break;
     }
   }
-  if(!found){
+  if (!found) {
     fullCutName = to_string(currentIndex) + "_" + cutName;
   }
 
   try {
-    eventReader->currentEvent->Get("genWeight");
+    weight = eventReader->currentEvent->Get("genWeight");
   } catch (Exception &) {
   }
 
@@ -66,12 +64,12 @@ void CutFlowManager::UpdateCutFlow(string cutName) {
 
 void CutFlowManager::SaveCutFlow() {
   if (!eventWriter) {
-    error() << "Error: No existing eventWriter for CutFlowManager - cannot save CutFlow\n";
+    error() << "No existing eventWriter for CutFlowManager - cannot save CutFlow" << endl;
   }
   if (!eventReader->inputFile->Get("CutFlow")) {
-    info() << "Input file doesn't contain CutFlow directory yet... will create a new one in the output file.\n";
+    info() << "Input file doesn't contain CutFlow directory yet... will create a new one in the output file." << endl;
     eventWriter->outFile->mkdir("CutFlow");
-  } 
+  }
   eventWriter->outFile->cd("CutFlow");
 
   for (auto &[cutName, sumOfWeights] : weightsAfterCuts) {
@@ -82,7 +80,11 @@ void CutFlowManager::SaveCutFlow() {
   eventWriter->outFile->cd();
 }
 
+std::map<std::string, float> CutFlowManager::GetCutFlow() { return weightsAfterCuts; }
 
-std::map<std::string, float> CutFlowManager::GetCutFlow() {
-  return weightsAfterCuts;
+void CutFlowManager::Print() {
+  info() << "CutFlow:\n";
+  for (auto &[cutName, sumOfWeights] : weightsAfterCuts) {
+    info() << cutName << " " << sumOfWeights << "\n";
+  }
 }

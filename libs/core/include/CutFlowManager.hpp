@@ -17,6 +17,9 @@ class CutFlowManager {
   void UpdateCutFlow(std::string cutName);
   void SaveCutFlow();
   std::map<std::string, float> GetCutFlow();
+  void Print();
+
+  bool isEmpty() { return weightsAfterCuts.empty(); }
 
  private:
   std::shared_ptr<EventReader> eventReader;
