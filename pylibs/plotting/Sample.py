@@ -1,11 +1,20 @@
 import ROOT
 from dataclasses import dataclass
+from enum import Enum
+
+# enum class with signal, background, data
+class SampleType(Enum):
+  signal = 0
+  background = 1
+  data = 2
+  
+  
 
 @dataclass
 class Sample:
   name: str = ""
   file_path: str = ""
-  sample_type: str = ""
+  sample_type: SampleType = SampleType.background
   cross_section: float = 1.0
   line_color: int = ROOT.kBlack
   line_style: int = ROOT.kSolid

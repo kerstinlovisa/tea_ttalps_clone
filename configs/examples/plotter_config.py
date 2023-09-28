@@ -1,11 +1,14 @@
 import ROOT
 from ROOT import TColor
-from Sample import Sample
+from Sample import Sample, SampleType
+from Legend import Legend
 
 base_path = "../samples/"
 skim = ""
 
 output_path = "../plots"
+
+luminosity_2018 = 63670. # pb^-1
 
 # data&signals must be listed after backgrounds for now
 
@@ -13,7 +16,7 @@ samples = (
   Sample(
     name="my_background", 
     file_path=f"{base_path}/backgrounds/nanoAOD_hists.root", 
-    sample_type="background",
+    sample_type=SampleType.background,
     cross_section=0.4, 
     line_alpha=0.0,
     fill_color=41,
@@ -24,7 +27,7 @@ samples = (
   Sample(
     name="my_signal", 
     file_path=f"{base_path}/signals/nanoAOD_hists.root", 
-    sample_type="signal",
+    sample_type=SampleType.signal,
     cross_section=1, 
     line_color=TColor.GetColor(230, 159, 0), 
     line_style=ROOT.kSolid,
@@ -35,7 +38,7 @@ samples = (
   Sample(
     name="my_data", 
     file_path=f"{base_path}/data/nanoAOD_hists.root", 
-    sample_type="data",
+    sample_type=SampleType.data,
     cross_section=1, 
     line_color=ROOT.kBlack,
     line_style=ROOT.kSolid,
@@ -47,19 +50,10 @@ samples = (
   ),
 )
 
-
-luminosity_2018 = 63670. # pb^-1
-
-legend_types = {
-  "signal": "l",
-  "background": "f",
-  "data": "pl",
-}
-
-legend_position = {
-  "signal": (0.15,0.85,0.25,0.89),
-  "background": (0.7,0.5,0.85,0.85),
-  "data": (0.15,0.8,0.25,0.85),
+legends = {
+  SampleType.signal: Legend(0.15,0.85,0.25,0.89, "l"),
+  SampleType.background: Legend(0.7,0.5,0.85,0.85, "f"),
+  SampleType.data: Legend(0.15,0.8,0.25,0.85, "pl"),
 }
 
 # normalization options:
