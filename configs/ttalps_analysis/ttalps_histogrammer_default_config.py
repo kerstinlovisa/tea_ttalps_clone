@@ -1,3 +1,5 @@
+from ttalps_skimmer_looseSemileptonic_config import extraEventCollections
+
 nEvents = -1
 printEveryNevents = 1000
 
@@ -8,14 +10,14 @@ runTriggerHistograms = False
 # basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/signals/"
 # basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data/"
 
-# basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/backgrounds/"
-basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/signals/"
+basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/backgrounds/"
+# basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/signals/"
 # basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/collision_data/"
 
-sampleName = "tta_mAlp-0p35GeV"
+sampleName = "ST_tW_antitop"
 
-skim = ""
-# skim = "skimmed_looseSemileptonic"
+# skim = ""
+skim = "skimmed_looseSemileptonic"
 # skim = "skimmed_signalLike"
 # skim = "skimmed_ttbarLike"
 
@@ -63,9 +65,10 @@ defaultHistParams = {
   "ele_dz"    :   ("Electron",   "dz",         400,    -20,     20,      ""  ),
   "n_jets"    :   ("Event",      "nJet",       50,     0,       50,      ""  ),
   "jet_pt"    :   ("Jet",        "pt",         2000,    0,      1000,    ""  ),
-  "jet_eta"   :   ("Jet",        "eta",        100,    -2.5,    2.5,     ""  ),
-  "jet_eta"   :   ("Jet",        "eta",        100,    -2.5,    2.5,     ""  ),
-  "jet_btagDeepB":("Jet",        "btagDeepB",  200,    -1,      1,       ""  ),
+  "jet_pt_good"    :   ("GoodJets",        "pt",         2000,    0,      1000,    ""  ),
+  "jet_eta"   :   ("GoodJets",        "eta",        100,    -2.5,    2.5,     ""  ),
+  "jet_eta"   :   ("GoodJets",        "eta",        100,    -2.5,    2.5,     ""  ),
+  "jet_btagDeepB":("GoodJets",        "btagDeepB",  200,    -1,      1,       ""  ),
 }
 
 ttalpsHistParams = {
@@ -73,8 +76,8 @@ ttalpsHistParams = {
   "muon_subleading_pt":   ("Muon",       "subleading_pt",      2000,    0,       1000,     ""  ),
   "ele_leading_pt"    :   ("Electron",   "leading_pt",         2000,    0,       1000,     ""  ),
   "ele_subleading_pt" :   ("Electron",   "subleading_pt",      2000,    0,       1000,     ""  ),
-  "jet_leading_pt"    :   ("Jet",        "leading_pt",         2000,    0,       1000,     ""  ),
-  "jet_subleading_pt" :   ("Jet",        "subleading_pt",      2000,    0,       1000,     ""  ),
+  "jet_leading_pt"    :   ("GoodJets",        "leading_pt",         2000,    0,       1000,     ""  ),
+  "jet_subleading_pt" :   ("GoodJets",        "subleading_pt",      2000,    0,       1000,     ""  ),
 }
 
 defaultHistVariables = {key: (params[0],params[1]) for key, params in defaultHistParams.items()}
