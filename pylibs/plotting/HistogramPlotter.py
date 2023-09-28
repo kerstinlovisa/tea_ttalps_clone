@@ -99,12 +99,6 @@ class HistogramPlotter:
     data_hist = self.stacks[SampleType.data][hist.name].GetHists()[0]
     ratio_hist = data_hist.Clone("ratio_"+hist.name)
     
-    print(f"{hist.name=}")
-    
-    print(f"{data_hist.GetNbinsX()*hist.rebin=}")
-    print(f"{data_hist.GetXaxis().GetBinLowEdge(1)=}")
-    print(f"{data_hist.GetXaxis().GetBinUpEdge(data_hist.GetNbinsX())=}")
-    
     backgrounds_sum = ROOT.TH1D("backgrounds_sum_"+hist.name, "backgrounds_sum_"+hist.name,
                                 int(data_hist.GetNbinsX()*hist.rebin),
                                 data_hist.GetXaxis().GetBinLowEdge(1), 
