@@ -11,30 +11,31 @@ class HistogramNormalizer:
   def __init__(self, config):
     self.config = config
     
-    total_backgrounds_entries, total_backgrounds_integral, total_backgrounds_cross_section = self.__getTotalBackgroundsIntegral()
+    total_backgrounds_entries, total_backgrounds_integral, total_backgrounds_cross_section, total_backgrounds_initial_weight = self.__getTotalBackgroundsIntegral()
     self.total_backgrounds_entries = total_backgrounds_entries
     self.total_backgrounds_integral = total_backgrounds_integral
     self.total_backgrounds_cross_section = total_backgrounds_cross_section
+    self.total_backgrounds_initial_weight = total_backgrounds_initial_weight
   
   def normalize(self, hist, sample):
     lumi = self.config.luminosity
     
-    if hist.norm_type == "norm1":
+    if hist.norm_type == NormalizationType.to_one:
       if sample.type == SampleType.background:
         hist.hist.Scale(lumi*sample.cross_section/self.total_backgrounds_integral)
       else:
         hist.hist.Scale(1./hist.Integral())
-    elif hist.norm_type == "to_background":
+    elif hist.norm_type == NormalizationType.to_background:
       if sample.type == SampleType.background:
-        # TODO: should do this one properly, dividing by initial number of events
-        hist.hist.Scale(lumi*sample.cross_section/hist.hist.Integral())
+        hist.hist.Scale(lumi*sample.cross_section/self.total_backgrounds_initial_weight)
       else:
-        hist.hist.Scale(lumi*self.total_backgrounds_cross_section/hist.hist.Integral())
-        
+        hist.hist.Scale(lumi*self.total_backgrounds_cross_section/self.total_backgrounds_initial_weight)
+  
   def __getTotalBackgroundsIntegral(self):
     entries = 0
     integral = 0
     cross_section = 0
+    initial_weight = 0
     
     for sample in self.config.samples:
       if sample.type != SampleType.background:
@@ -49,4 +50,6 @@ class HistogramNormalizer:
       entries += hist.Integral()
       cross_section += sample.cross_section
       
-    return entries, integral, cross_section
+      initial_weight += file.Get("cutFlow").GetBinContent(1)
+      
+    return entries, integral, cross_section, initial_weight

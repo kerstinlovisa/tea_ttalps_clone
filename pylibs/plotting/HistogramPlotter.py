@@ -21,8 +21,11 @@ class HistogramPlotter:
     self.data_included = any(sample.type == SampleType.data for sample in self.config.samples)
     self.backgrounds_included = any(sample.type == SampleType.background for sample in self.config.samples)
     
+    self.initial_background_weight = None
+    
   
   def addHistsToStacks(self, input_file, sample):
+    
     for hist in self.config.histograms:
       hist.load(input_file)
       
