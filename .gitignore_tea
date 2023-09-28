@@ -13,6 +13,8 @@
 !libs/histogramming/
 
 !pylibs/
+!pylibs/*
+!pylibs/*/*
 !samples/
 !templates/
 

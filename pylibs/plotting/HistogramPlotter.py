@@ -45,43 +45,23 @@ class HistogramPlotter:
 
     return legends_dict
 
-  def addHistsToStacks(self, input_files, file_name, hists, legends, file_type, efficiency=False):
-    variables = self.config.efficiency_plots if efficiency else self.config.variables
-
-    cross_section = self.config.cross_sections[file_name]
+  def addHistsToStacks(self, input_file, sample, hists, legends):
+    cross_section = sample.cross_section
     lumi = self.config.luminosity_2018
+    sample_type = sample.sample_type
     
-    file_type = self.config.files[file_name][1]
-    
-    background_count = 0
-    
-    first = True
-    for name, values in variables.items():
-      params = self.config.variables[values[0]] if efficiency else values
-      hist_name = values[0] if efficiency else name
-        
-
-      hist = input_files[file_name].Get(hist_name)
+    for hist_name, params in self.config.variables.items():
+      hist = input_file.Get(hist_name)
       if not self.__checkHist(hist):
         print(f"Couldn't find hist or it is empty: {hist_name}")
         continue
 
-      if efficiency:
-        hist = self.__getEfficiencyHist(hist)
-
       normalization_type = params[2]
-      self.__normalizeHist(hist, normalization_type, file_type, lumi, cross_section)
-      
-      self.__setupHist(hist, params, self.config.lines[file_name], file_type)
-      hists[file_type][name].Add(hist)
-      legends[file_type][name].AddEntry(hist, self.config.legends[file_name], self.config.legend_types[file_type])
-      
-      if file_type == "background" and first:
-        background_count += hist.Integral()
-        first = False
-        
-    return background_count
-
+      self.__normalizeHist(hist, normalization_type, sample_type, lumi, cross_section)
+      self.__setupHist(hist, sample, params[3])
+      hists[sample_type][hist_name].Add(hist)
+      legends[sample_type][hist_name].AddEntry(hist, sample.legend_description, self.config.legend_types[sample_type])  
+  
   def drawStacks(self, backgrounds_included, data_included, hists, legends, efficiency=False):
 
     # create output path if it doesn't exist
@@ -136,22 +116,15 @@ class HistogramPlotter:
       else:
         hist.Scale(lumi*self.total_backgrounds_cross_section/hist.Integral())
 
-  def __setupHist(self, hist, params, linestyles, sample_type):
-    line_color, line_style = linestyles
-    
-    if sample_type == "signal":
-      hist.SetLineStyle(line_style)
-      hist.SetLineColor(line_color)
-    elif sample_type == "data":
-      hist.SetLineColor(ROOT.kBlack)
-      hist.SetMarkerStyle(20)
-      hist.SetMarkerSize(1)
-      hist.SetMarkerColor(ROOT.kBlack)
-    else:
-      hist.SetLineColorAlpha(line_color, 0)
-      hist.SetFillColorAlpha(line_color, 0.7)
-    
-    hist.Rebin(params[3])
+  def __setupHist(self, hist, sample, rebin):
+    hist.SetLineStyle(sample.line_style)
+    hist.SetLineColor(sample.line_color)
+    hist.SetMarkerStyle(sample.marker_style)
+    hist.SetMarkerSize(sample.marker_size)
+    hist.SetMarkerColor(sample.marker_color)
+    hist.SetLineColorAlpha(sample.line_color, sample.line_alpha)
+    hist.SetFillColorAlpha(sample.fill_color, sample.fill_alpha)
+    hist.Rebin(rebin)
     hist.Sumw2(False)
 
   def __setupFigure(self, stack, params):
@@ -173,13 +146,6 @@ class HistogramPlotter:
     except:
       print("Couldn't set axes limits")
       return
-
-  def __getEfficiencyHist(self, input_hist):
-    hist = input_hist.Clone()
-    initial = hist.GetBinContent(1)
-    for bin in range(1, hist.GetNbinsX()+2):
-      hist.SetBinContent(bin, hist.GetBinContent(bin)/initial)
-    return hist
 
   def __checkHist(self, hist):
     if hist is None or type(hist) is TObject:

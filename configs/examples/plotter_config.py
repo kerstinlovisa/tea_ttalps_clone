@@ -1,5 +1,6 @@
 import ROOT
 from ROOT import TColor
+from Sample import Sample
 
 base_path = "../samples/"
 skim = ""
@@ -7,35 +8,47 @@ skim = ""
 output_path = "../plots"
 
 # data&signals must be listed after backgrounds for now
-files = {
-  #name                  filename     type(signal/background)
-  "my_background": (f"{base_path}/backgrounds/nanoAOD_hists.root", "background"),
-  "my_signal": (f"{base_path}/signals/nanoAOD_hists.root", "signal"),
-  "my_data": (f"{base_path}/data/nanoAOD_hists.root", "data"),
-}
+
+samples = (
+  Sample(
+    name="my_background", 
+    file_path=f"{base_path}/backgrounds/nanoAOD_hists.root", 
+    sample_type="background",
+    cross_section=0.4, 
+    line_alpha=0.0,
+    fill_color=41,
+    fill_alpha=0.7,
+    marker_size=0.0,
+    legend_description="my_background"
+  ),
+  Sample(
+    name="my_signal", 
+    file_path=f"{base_path}/signals/nanoAOD_hists.root", 
+    sample_type="signal",
+    cross_section=1, 
+    line_color=TColor.GetColor(230, 159, 0), 
+    line_style=ROOT.kSolid,
+    fill_alpha=0.0,
+    marker_size=0.0,
+    legend_description="my_signal"
+  ),
+  Sample(
+    name="my_data", 
+    file_path=f"{base_path}/data/nanoAOD_hists.root", 
+    sample_type="data",
+    cross_section=1, 
+    line_color=ROOT.kBlack,
+    line_style=ROOT.kSolid,
+    marker_style=20,
+    marker_size=1.0,
+    marker_color=ROOT.kBlack,
+    fill_alpha=0.0,
+    legend_description="my_data"
+  ),
+)
+
 
 luminosity_2018 = 63670. # pb^-1
-
-cross_sections = {
-  #name                   cross section [pb]
-  "my_background": 0.4, 
-  "my_signal": 1,
-  "my_data": 1,
-}
-
-lines = {
-  #name                   color
-  "my_background": [41, ROOT.kSolid],
-  "my_signal": [TColor.GetColor(230, 159, 0), ROOT.kSolid],
-  "my_data": [ROOT.kBlack, ROOT.kSolid],
-} 
-
-legends = {
-  #name                   title
-  "my_background": "my_background",
-  "my_signal":"my_signal",
-  "my_data": "my_data",
-}
 
 legend_types = {
   "signal": "l",
