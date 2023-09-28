@@ -22,13 +22,16 @@ int main(int argc, char **argv) {
   auto histogramsFiller = make_unique<HistogramsFiller>(config, histogramsHandler);
 
   histogramsHandler->SetupHistograms();
+  bool cutFlowEmpty = cutFlowManager->isEmpty();
 
   for (int i_event = 0; i_event < eventReader->GetNevents(); i_event++) {
     auto event = eventReader->GetEvent(i_event);
 
+    if(cutFlowEmpty) cutFlowManager->UpdateCutFlow("initial");
     histogramsFiller->FillDefaultVariables(event);
   }
   
+  cutFlowManager->Print();
   histogramsFiller->FillCutFlow(cutFlowManager);
 
   histogramsHandler->SaveHistograms();
