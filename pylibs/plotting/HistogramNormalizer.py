@@ -17,34 +17,41 @@ class HistogramNormalizer:
     
     if hist.norm_type == NormalizationType.to_one:
       if sample.type == SampleType.background:
-        hist.hist.Scale(lumi*sample.cross_section/self.total_backgrounds_integral)
+        hist.hist.Scale(1./self.total_background)
       else:
         hist.hist.Scale(1./hist.Integral())
+        
     elif hist.norm_type == NormalizationType.to_background:
+      
       if sample.type == SampleType.background:
-        hist.hist.Scale(lumi*sample.cross_section/self.total_backgrounds_initial_weight)
-      else:
-        hist.hist.Scale(self.total_backgrounds_integral/hist.hist.Integral())
+        hist.hist.Scale(lumi*sample.cross_section/self.background_initial_sum_weights[sample.name])
+      
+      elif sample.type == SampleType.signal:
+        hist.hist.Scale(self.total_background/self.signal_final_sum_weights[sample.name])
+      
+      elif sample.type == SampleType.data:
+        hist.hist.Scale(self.total_background/self.data_final_entries[sample.name])
   
   def __setBackgroundEntries(self):
     
-    self.total_backgrounds_entries = 0
-    self.total_backgrounds_integral = 0
-    self.total_backgrounds_cross_section = 0
-    self.total_backgrounds_initial_weight = 0
+    self.signal_final_sum_weights = {}
+    self.data_final_entries = {}
+    self.background_initial_sum_weights = {}
+    self.total_background = 0
     
     for sample in self.config.samples:
-      if sample.type != SampleType.background:
-        continue
-      
       file = TFile.Open(sample.file_path, "READ")
 
-      hist_name = next(iter(self.config.histograms)).name
-      hist = file.Get(hist_name) 
-
-      initial_weight = file.Get("cutFlow").GetBinContent(1)
-
-      self.total_backgrounds_entries += hist.Integral()
-      self.total_backgrounds_integral += hist.Integral() * self.config.luminosity * sample.cross_section / initial_weight
-      self.total_backgrounds_cross_section += sample.cross_section
-      self.total_backgrounds_initial_weight += initial_weight
+      initial_weight_sum = file.Get("cutFlow").GetBinContent(1)
+      final_weight_sum = file.Get("cutFlow").GetBinContent(file.Get("cutFlow").GetNbinsX())
+      efficiency = final_weight_sum/initial_weight_sum
+      
+      if sample.type == SampleType.background:
+        self.total_background += sample.cross_section * self.config.luminosity * efficiency
+        self.background_initial_sum_weights[sample.name] = initial_weight_sum
+        
+      elif sample.type == SampleType.signal:
+        self.signal_final_sum_weights[sample.name] = final_weight_sum
+        
+      elif sample.type == SampleType.data:
+        self.data_final_entries[sample.name] = final_weight_sum

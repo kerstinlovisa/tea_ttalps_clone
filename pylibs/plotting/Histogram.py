@@ -35,6 +35,7 @@ class Histogram:
     self.hist.SetLineColorAlpha(sample.line_color, sample.line_alpha)
     self.hist.SetFillColorAlpha(sample.fill_color, sample.fill_alpha)
     self.hist.Rebin(self.rebin)
+    self.hist.Scale(1./self.rebin)
     self.hist.Sumw2(False)
   
   def __checkHist(self):

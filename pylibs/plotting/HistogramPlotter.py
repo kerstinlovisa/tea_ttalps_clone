@@ -81,13 +81,11 @@ class HistogramPlotter:
         
         self.stacks[SampleType.signal][hist.name].Draw("nostack same")
       else:
-        self.stacks[SampleType.signal][hist.name].Draw("hist nostack")
+        self.stacks[SampleType.signal][hist.name].Draw("nostack hist")
         self.__setupFigure(self.stacks[SampleType.signal][hist.name], hist)
 
       if self.data_included:
         self.stacks[SampleType.data][hist.name].Draw("nostack same P")
-
-
 
       for sample_type in SampleType:
         self.legends[sample_type][hist.name].Draw()
@@ -100,11 +98,11 @@ class HistogramPlotter:
     ratio_hist = data_hist.Clone("ratio_"+hist.name)
     
     backgrounds_sum = ROOT.TH1D("backgrounds_sum_"+hist.name, "backgrounds_sum_"+hist.name,
-                                int(data_hist.GetNbinsX()*hist.rebin),
+                                data_hist.GetNbinsX(),
                                 data_hist.GetXaxis().GetBinLowEdge(1), 
                                 data_hist.GetXaxis().GetBinUpEdge(data_hist.GetNbinsX()))
     
-    for background_hist in self.stacks[SampleType.background][hist.name].GetHists():
+    for background_hist in self.stacks[SampleType.background][hist.name].GetHists():  
       backgrounds_sum.Add(background_hist)
     
     ratio_hist.Divide(backgrounds_sum)
