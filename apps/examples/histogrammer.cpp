@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
 
   auto eventReader = make_shared<EventReader>(config);
   auto histogramsHandler = make_shared<HistogramsHandler>(config);
-  auto cutFlowManager = make_shared<CutFlowManager>(eventReader);
+  auto cutFlowManager = make_shared<CutFlowManager>(config, eventReader);
   auto histogramsFiller = make_unique<HistogramsFiller>(config, histogramsHandler);
 
   histogramsHandler->SetupHistograms();

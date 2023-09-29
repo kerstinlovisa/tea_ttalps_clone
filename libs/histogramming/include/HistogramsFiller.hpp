@@ -25,6 +25,7 @@ class HistogramsFiller {
   std::unique_ptr<EventProcessor> eventProcessor;
 
   std::map<std::string, std::vector<std::string>> defaultHistVariables;
+  std::string weightsBranchName;
 
 };
 

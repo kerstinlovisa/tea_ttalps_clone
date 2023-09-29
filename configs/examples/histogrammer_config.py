@@ -25,6 +25,7 @@ defaultHistParams = {
   "jet_btagDeepB":("Jet",        "btagDeepB",  200,    -1,      1,       ""  ),
 }
 
+weightsBranchName = "genWeight"
 
 defaultHistVariables = {key: (params[0],params[1]) for key, params in defaultHistParams.items()}
 

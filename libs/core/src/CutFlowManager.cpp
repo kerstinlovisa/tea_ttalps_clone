@@ -9,8 +9,16 @@
 
 using namespace std;
 
-CutFlowManager::CutFlowManager(shared_ptr<EventReader> eventReader_, shared_ptr<EventWriter> eventWriter_)
+CutFlowManager::CutFlowManager(shared_ptr<ConfigManager> _config, shared_ptr<EventReader> eventReader_,
+                               shared_ptr<EventWriter> eventWriter_)
     : eventReader(eventReader_), eventWriter(eventWriter_), currentIndex(0) {
+  
+  try {
+    _config->GetValue("weightsBranchName", weightsBranchName);
+  } catch (const Exception& e) {
+    info() << "Weights branch not specified -- will assume weight is 1 for all events" << endl;
+  }
+  
   if (eventReader->inputFile->Get("CutFlow")) {
     info() << "Input file contains CutFlow directory - will store existing cutflow for output.\n";
 
@@ -33,7 +41,6 @@ CutFlowManager::CutFlowManager(shared_ptr<EventReader> eventReader_, shared_ptr<
 CutFlowManager::~CutFlowManager() {}
 
 void CutFlowManager::UpdateCutFlow(string cutName) {
-  float weight = 1;
 
   string fullCutName;
 
@@ -49,10 +56,7 @@ void CutFlowManager::UpdateCutFlow(string cutName) {
     fullCutName = to_string(currentIndex) + "_" + cutName;
   }
 
-  try {
-    weight = eventReader->currentEvent->Get("genWeight");
-  } catch (Exception &) {
-  }
+  float weight = weightsBranchName == "" ? 1 : eventReader->currentEvent->Get(weightsBranchName);
 
   if (weightsAfterCuts.count(fullCutName)) {
     weightsAfterCuts[fullCutName] += weight;

@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
   
   auto eventReader = make_shared<EventReader>(config);
   auto eventWriter = make_shared<EventWriter>(config, eventReader);
-  auto cutFlowManager = make_shared<CutFlowManager>(eventReader, eventWriter);
+  auto cutFlowManager = make_shared<CutFlowManager>(config, eventReader, eventWriter);
   auto eventProcessor = make_unique<EventProcessor>(config);
   
   for (int i_event = 0; i_event < eventReader->GetNevents(); i_event++) {    

@@ -4,6 +4,8 @@ printEveryNevents = 100
 inputFilePath = "../samples/signals/nanoAOD_example.root"
 treeOutputFilePath = "../samples/signals/loose_skim/nanoAOD_example.root"
 
+weightsBranchName = "genWeight"
+
 triggerSelection = (
     "HLT_IsoMu24",
 )

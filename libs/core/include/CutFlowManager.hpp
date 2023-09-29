@@ -5,13 +5,14 @@
 #ifndef CutFlowManager_hpp
 #define CutFlowManager_hpp
 
-#include "EventWriter.hpp"
 #include "EventReader.hpp"
+#include "EventWriter.hpp"
 #include "Helpers.hpp"
 
 class CutFlowManager {
  public:
-  CutFlowManager(std::shared_ptr<EventReader> eventReader_, std::shared_ptr<EventWriter> eventWriter_=nullptr);
+  CutFlowManager(std::shared_ptr<ConfigManager> _config, std::shared_ptr<EventReader> eventReader_,
+                 std::shared_ptr<EventWriter> eventWriter_ = nullptr);
   ~CutFlowManager();
 
   void UpdateCutFlow(std::string cutName);
@@ -22,6 +23,8 @@ class CutFlowManager {
   bool isEmpty() { return weightsAfterCuts.empty(); }
 
  private:
+  std::string weightsBranchName;
+
   std::shared_ptr<EventReader> eventReader;
   std::shared_ptr<EventWriter> eventWriter;
 
