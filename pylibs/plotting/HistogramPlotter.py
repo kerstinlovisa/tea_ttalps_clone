@@ -57,7 +57,8 @@ class HistogramPlotter:
         gPad.SetLogy(False)
         
         ratio_hist = self.__getRatioStack(hist)
-        ratio_hist.Draw("p")
+        if ratio_hist:
+          ratio_hist.Draw("p")
         self.__setupFigure(ratio_hist, hist, is_ratio=True)
         
         # draw a line at 1
@@ -94,7 +95,11 @@ class HistogramPlotter:
       canvas.SaveAs(self.config.output_path+"/"+hist.name+".pdf")
   
   def __getRatioStack(self, hist):
-    data_hist = self.stacks[SampleType.data][hist.name].GetHists()[0]
+    
+    try:
+      data_hist = self.stacks[SampleType.data][hist.name].GetHists()[0]
+    except:
+      return None
     ratio_hist = data_hist.Clone("ratio_"+hist.name)
     
     backgrounds_sum = ROOT.TH1D("backgrounds_sum_"+hist.name, "backgrounds_sum_"+hist.name,
