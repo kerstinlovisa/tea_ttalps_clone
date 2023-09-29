@@ -8,11 +8,11 @@ runTriggerHistograms = False
 # basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/signals/"
 # basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data/"
 
-basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/backgrounds/"
+# basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/backgrounds/"
 # basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/signals/"
-# basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/collision_data/"
+basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/collision_data/"
 
-sampleName = "TTbar_inclusive"
+# sampleName = "TTbar_inclusive"
 # sampleName = "ST_tW_top"
 # sampleName = "ST_tW_antitop"
 # sampleName = "ttWJets"
@@ -33,7 +33,7 @@ sampleName = "TTbar_inclusive"
 # sampleName = "QCD_Pt_2400to3200"
 # sampleName = "QCD_Pt_3200toInf"
 # sampleName = "tta_mAlp-0p35GeV"
-# sampleName = "SingleMuon2018"
+sampleName = "SingleMuon2018"
 
 # skim = ""
 skim = "skimmed_looseSemileptonic"
