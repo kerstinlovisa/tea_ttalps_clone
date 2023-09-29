@@ -35,7 +35,7 @@ TTAlpsHistogramFiller::TTAlpsHistogramFiller(shared_ptr<ConfigManager> _config, 
   try {
     _config->GetValue("weightsBranchName", weightsBranchName);
   } catch (const Exception& e) {
-    info() << "Weights branch not specified -- will assume weight is 1 for all events" << endl;
+    warn() << "Weights branch not specified -- will assume weight is 1 for all events" << endl;
   }
 }
 
@@ -115,6 +115,15 @@ void TTAlpsHistogramFiller::FillLeadingPt(const std::shared_ptr<Event> event, st
   } catch (...) {
   }
   histogramsHandler->histograms1D[histName]->Fill(eventProcessor->GetMaxPt(event, variableLocation[0]), weight);
+}
+
+void TTAlpsHistogramFiller::FillNormCheck(const std::shared_ptr<Event> event) {
+  float weight = 1.0;
+  try {
+    weight = event->Get(weightsBranchName);
+  } catch (...) {
+  }
+  histogramsHandler->histograms1D["norm_check"]->Fill(0.5, weight);
 }
 
 void TTAlpsHistogramFiller::FillAllSubLeadingPt(const std::shared_ptr<Event> event, std::string histName, std::vector<std::string> variableLocation) {

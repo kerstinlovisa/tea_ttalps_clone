@@ -37,6 +37,8 @@ int main(int argc, char **argv) {
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
 
+    ttalpsHistogramsFiller->FillNormCheck(event);
+
     if (runDefaultHistograms) {
       histogramFiller->FillDefaultVariables(event);
       ttalpsHistogramsFiller->FillCustomTTAlpsVariables(event);
