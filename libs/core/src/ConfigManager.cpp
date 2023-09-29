@@ -91,6 +91,15 @@ PyObject *ConfigManager::GetPythonDict(string name) {
 
 template <>
 void ConfigManager::GetValue<string>(std::string name, string &outputValue) {
+  if(name=="inputFilePath" && inputPath!="") {
+    outputValue = inputPath;
+    return;
+  }
+  if(name=="treeOutputFilePath" && outputPath!="") {
+    outputValue = outputPath;
+    return;
+  }
+
   PyObject *pythonValue = GetPythonValue(name);
   if (!pythonValue || !PyUnicode_Check(pythonValue)) {
     error() << "Failed retriving python value (string)\n";

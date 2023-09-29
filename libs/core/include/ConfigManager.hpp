@@ -27,6 +27,9 @@ class ConfigManager {
 
   void GetSelections(std::map<std::string, std::pair<float, float>> &selections);
 
+  void SetInputPath(std::string path){inputPath = path;}
+  void SetOutputPath(std::string path){outputPath = path;}
+
  private:
   FILE *pythonFile;
   PyObject *pythonModule;
@@ -38,6 +41,9 @@ class ConfigManager {
 
   int GetCollectionSize(PyObject *collection);
   PyObject *GetItem(PyObject *collection, int index);
+
+  std::string inputPath = "";
+  std::string outputPath = "";
 };
 
 #endif /* ConfigManager_hpp */
