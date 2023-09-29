@@ -8,15 +8,15 @@ runTriggerHistograms = False
 # basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/signals/"
 # basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data/"
 
-# basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/backgrounds/"
+basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/backgrounds/"
 # basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/signals/"
-basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/collision_data/"
+# basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/collision_data/"
 
 # sampleName = "TTbar_inclusive"
 # sampleName = "ST_tW_top"
 # sampleName = "ST_tW_antitop"
 # sampleName = "ttWJets"
-# sampleName = "ttZJets"
+sampleName = "ttZJets"
 # sampleName = "ttHToMuMu"
 # sampleName = "QCD_Pt_30to50"
 # sampleName = "QCD_Pt_50to80"
@@ -33,7 +33,7 @@ basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/collisio
 # sampleName = "QCD_Pt_2400to3200"
 # sampleName = "QCD_Pt_3200toInf"
 # sampleName = "tta_mAlp-0p35GeV"
-sampleName = "SingleMuon2018"
+# sampleName = "SingleMuon2018"
 
 # skim = ""
 skim = "skimmed_looseSemileptonic"
@@ -128,10 +128,22 @@ defaultHistParams = {
 ttalpsHistParams = {
   "muon_leading_pt"   :   ("Muon",          "leading_pt",     2000,   0,       1000,    ""  ),
   "muon_subleading_pt":   ("Muon",          "subleading_pt",  2000,   0,       1000,    ""  ),
-  "ele_leading_pt"    :   ("Electron",      "leading_pt",     2000,   0,       1000,    ""  ),
-  "ele_subleading_pt" :   ("Electron",      "subleading_pt",  2000,   0,       1000,    ""  ),
-  "jet_leading_pt"    :   ("GoodJets",      "leading_pt",     2000,   0,       1000,    ""  ),
-  "jet_subleading_pt" :   ("GoodJets",      "subleading_pt",  2000,   0,       1000,    ""  ),
+  
+  "good_muon_leading_pt"   :   ("GoodMuons",          "leading_pt",     2000,   0,       1000,    ""  ),
+  "good_muon_subleading_pt":   ("GoodMuons",          "subleading_pt",  2000,   0,       1000,    ""  ),
+  
+  "electron_leading_pt"    :   ("Electron",      "leading_pt",     2000,   0,       1000,    ""  ),
+  "electron_subleading_pt" :   ("Electron",      "subleading_pt",  2000,   0,       1000,    ""  ),
+  
+  "good_electron_leading_pt"    :   ("GoodElectrons",      "leading_pt",     2000,   0,       1000,    ""  ),
+  "good_electron_subleading_pt" :   ("GoodElectrons",      "subleading_pt",  2000,   0,       1000,    ""  ),
+  
+  "jet_leading_pt"    :   ("Jet",      "leading_pt",     2000,   0,       1000,    ""  ),
+  "jet_subleading_pt" :   ("Jet",      "subleading_pt",  2000,   0,       1000,    ""  ),
+  
+  "good_jet_leading_pt"    :   ("GoodJets",      "leading_pt",     2000,   0,       1000,    ""  ),
+  "good_jet_subleading_pt" :   ("GoodJets",      "subleading_pt",  2000,   0,       1000,    ""  ),
+  
   "norm_check"        :   ("",              "norm_check",     1,      0,       1,       ""  ),
 }
 
