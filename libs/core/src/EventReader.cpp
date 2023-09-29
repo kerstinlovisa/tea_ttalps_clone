@@ -17,6 +17,12 @@ EventReader::EventReader(shared_ptr<ConfigManager> _config) : config(_config) {
   config->GetValue("inputFilePath", inputFilePath);
 
   currentEvent = make_shared<Event>(config);
+
+  // if inputFilePath is a DAS dataset name, insert a redirector into it
+  if (inputFilePath.find("root://") == string::npos && inputFilePath.find("/store/") != string::npos) {
+    inputFilePath = "root://cms-xrd-global.cern.ch/" + inputFilePath;
+  }
+
   inputFile = TFile::Open(inputFilePath.c_str());
 
   SetupBranches(inputFilePath);
