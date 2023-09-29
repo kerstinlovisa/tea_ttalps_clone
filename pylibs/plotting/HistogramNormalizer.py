@@ -10,13 +10,8 @@ class HistogramNormalizer:
   
   def __init__(self, config):
     self.config = config
+    self.__setBackgroundEntries()
     
-    total_backgrounds_entries, total_backgrounds_integral, total_backgrounds_cross_section, total_backgrounds_initial_weight = self.__getTotalBackgroundsIntegral()
-    self.total_backgrounds_entries = total_backgrounds_entries
-    self.total_backgrounds_integral = total_backgrounds_integral
-    self.total_backgrounds_cross_section = total_backgrounds_cross_section
-    self.total_backgrounds_initial_weight = total_backgrounds_initial_weight
-  
   def normalize(self, hist, sample):
     lumi = self.config.luminosity
     
@@ -29,13 +24,14 @@ class HistogramNormalizer:
       if sample.type == SampleType.background:
         hist.hist.Scale(lumi*sample.cross_section/self.total_backgrounds_initial_weight)
       else:
-        hist.hist.Scale(lumi*self.total_backgrounds_cross_section/self.total_backgrounds_initial_weight)
+        hist.hist.Scale(self.total_backgrounds_integral/hist.hist.Integral())
   
-  def __getTotalBackgroundsIntegral(self):
-    entries = 0
-    integral = 0
-    cross_section = 0
-    initial_weight = 0
+  def __setBackgroundEntries(self):
+    
+    self.total_backgrounds_entries = 0
+    self.total_backgrounds_integral = 0
+    self.total_backgrounds_cross_section = 0
+    self.total_backgrounds_initial_weight = 0
     
     for sample in self.config.samples:
       if sample.type != SampleType.background:
@@ -46,10 +42,9 @@ class HistogramNormalizer:
       hist_name = next(iter(self.config.histograms)).name
       hist = file.Get(hist_name) 
 
-      integral += hist.Integral() * self.config.luminosity * sample.cross_section
-      entries += hist.Integral()
-      cross_section += sample.cross_section
-      
-      initial_weight += file.Get("cutFlow").GetBinContent(1)
-      
-    return entries, integral, cross_section, initial_weight
+      initial_weight = file.Get("cutFlow").GetBinContent(1)
+
+      self.total_backgrounds_entries += hist.Integral()
+      self.total_backgrounds_integral += hist.Integral() * self.config.luminosity * sample.cross_section / initial_weight
+      self.total_backgrounds_cross_section += sample.cross_section
+      self.total_backgrounds_initial_weight += initial_weight
