@@ -37,14 +37,23 @@ void HistogramsFiller::FillDefaultVariables(const std::shared_ptr<Event> event) 
   }
   
   for (auto& [histName, variableLocation] : defaultHistVariables) {
-    if (variableLocation[0] == "Event") {
-      // Assuming uint nObject from Event for now
-      uint eventVariable = event->Get(variableLocation[1]);
+    string collectionName = variableLocation[0];
+    string branchName = variableLocation[1];
+    
+    if (collectionName == "Event") {
+      
+      uint eventVariable;
+      if(branchName[0] == 'n'){
+        eventVariable = event->GetCollectionSize(branchName.substr(1));
+      }
+      else{
+        eventVariable = event->Get(branchName);
+      }
       histogramsHandler->histograms1D[histName]->Fill(eventVariable, weight);
     } else {
-      auto collection = event->GetCollection(variableLocation[0]);
+      auto collection = event->GetCollection(collectionName);
       for (auto object : *collection) {
-        histogramsHandler->histograms1D[histName]->Fill(object->Get(variableLocation[1]), weight);
+        histogramsHandler->histograms1D[histName]->Fill(object->Get(branchName), weight);
       }
     }
   }
