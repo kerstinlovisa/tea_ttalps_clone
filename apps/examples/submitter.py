@@ -86,9 +86,54 @@ def main():
       os.system(command)
   
   elif args.condor:
-    print("\n\nSubmitting to condor")
-    command = f"condor_submit {app_name}.jdl"
-    os.system(command)
+    if not os.path.exists("error"):
+      os.makedirs("error")
+    if not os.path.exists("log"):
+      os.makedirs("log")
+    if not os.path.exists("output"):
+      os.makedirs("output")
+      
+    import uuid
+    hash_string = str(uuid.uuid4().hex[:6])
+    condor_config_name = f"condor_config_{hash_string}.sub"
+    
+    os.system(f"cp ../templates/condor_config.template.sub {condor_config_name}")
+    
+    spec = importlib.util.spec_from_file_location("files_module", args.files_config)
+    files_config = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(files_config)
+    
+    
+    python_executable = os.popen("which python").read().strip()
+    python_executable = python_executable.replace("/", "\/")
+    
+    dataset_name = files_config.dataset
+    das_command = f"dasgoclient -query='file dataset={dataset_name}'"
+    print(f"\n\nExecuting {das_command=}")
+    input_files = os.popen(das_command).read().splitlines()
+    
+    # store input_files list in a file
+    input_files_file_name = f"input_files_{hash_string}.txt"
+    with open(input_files_file_name, "w") as f:
+      for input_file_path in input_files:
+        f.write(f"{input_file_path}\n")
+    
+    output_dir = files_config.output_dir.replace("/", "\/")
+    
+    os.system(f"sed -i 's/<executor>/{python_executable}/g' {condor_config_name}")
+    os.system(f"sed -i 's/<app>/{app_name}/g' {condor_config_name}")
+    os.system(f"sed -i 's/<config>/{args.config}/g' {condor_config_name}")
+    os.system(f"sed -i 's/<input_files_file_name>/{input_files_file_name}/g' {condor_config_name}")
+    os.system(f"sed -i 's/<output_dir>/{output_dir}/g' {condor_config_name}")
+    os.system(f"sed -i 's/<n_jobs>/{files_config.max_files}/g' {condor_config_name}")
+    
+    print("Submitting to condor")
+    command = f"condor_submit {condor_config_name}"
+    # os.system(command)
+    
+    # remove condor_config_name file
+    # os.system(f"rm {condor_config_name}")
+    
   else:
     print("Please select either --local or --condor")
     exit()
