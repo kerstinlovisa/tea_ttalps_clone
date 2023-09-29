@@ -1,5 +1,3 @@
-from ttalps_skimmer_looseSemileptonic_config import extraEventCollections
-
 nEvents = -1
 printEveryNevents = 1000
 
@@ -14,12 +12,12 @@ basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/backgrou
 # basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/signals/"
 # basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/collision_data/"
 
-# sampleName = "TTbar_inclusive"
+sampleName = "TTbar_inclusive"
 # sampleName = "ST_tW_top"
 # sampleName = "ST_tW_antitop"
 # sampleName = "ttWJets"
 # sampleName = "ttZJets"
-sampleName = "ttHToMuMu"
+# sampleName = "ttHToMuMu"
 # sampleName = "QCD_Pt_30to50"
 # sampleName = "QCD_Pt_50to80"
 # sampleName = "QCD_Pt_80to120"
@@ -74,34 +72,67 @@ histogramsOutputFilePath = f"{basePath}/{sampleName}/{skim}/{histsFileName}"
 
 weightsBranchName = "genWeight"
 
+from ttalps_skimmer_looseSemileptonic_config import extraEventCollections
+
+extraEventCollections["GoodMuons"] = {
+  "inputCollections": ("Muon",),
+  "pt": (30., 9999999.),
+  "eta": (-2.4, 2.4),
+}
+
+extraEventCollections["GoodElectrons"] = {
+  "inputCollections": ("Electron",),
+  "pt": (30., 9999999.),
+  "eta": (-2.4, 2.4),
+}
+
 defaultHistParams = {
-# key              collection    variable      bins    xmin     xmax    outputdir  
-  "n_muons"   :   ("Event",      "nMuon",      50,     0,       50,      ""  ),
-  "muon_pt"   :   ("Muon",       "pt",         2000,    0,      1000,    ""  ),
-  "muon_eta"  :   ("Muon",       "eta",        100,    -2.5,    2.5,     ""  ),
-  "muon_dxy"  :   ("Muon",       "dxy",        400,    -20,     20,      ""  ),
-  "muon_dz"   :   ("Muon",       "dz",         400,    -20,     20,      ""  ),
-  "n_eles"    :   ("Event",      "nElectron",  50,     0,       50,      ""  ),
-  "ele_pt"    :   ("Electron",   "pt",         2000,    0,      1000,    ""  ),
-  "ele_eta"   :   ("Electron",   "eta",        100,    -2.5,    2.5,     ""  ),
-  "ele_dxy"   :   ("Electron",   "dxy",        400,    -20,     20,      ""  ),
-  "ele_dz"    :   ("Electron",   "dz",         400,    -20,     20,      ""  ),
-  "n_jets"    :   ("Event",      "nJet",       50,     0,       50,      ""  ),
-  "jet_pt"    :   ("Jet",        "pt",         2000,    0,      1000,    ""  ),
-  "jet_pt_good":  ("GoodJets",   "pt",         2000,    0,      1000,    ""  ),
-  "jet_eta"   :   ("GoodJets",   "eta",        100,    -2.5,    2.5,     ""  ),
-  "jet_phi"   :   ("GoodJets",   "phi",        100,    -2.5,    2.5,     ""  ),
-  "jet_btagDeepB":("GoodJets",   "btagDeepB",  200,    -1,      1,       ""  ),
+# key                      collection       variable          bins    xmin     xmax    outputdir  
+  "n_muons"           :   ("Event",         "nMuon",          50,     0,       50,      ""  ),
+  "muon_pt"           :   ("Muon",          "pt",             2000,    0,      1000,    ""  ),
+  "muon_eta"          :   ("Muon",          "eta",            100,    -2.5,    2.5,     ""  ),
+  "muon_dxy"          :   ("Muon",          "dxy",            400,    -20,     20,      ""  ),
+  "muon_dz"           :   ("Muon",          "dz",             400,    -20,     20,      ""  ),
+  
+  "n_good_muons"      :   ("Event",         "nGoodMuons",     50,     0,       50,      ""  ),
+  "good_muon_pt"      :   ("GoodMuons",     "pt",             2000,    0,      1000,    ""  ),
+  "good_muon_eta"     :   ("GoodMuons",     "eta",            100,    -2.5,    2.5,     ""  ),
+  "good_muon_dxy"     :   ("GoodMuons",     "dxy",            400,    -20,     20,      ""  ),
+  "good_muon_dz"      :   ("GoodMuons",     "dz",             400,    -20,     20,      ""  ),
+  
+  "n_electrons"       :   ("Event",         "nElectron",      50,     0,       50,      ""  ),
+  "electron_pt"       :   ("Electron",      "pt",             2000,    0,      1000,    ""  ),
+  "electron_eta"      :   ("Electron",      "eta",            100,    -2.5,    2.5,     ""  ),
+  "electron_dxy"      :   ("Electron",      "dxy",            400,    -20,     20,      ""  ),
+  "electron_dz"       :   ("Electron",      "dz",             400,    -20,     20,      ""  ),
+  
+  "n_good_electrons"  :   ("Event",         "nGoodElectrons", 50,     0,       50,      ""  ),
+  "good_electron_pt"  :   ("GoodElectrons", "pt",             2000,    0,      1000,    ""  ),
+  "good_electron_eta" :   ("GoodElectrons", "eta",            100,    -2.5,    2.5,     ""  ),
+  "good_electron_dxy" :   ("GoodElectrons", "dxy",            400,    -20,     20,      ""  ),
+  "good_electron_dz"  :   ("GoodElectrons", "dz",             400,    -20,     20,      ""  ),
+  
+  "n_jets"            :   ("Event",         "nJet",           50,     0,       50,      ""  ),
+  "jet_pt"            :   ("Jet",           "pt",             2000,    0,      1000,    ""  ),
+  "jet_eta"           :   ("Jet",           "eta",            100,    -2.5,    2.5,     ""  ),
+  "jet_phi"           :   ("Jet",           "phi",            100,    -2.5,    2.5,     ""  ),
+  "jet_btagDeepB"     :   ("Jet",           "btagDeepB",      200,    -1,      1,       ""  ),
+  
+  "n_good_jets"       :   ("Event",         "nGoodJets",      50,     0,       50,      ""  ),
+  "good_jet_pt"       :   ("GoodJets",      "pt",             2000,    0,      1000,    ""  ),
+  "good_jet_eta"      :   ("GoodJets",      "eta",            100,    -2.5,    2.5,     ""  ),
+  "good_jet_phi"      :   ("GoodJets",      "phi",            100,    -2.5,    2.5,     ""  ),
+  "good_jet_btagDeepB":   ("GoodJets",      "btagDeepB",      200,    -1,      1,       ""  ),
 }
 
 ttalpsHistParams = {
-  "muon_leading_pt"   :   ("Muon",        "leading_pt",         2000,     0,       1000,      ""  ),
-  "muon_subleading_pt":   ("Muon",        "subleading_pt",      2000,     0,       1000,      ""  ),
-  "ele_leading_pt"    :   ("Electron",    "leading_pt",         2000,     0,       1000,      ""  ),
-  "ele_subleading_pt" :   ("Electron",    "subleading_pt",      2000,     0,       1000,      ""  ),
-  "jet_leading_pt"    :   ("GoodJets",    "leading_pt",         2000,     0,       1000,      ""  ),
-  "jet_subleading_pt" :   ("GoodJets",    "subleading_pt",      2000,     0,       1000,      ""  ),
-  "norm_check"        :   ("",            "norm_check",         1,        0,       1,         ""  ),
+  "muon_leading_pt"   :   ("Muon",          "leading_pt",     2000,   0,       1000,    ""  ),
+  "muon_subleading_pt":   ("Muon",          "subleading_pt",  2000,   0,       1000,    ""  ),
+  "ele_leading_pt"    :   ("Electron",      "leading_pt",     2000,   0,       1000,    ""  ),
+  "ele_subleading_pt" :   ("Electron",      "subleading_pt",  2000,   0,       1000,    ""  ),
+  "jet_leading_pt"    :   ("GoodJets",      "leading_pt",     2000,   0,       1000,    ""  ),
+  "jet_subleading_pt" :   ("GoodJets",      "subleading_pt",  2000,   0,       1000,    ""  ),
+  "norm_check"        :   ("",              "norm_check",     1,      0,       1,       ""  ),
 }
 
 defaultHistVariables = {key: (params[0],params[1]) for key, params in defaultHistParams.items()}
