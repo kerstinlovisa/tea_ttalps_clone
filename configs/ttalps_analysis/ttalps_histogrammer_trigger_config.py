@@ -54,6 +54,8 @@ ttbarCategories = ["inclusive", "hh", "he", "hmu", "htau", "ee", "mumu", "tautau
 variableNames = ["muonMaxPt", "eleMaxPt", "jetMaxPt", "jetHt"]
 selectionNames = ["singleLepton", "dilepton", "hadron"]
 
+weightsBranchName = "genWeight"
+
 triggerSets = {
     "hadBoth": ("HLT_PFHT450_SixPFJet36_PFBTagDeepCSV_1p59", "HLT_PFHT400_SixPFJet32_DoublePFBTagDeepCSV_2p94"),
     "hadSinglebtag": ("HLT_PFHT450_SixPFJet36_PFBTagDeepCSV_1p59", ),
