@@ -56,7 +56,11 @@ void CutFlowManager::UpdateCutFlow(string cutName) {
     fullCutName = to_string(currentIndex) + "_" + cutName;
   }
 
-  float weight = weightsBranchName == "" ? 1.0 : eventReader->currentEvent->Get(weightsBranchName);
+  float weight = 1.0;
+  try {
+    weight = eventReader->currentEvent->Get(weightsBranchName);
+  } catch (...) {
+  }
 
   if (weightsAfterCuts.count(fullCutName)) {
     weightsAfterCuts[fullCutName] += weight;

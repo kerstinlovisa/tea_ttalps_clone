@@ -30,7 +30,11 @@ HistogramsFiller::~HistogramsFiller() {}
 
 void HistogramsFiller::FillDefaultVariables(const std::shared_ptr<Event> event) {
   
-  float weight = weightsBranchName == "" ? 1.0 : event->Get(weightsBranchName);
+  float weight = 1.0;
+  try {
+    weight = event->Get(weightsBranchName);
+  } catch (...) {
+  }
   
   for (auto& [histName, variableLocation] : defaultHistVariables) {
     if (variableLocation[0] == "Event") {
