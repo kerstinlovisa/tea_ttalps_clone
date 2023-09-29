@@ -45,6 +45,8 @@ fileName = fileNames[sampleName]
 inputFilePath = f"{basePath}/{sampleName}/skimmed_looseSemileptonic/{fileName}"
 treeOutputFilePath = f"{basePath}/{sampleName}/skimmed_ttbarLike/{fileName}"
 
+weightsBranchName = "weight"
+
 triggerSelection = (
     "HLT_Ele28_eta2p1_WPTight_Gsf_HT150",
     "HLT_Ele30_eta2p1_WPTight_Gsf_CentralPFJet35_EleCleaned",

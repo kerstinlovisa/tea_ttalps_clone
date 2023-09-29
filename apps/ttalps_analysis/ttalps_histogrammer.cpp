@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
   auto config = make_shared<ConfigManager>(configPath);
 
   auto eventReader = make_shared<EventReader>(config);
-  auto cutFlowManager = make_shared<CutFlowManager>(eventReader);
+  auto cutFlowManager = make_shared<CutFlowManager>(config, eventReader);
   auto histogramsHandler = make_shared<HistogramsHandler>(config);
   histogramsHandler->SetupHistograms();
 
