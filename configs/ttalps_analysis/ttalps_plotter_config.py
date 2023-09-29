@@ -58,6 +58,8 @@ histograms = (
   Histogram("cutFlow", "cutflow",                               True, NormalizationType.to_background, 1,   0, 8,     1e2, 1e10,     "Selection",        "Number of events"),
 )
 
+weightsBranchName = "weight"
+
 # data&signals must be listed after backgrounds for now
 samples = (
   Sample(
