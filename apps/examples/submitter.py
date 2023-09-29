@@ -56,6 +56,20 @@ def run_locally_with_files_config(args, files_config):
     output_dir = files_config.output_dir
     max_files = files_config.max_files
     
+    # execute bash command and get output as a list of lines
+    das_command = f"dasgoclient -query='file dataset={dataset_name}'"
+    print(f"\n\nExecuting {das_command=}")
+    input_files = os.popen(das_command).read().splitlines()
+    
+    for input_file_path in input_files[:max_files]:
+      input_file_name = input_file_path.strip().split("/")[-1]
+      output_file_path = f"{output_dir}/{input_file_name}"
+      command_for_file = f"{command} {input_file_path} {output_file_path}"
+      
+      print(f"\n\nExecuting {command_for_file=}")
+      os.system(command_for_file)
+    
+    
 
 def main():
   args = get_args()
