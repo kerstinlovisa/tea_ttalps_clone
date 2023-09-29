@@ -29,6 +29,8 @@ class TTAlpsHistogramFiller {
   std::map<std::string, std::vector<std::string>> defaultHistVariables;
   std::map<std::string, std::vector<std::string>> ttalpsHistVariables;
 
+  std::string weightsBranchName;
+
   std::vector<std::string> triggerNames;
   bool EndsWithTriggerName(std::string name);
 };
