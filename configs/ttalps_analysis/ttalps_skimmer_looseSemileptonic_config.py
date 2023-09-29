@@ -9,11 +9,32 @@ applySignalLikeSkimming = False
 # basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/signals/"
 # basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data/"
 
-basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/backgrounds/"
+# basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/backgrounds/"
 # basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/signals/"
-# basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/collision_data/"
+basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/collision_data/"
 
-sampleName = "ST_tW_antitop"
+# sampleName = "TTbar_inclusive"
+# sampleName = "ST_tW_top"
+# sampleName = "ST_tW_antitop"
+# sampleName = "ttWJets"
+# sampleName = "ttZJets"
+# sampleName = "ttHToMuMu"
+# sampleName = "QCD_Pt_30to50"
+# sampleName = "QCD_Pt_50to80"
+# sampleName = "QCD_Pt_80to120"
+# sampleName = "QCD_Pt_120to170"
+# sampleName = "QCD_Pt_170to300"
+# sampleName = "QCD_Pt_300to470"
+# sampleName = "QCD_Pt_470to600"
+# sampleName = "QCD_Pt_600to800"
+# sampleName = "QCD_Pt_800to1000"
+# sampleName = "QCD_Pt_1000to1400"
+# sampleName = "QCD_Pt_1400to1800"
+# sampleName = "QCD_Pt_1800to2400"
+# sampleName = "QCD_Pt_2400to3200"
+# sampleName = "QCD_Pt_3200toInf"
+# sampleName = "tta_mAlp-0p35GeV"
+sampleName = "SingleMuon2018"
 
 fileNames = {
     "TTbar_inclusive": "FCA55055-C8F3-C44B-8DCC-6DCBC0B8B992.root",
@@ -43,6 +64,8 @@ fileNames = {
 fileName = fileNames[sampleName]
 inputFilePath = f"{basePath}/{sampleName}/{fileName}"
 treeOutputFilePath = f"{basePath}/{sampleName}/skimmed_looseSemileptonic/{fileName}"
+
+weightsBranchName = "genWeight"
 
 triggerSelection = (
     "HLT_Ele28_eta2p1_WPTight_Gsf_HT150",
