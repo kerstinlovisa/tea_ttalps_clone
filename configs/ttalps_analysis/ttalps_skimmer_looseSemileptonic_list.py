@@ -17,5 +17,8 @@
 # option 3: give DAS dataset name and output path: will run for all files in dataset (or up to max_files)
 dataset = "/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
 output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttZJets/skimmed_looseSemileptonic/"
-max_files = 10
+max_files = -1
 
+# dataset = "/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
+# output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttWJets/skimmed_looseSemileptonic/"
+# max_files = -1
