@@ -1,5 +1,5 @@
 nEvents = -1
-printEveryNevents = 1000
+printEveryNevents = 10000
 
 applyLooseSkimming = True
 applyTTbarLikeSkimming = False
