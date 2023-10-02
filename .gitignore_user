@@ -13,6 +13,7 @@ libs/histogramming/
 pylibs/
 samples/
 templates/
+templates/*
 
 
 bin/*

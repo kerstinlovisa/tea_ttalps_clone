@@ -1,0 +1,11 @@
+Universe              = vanilla
+executable            = <executable>
+arguments             = $(ProcId)
+GetEnv                = True
+output                = output/$(ClusterId).$(ProcId).out
+error                 = error/$(ClusterId).$(ProcId).err
+log                   = log/$(ClusterId).log
+requirements 	      = (OpSysAndVer =?= "CentOS7")
++JobFlavour           = "<job_flavour>"
+
+queue <n_jobs>

@@ -12,7 +12,19 @@ def get_args():
   parser.add_argument("--condor", action="store_true", default=False, help="run on condor")
   
   parser.add_argument("--files_config", type=str, default="", help="path to a python config with a list of input/output paths")
-
+  
+  parser.add_argument(
+    "--job_flavour", 
+    type=str, 
+    default="",
+    help="condor job flavour: espresso (20 min), microcentury (1h), longlunch (2h), workday (8h), tomorrow (1d), testmatch (3d), nextweek (1w)"
+  )
+  parser.add_argument(
+    "--resubmit_job", 
+    type=int, 
+    help="use this option to resubmitt a specific job"
+  )
+  
   args = parser.parse_args()
   return args
 
@@ -84,20 +96,29 @@ def main():
     else:
       print(f"\n\nExecuting {command=}")
       os.system(command)
-  
   elif args.condor:
+    print("Running on condor")
+    if args.job_flavour == "":
+      print("Please provide a job flavour")
+      exit()
+    
     if not os.path.exists("error"):
       os.makedirs("error")
     if not os.path.exists("log"):
       os.makedirs("log")
     if not os.path.exists("output"):
       os.makedirs("output")
+    if not os.path.exists("tmp"):
+      os.makedirs("tmp")
       
     import uuid
     hash_string = str(uuid.uuid4().hex[:6])
-    condor_config_name = f"condor_config_{hash_string}.sub"
+    condor_config_name = f"tmp/condor_config_{hash_string}.sub"
+    condor_run_script_name = f"tmp/condor_run_{hash_string}.sh"
     
     os.system(f"cp ../templates/condor_config.template.sub {condor_config_name}")
+    os.system(f"cp ../templates/condor_run.template.sh {condor_run_script_name}")
+    os.system(f"chmod 700 {condor_run_script_name}")
     
     spec = importlib.util.spec_from_file_location("files_module", args.files_config)
     files_config = importlib.util.module_from_spec(spec)
@@ -109,30 +130,45 @@ def main():
     
     dataset_name = files_config.dataset
     das_command = f"dasgoclient -query='file dataset={dataset_name}'"
+    
     print(f"\n\nExecuting {das_command=}")
     input_files = os.popen(das_command).read().splitlines()
     
     # store input_files list in a file
-    input_files_file_name = f"input_files_{hash_string}.txt"
+    input_files_file_name = f"tmp/input_files_{hash_string}.txt"
     with open(input_files_file_name, "w") as f:
       for input_file_path in input_files:
         f.write(f"{input_file_path}\n")
     
     output_dir = files_config.output_dir.replace("/", "\/")
     
-    os.system(f"sed -i 's/<executor>/{python_executable}/g' {condor_config_name}")
-    os.system(f"sed -i 's/<app>/{app_name}/g' {condor_config_name}")
-    os.system(f"sed -i 's/<config>/{args.config}/g' {condor_config_name}")
-    os.system(f"sed -i 's/<input_files_file_name>/{input_files_file_name}/g' {condor_config_name}")
-    os.system(f"sed -i 's/<output_dir>/{output_dir}/g' {condor_config_name}")
-    os.system(f"sed -i 's/<n_jobs>/{files_config.max_files}/g' {condor_config_name}")
+    condor_run_script_name_escaped = condor_run_script_name.replace("/", "\/")
+    input_files_file_name_escaped = input_files_file_name.replace("/", "\/")
+    
+    voms_proxy_path = os.popen("voms-proxy-info -path").read().strip().replace("/", "\/")    
+    os.system(f"cp {voms_proxy_path} voms_proxy")
+
+    max_files = files_config.max_files if files_config.max_files != -1 else len(input_files)
+    
+    os.system(f"sed -i 's/<executable>/{condor_run_script_name_escaped}/g' {condor_config_name}")
+    os.system(f"sed -i 's/<job_flavour>/{args.job_flavour}/g' {condor_config_name}")
+    
+    if args.resubmit_job is not None:
+      os.system(f"sed -i 's/<$(ProcId)>/{args.resubmit_job}\/voms_proxy/g' {condor_config_name}")
+      os.system(f"sed -i 's/<n_jobs>/{1}/g' {condor_config_name}")
+    else:
+      os.system(f"sed -i 's/<n_jobs>/{max_files}/g' {condor_config_name}")
+    
+    os.system(f"sed -i 's/<voms_proxy>/{voms_proxy_path}/g' {condor_run_script_name}")
+    os.system(f"sed -i 's/<python_path>/{python_executable}/g' {condor_run_script_name}")
+    os.system(f"sed -i 's/<app>/{app_name}/g' {condor_run_script_name}")
+    os.system(f"sed -i 's/<config>/{args.config}/g' {condor_run_script_name}")
+    os.system(f"sed -i 's/<input_files_file_name>/{input_files_file_name_escaped}/g' {condor_run_script_name}")
+    os.system(f"sed -i 's/<output_dir>/{output_dir}/g' {condor_run_script_name}")
     
     print("Submitting to condor")
     command = f"condor_submit {condor_config_name}"
-    # os.system(command)
-    
-    # remove condor_config_name file
-    # os.system(f"rm {condor_config_name}")
+    os.system(command)
     
   else:
     print("Please select either --local or --condor")

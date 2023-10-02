@@ -17,6 +17,7 @@
 !pylibs/*/*
 !samples/
 !templates/
+!templates/*
 
 !.gitignore_user
 !.gitignore_tea
