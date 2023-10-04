@@ -95,7 +95,7 @@ void ConfigManager::GetValue<string>(std::string name, string &outputValue) {
     outputValue = inputPath;
     return;
   }
-  if(name=="treeOutputFilePath" && outputPath!="") {
+  if((name=="treeOutputFilePath" || name=="histogramsOutputFilePath") && outputPath!="") {
     outputValue = outputPath;
     return;
   }
