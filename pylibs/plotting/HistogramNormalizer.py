@@ -44,7 +44,12 @@ class HistogramNormalizer:
 
       initial_weight_sum = file.Get("cutFlow").GetBinContent(1)
       final_weight_sum = file.Get("cutFlow").GetBinContent(file.Get("cutFlow").GetNbinsX())
-      efficiency = final_weight_sum/initial_weight_sum
+      
+      if initial_weight_sum == 0:
+        print(f"Initial sum of weights is zero for sample: {sample.name}. Setting efficeincy to zero.")
+        efficiency = 0
+      else:
+        efficiency = final_weight_sum/initial_weight_sum
       
       if sample.type == SampleType.background:
         self.total_background += sample.cross_section * self.config.luminosity * efficiency

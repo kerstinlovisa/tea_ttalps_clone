@@ -74,10 +74,7 @@ void CutFlowManager::SaveCutFlow() {
   if (!eventWriter) {
     error() << "No existing eventWriter for CutFlowManager - cannot save CutFlow" << endl;
   }
-  if (!eventReader->inputFile->Get("CutFlow")) {
-    info() << "Input file doesn't contain CutFlow directory yet... will create a new one in the output file." << endl;
-    eventWriter->outFile->mkdir("CutFlow");
-  }
+  eventWriter->outFile->mkdir("CutFlow");  
   eventWriter->outFile->cd("CutFlow");
 
   for (auto &[cutName, sumOfWeights] : weightsAfterCuts) {
