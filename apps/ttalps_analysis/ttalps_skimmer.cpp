@@ -64,7 +64,7 @@ int main(int argc, char **argv) {
 
     eventWriter->AddCurrentEvent("Events");
   }
-
+  cutFlowManager->Print();
   cutFlowManager->SaveCutFlow();
   eventWriter->Save();
 
