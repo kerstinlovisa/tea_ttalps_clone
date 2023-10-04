@@ -5,14 +5,14 @@ from Legend import Legend
 from Histogram import Histogram
 from HistogramNormalizer import NormalizationType
 
-# base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms/"
-base_path = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/"
+base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms/"
+# base_path = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/"
 output_path = "../plots"
 
 # skim = ""
-skim = "skimmed_looseSemileptonic"
+# skim = "skimmed_looseSemileptonic"
 # skim = "skimmed_signalLike"
-# skim = "skimmed_ttbarLike"
+skim = "skimmed_ttbarLike"
 
 luminosity = 63670. # pb^-1
 
@@ -88,7 +88,7 @@ weightsBranchName = "weight"
 samples = (
   Sample(
     name="ttZJets",
-    file_path=f"{base_path}/backgrounds/ttZJets/{skim}/EB2F627D-0570-7C4C-A561-C29B6E4F123A_hists.root",
+    file_path=f"{base_path}/backgrounds2018/ttZJets/{skim}/histograms/histograms.root",
     type=SampleType.background,
     cross_section=0.4611,
     line_alpha=0,
@@ -99,7 +99,7 @@ samples = (
   ),
   # Sample(
   #   name="ttHToMuMu",
-  #   file_path=f"{base_path}/backgrounds/ttHToMuMu/{skim}/D41A5AFC-EC31-A64F-9E87-6F1C22ED6DCB_hists.root",
+  #   file_path=f"{base_path}/backgrounds2018/ttHToMuMu/{skim}/D41A5AFC-EC31-A64F-9E87-6F1C22ED6DCB_hists.root",
   #   type=SampleType.background,
   #   cross_section=0.5269,
   #   line_alpha=0,
@@ -110,7 +110,7 @@ samples = (
   # ),
   Sample(
     name="ttWJets",
-    file_path=f"{base_path}/backgrounds/ttWJets/{skim}/5B123882-8484-1B47-9A07-57F8F526F6EF_hists.root",
+    file_path=f"{base_path}/backgrounds2018/ttWJets/{skim}/histograms/histograms.root",
     type=SampleType.background,
     cross_section=0.5407,
     line_alpha=0,
@@ -121,7 +121,7 @@ samples = (
   ),
   # Sample(
   #   name="ST_tW_top",
-  #   file_path=f"{base_path}/backgrounds/ST_tW_top/{skim}/776A38DC-FF27-6F4E-9B16-C55B696BAA92_hists.root",
+  #   file_path=f"{base_path}/backgrounds2018/ST_tW_top/{skim}/776A38DC-FF27-6F4E-9B16-C55B696BAA92_hists.root",
   #   type=SampleType.background,
   #   cross_section=32.45,
   #   line_alpha=0,
@@ -132,7 +132,7 @@ samples = (
   # ),
   # Sample(
   #   name="ST_tW_antitop",
-  #   file_path=f"{base_path}/backgrounds/ST_tW_antitop/{skim}/09B1D3CA-5FCC-0A48-BFA6-E1759D5D7D02_hists.root",
+  #   file_path=f"{base_path}/backgrounds2018/ST_tW_antitop/{skim}/09B1D3CA-5FCC-0A48-BFA6-E1759D5D7D02_hists.root",
   #   type=SampleType.background,
   #   cross_section=32.51,
   #   line_alpha=0,
@@ -142,8 +142,8 @@ samples = (
   #   legend_description="ST_tW_antitop",
   # ),
   Sample(
-    name="TTbar_inclusive",
-    file_path=f"{base_path}/backgrounds/TTbar_inclusive/{skim}/FCA55055-C8F3-C44B-8DCC-6DCBC0B8B992_hists.root",
+    name="TTToSemiLeptonic",
+    file_path=f"{base_path}/backgrounds2018/TTToSemiLeptonic/{skim}/histograms/histograms.root",
     type=SampleType.background,
     cross_section=494.8, # that's for 14 TeV, not sure where to find the correct one...
     line_alpha=0,
@@ -166,7 +166,7 @@ samples = (
   ),
   Sample(
     name="SingleMuon2018",
-    file_path=f"{base_path}/collision_data/SingleMuon2018/{skim}/36ED9511-D46A-0C4F-A485-C2DF1C874906_hists.root",
+    file_path=f"{base_path}/collision_data2018/SingleMuon2018_{skim}_histograms.root",
     type=SampleType.data,
     cross_section=1,
     line_alpha=0,
