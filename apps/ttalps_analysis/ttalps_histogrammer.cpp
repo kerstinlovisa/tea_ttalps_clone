@@ -10,8 +10,10 @@
 using namespace std;
 
 void CheckArgs(int argc, char **argv) {
-  if (argc != 2) {
-    fatal() << "Usage: " << argv[0] << " config_path\n";
+  if (argc != 2 && argc != 4) {
+    fatal() << "Usage: " << argv[0] << " config_path"<<endl;
+    fatal() << "or"<<endl;
+    fatal() << argv[0] << " config_path input_path output_path"<<endl;
     exit(1);
   }
 }
@@ -21,6 +23,11 @@ int main(int argc, char **argv) {
 
   string configPath = argv[1];
   auto config = make_shared<ConfigManager>(configPath);
+
+  if(argc == 4){
+    config->SetInputPath(argv[2]);
+    config->SetOutputPath(argv[3]);
+  }
 
   auto eventReader = make_shared<EventReader>(config);
   auto cutFlowManager = make_shared<CutFlowManager>(config, eventReader);
@@ -57,6 +64,8 @@ int main(int argc, char **argv) {
   if(runTriggerHistograms) ttalpsHistogramsFiller->FillTriggerEfficiencies();
   if(runDefaultHistograms) histogramFiller->FillCutFlow(cutFlowManager);
   
+  cutFlowManager->Print();
+
   histogramsHandler->SaveHistograms();
 
   return 0;
