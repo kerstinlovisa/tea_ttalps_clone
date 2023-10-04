@@ -4,11 +4,11 @@ printEveryNevents = 1000
 runDefaultHistograms = True
 runTriggerHistograms = False
 
-# basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds/"
+basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/"
 # basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/signals/"
-# basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data/"
+# basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/"
 
-basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/backgrounds/"
+# basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/backgrounds/"
 # basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/signals/"
 # basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/collision_data/"
 
@@ -36,16 +36,16 @@ sampleName = "ttZJets"
 # sampleName = "SingleMuon2018"
 
 # skim = ""
-skim = "skimmed_looseSemileptonic"
+# skim = "skimmed_looseSemileptonic"
 # skim = "skimmed_signalLike"
-# skim = "skimmed_ttbarLike"
+skim = "skimmed_ttbarLike"
 
 fileNames = {
     "TTbar_inclusive": "FCA55055-C8F3-C44B-8DCC-6DCBC0B8B992.root",
     "ST_tW_top": "776A38DC-FF27-6F4E-9B16-C55B696BAA92.root",
     "ST_tW_antitop": "09B1D3CA-5FCC-0A48-BFA6-E1759D5D7D02.root",
     "ttWJets": "5B123882-8484-1B47-9A07-57F8F526F6EF.root",
-    "ttZJets": "EB2F627D-0570-7C4C-A561-C29B6E4F123A.root",
+    "ttZJets": "03171D1F-9F51-3444-AF6F-E8E173F87F94.root",
     "ttHToMuMu": "D41A5AFC-EC31-A64F-9E87-6F1C22ED6DCB.root",
     "QCD_Pt_30to50": "72E0DD65-5D9D-3E47-99A9-AAB4E4ACC724.root",
     "QCD_Pt_50to80": "CAB74055-4D6E-024F-9B89-465541A2B906.root",
