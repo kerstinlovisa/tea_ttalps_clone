@@ -9,10 +9,10 @@
 
 
 # option 2: list input files and output files
-input_output_file_list = (
-  ("/nfs/dust/cms/user/jniedzie/ttalps_cms/signals/tta_mAlp-0p35GeV/skimmed_looseSemileptonic/tta_mAlp-0p35GeV_nEvents-100000.root", 
-   "/nfs/dust/cms/user/jniedzie/ttalps_cms/signals/tta_mAlp-0p35GeV/skimmed_ttbarLike/tta_mAlp-0p35GeV_nEvents-100000.root"),
-)
+# input_output_file_list = (
+#   ("/nfs/dust/cms/user/jniedzie/ttalps_cms/signals/tta_mAlp-0p35GeV/skimmed_looseSemileptonic/tta_mAlp-0p35GeV_nEvents-100000.root", 
+#    "/nfs/dust/cms/user/jniedzie/ttalps_cms/signals/tta_mAlp-0p35GeV/skimmed_ttbarLike/tta_mAlp-0p35GeV_nEvents-100000.root"),
+# )
 
 # option 3: give DAS dataset name and output path: will run for all files in dataset (or up to max_files)
 # dataset = "/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
@@ -32,30 +32,37 @@ input_output_file_list = (
 # max_files = -1
 
 # option 5: only specify local input and output directories
+max_files = -1
+
 # input_directory = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttZJets/skimmed_looseSemileptonic"
 # output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttZJets/skimmed_ttbarLike/"
-# max_files = -1
 
 # input_directory = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttWJets/skimmed_looseSemileptonic"
 # output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttWJets/skimmed_ttbarLike/"
-# max_files = -1
 
 # input_directory = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/TTToSemiLeptonic/skimmed_looseSemileptonic"
 # output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/TTToSemiLeptonic/skimmed_ttbarLike/"
-# max_files = -1
+
+# input_directory = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ST_tW_antitop/skimmed_looseSemileptonic"
+# output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ST_tW_antitop/skimmed_ttbarLike/"
+
+# input_directory = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ST_tW_top/skimmed_looseSemileptonic"
+# output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ST_tW_top/skimmed_ttbarLike/"
+
+# input_directory = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttHToMuMu/skimmed_looseSemileptonic"
+# output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttHToMuMu/skimmed_ttbarLike/"
+
+input_directory = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttHTobb/skimmed_looseSemileptonic/"
+output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttHTobb/skimmed_ttbarLike/"
 
 # input_directory = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018A/skimmed_looseSemileptonic"
 # output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018A/skimmed_ttbarLike/"
-# max_files = -1
 
 # input_directory = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018B/skimmed_looseSemileptonic"
 # output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018B/skimmed_ttbarLike/"
-# max_files = -1
 
 # input_directory = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018C/skimmed_looseSemileptonic"
 # output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018C/skimmed_ttbarLike/"
-# max_files = -1
 
 # input_directory = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018D/skimmed_looseSemileptonic"
 # output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018D/skimmed_ttbarLike/"
-# max_files = -1
