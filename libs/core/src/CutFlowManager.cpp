@@ -21,7 +21,7 @@ CutFlowManager::CutFlowManager(shared_ptr<ConfigManager> _config, shared_ptr<Eve
   
   if (eventReader->inputFile->Get("CutFlow")) {
     info() << "Input file contains CutFlow directory - will store existing cutflow for output.\n";
-
+    
     auto sourceDir = (TDirectory *)eventReader->inputFile->Get("CutFlow");
 
     TIter nextKey(sourceDir->GetListOfKeys());
@@ -31,6 +31,7 @@ CutFlowManager::CutFlowManager(shared_ptr<ConfigManager> _config, shared_ptr<Eve
       TObject *obj = key->ReadObj();
       auto hist = (TH1D *)obj;
       weightsAfterCuts[key->GetName()] = hist->GetBinContent(1);
+      existingCuts.push_back(key->GetName());
       delete obj;
       currentIndex++;
     }
@@ -41,7 +42,7 @@ CutFlowManager::CutFlowManager(shared_ptr<ConfigManager> _config, shared_ptr<Eve
 CutFlowManager::~CutFlowManager() {}
 
 void CutFlowManager::UpdateCutFlow(string cutName) {
-
+  
   string fullCutName;
 
   bool found = false;
@@ -56,10 +57,16 @@ void CutFlowManager::UpdateCutFlow(string cutName) {
     fullCutName = to_string(currentIndex) + "_" + cutName;
   }
 
+  // If cutflow already exists, we don't want to overwrite it
+  if (find(existingCuts.begin(), existingCuts.end(), fullCutName) != existingCuts.end()) {
+    return;
+  }
+
   float weight = 1.0;
   try {
     weight = eventReader->currentEvent->Get(weightsBranchName);
   } catch (...) {
+    error() << "Could not find weights branch " << weightsBranchName << endl;
   }
 
   if (weightsAfterCuts.count(fullCutName)) {

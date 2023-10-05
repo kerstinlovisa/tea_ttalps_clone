@@ -33,8 +33,8 @@ class Event {
     exit(1);
   }
 
-  inline int GetCollectionSize(std::string name) {
-    if (collections.count(name)) return collections.at(name)->size();
+  inline UInt_t GetCollectionSize(std::string name) {
+    if (collections.count(name)) return Get("n" + name);
     if (extraCollections.count(name)) return extraCollections.at(name)->size();
     fatal() << "Tried to get a collection that doesn't exist: " << name << "\n";
     exit(1);

@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 from ROOT import TObject
 
-from Sample import SampleType
-
 @dataclass
 class Histogram:
   name: str = ""
@@ -21,9 +19,13 @@ class Histogram:
     self.hist = input_file.Get(self.name)
     
   def isGood(self):
-    if not self.__checkHist():
-        print(f"Couldn't find hist or it is empty: {self.name}")
-        return False
+    if self.hist is None or type(self.hist) is TObject:
+      print(f"Could not find histogram: {self.name}")
+      return False
+    if self.hist.GetEntries() == 0:
+      print(f"Histogram is empty: {self.name}")
+      return False
+    
     return True
     
   def setup(self, sample):
@@ -37,10 +39,3 @@ class Histogram:
     self.hist.Rebin(self.rebin)
     self.hist.Scale(1./self.rebin)
     self.hist.Sumw2(False)
-  
-  def __checkHist(self):
-    if self.hist is None or type(self.hist) is TObject:
-      return False
-    if self.hist.GetEntries() == 0:
-      return False
-    return True

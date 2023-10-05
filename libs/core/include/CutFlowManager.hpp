@@ -31,6 +31,8 @@ class CutFlowManager {
   std::map<std::string, float> weightsAfterCuts;
 
   int currentIndex;
+
+  std::vector<std::string> existingCuts;
 };
 
 #endif /* CutFlowManager_hpp */
