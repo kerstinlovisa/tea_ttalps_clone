@@ -39,6 +39,14 @@ class TTAlpsSelections {
   // - some amount of MET
   bool PassesSingleLeptonSelections(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager = nullptr);
 
+  // Selections targetting ttZ, Z->μμ process. Requires:
+  // - 1 good e/μ (the top-lepton)
+  // - 2 additional quasi-good muons
+  // - at least 4 good jets
+  // - at least 1 good b-tagged jet
+  // - some amount of MET
+  bool PassesTTZLikeSelections(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager = nullptr);
+
   bool PassesDileptonSelections(const std::shared_ptr<Event> event);
   bool PassesHadronSelections(const std::shared_ptr<Event> event);
 

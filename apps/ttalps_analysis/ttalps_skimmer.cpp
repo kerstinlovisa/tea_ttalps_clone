@@ -37,10 +37,11 @@ int main(int argc, char **argv) {
   auto eventProcessor = make_unique<EventProcessor>(config);
   auto ttAlpsSelections = make_unique<TTAlpsSelections>(config);
 
-  bool applyLooseSkimming, applyTTbarLikeSkimming, applySignalLikeSkimming;
+  bool applyLooseSkimming, applyTTbarLikeSkimming, applySignalLikeSkimming, applyTTZLikeSkimming;
   config->GetValue("applyLooseSkimming", applyLooseSkimming);
   config->GetValue("applyTTbarLikeSkimming", applyTTbarLikeSkimming);
   config->GetValue("applySignalLikeSkimming", applySignalLikeSkimming);
+  config->GetValue("applyTTZLikeSkimming", applyTTZLikeSkimming);
 
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
@@ -60,6 +61,10 @@ int main(int argc, char **argv) {
 
     if(applySignalLikeSkimming){
       if(!ttAlpsSelections->PassesSignalLikeSelections(event, cutFlowManager)) continue;
+    }
+
+    if(applyTTZLikeSkimming){
+      if(!ttAlpsSelections->PassesTTZLikeSelections(event, cutFlowManager)) continue;
     }
 
     eventWriter->AddCurrentEvent("Events");
