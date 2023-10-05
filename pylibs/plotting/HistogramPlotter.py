@@ -25,6 +25,8 @@ class HistogramPlotter:
     
     self.initial_background_weight = None
     
+    self.data_hists = {}
+    
   
   def addHistsToStacks(self, input_file, sample):
     
@@ -34,7 +36,10 @@ class HistogramPlotter:
       if not hist.isGood():
         continue
 
-      self.normalizer.normalize(hist, sample)
+      if sample.type == SampleType.data:
+        self.data_hists[hist.name] = hist.hist
+
+      self.normalizer.normalize(hist, sample, self.data_hists[hist.name])
       hist.setup(sample)
       
       self.stacks[sample.type][hist.name].Add(hist.hist)

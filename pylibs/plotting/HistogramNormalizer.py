@@ -6,6 +6,7 @@ class NormalizationType(Enum):
   to_one = 0 # normalize all histograms to 1
   to_background = 1 # normalize background with cross section and luminosity, normalize signal and data to background
   to_lumi = 3 # normalize signal/background to lumi*crosssection, keep data unchanged
+  to_data = 4 # normalize signal/background to data, keep data unchanged
 
 class HistogramNormalizer:
   
@@ -13,7 +14,7 @@ class HistogramNormalizer:
     self.config = config
     self.__setBackgroundEntries()
     
-  def normalize(self, hist, sample):
+  def normalize(self, hist, sample, data_hist=None):
     lumi = self.config.luminosity
     
     if hist.norm_type == NormalizationType.to_one:
@@ -44,13 +45,28 @@ class HistogramNormalizer:
       
       elif sample.type == SampleType.data:
         pass
+      
+    elif hist.norm_type == NormalizationType.to_data:
+      
+      if sample.type == SampleType.background:
+        if hist.hist.Integral() == 0:
+          return  
+        hist.hist.Scale(hist.rebin * sample.cross_section/self.total_background_cross_section * data_hist.Integral()/hist.hist.Integral())
+      elif sample.type == SampleType.signal:
+        if hist.hist.Integral() == 0:
+          return
+        hist.hist.Scale(hist.rebin * data_hist.Integral()/hist.hist.Integral())
+      elif sample.type == SampleType.data:
+        pass
   
   def __setBackgroundEntries(self):
     
     self.signal_final_sum_weights = {}
     self.data_final_entries = {}
+    self.background_final_sum_weights = {}
     self.background_initial_sum_weights = {}
     self.total_background = 0
+    self.total_background_cross_section = 0
     
     for sample in self.config.samples:
       file = TFile.Open(sample.file_path, "READ")
@@ -72,6 +88,9 @@ class HistogramNormalizer:
         
         self.total_background += sample.cross_section * self.config.luminosity * efficiency
         self.background_initial_sum_weights[sample.name] = initial_weight_sum
+        self.total_background_cross_section += sample.cross_section
+        
+        self.background_final_sum_weights[sample.name] = final_weight_sum
         
       elif sample.type == SampleType.signal:
         print(f"{sample.name}: {final_weight_sum}")

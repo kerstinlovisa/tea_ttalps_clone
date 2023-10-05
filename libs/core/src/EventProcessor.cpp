@@ -57,7 +57,7 @@ bool EventProcessor::PassesEventSelections(const shared_ptr<Event> event, shared
 float EventProcessor::GetMaxPt(shared_ptr<Event> event, string collectionName) {
   auto collection = event->GetCollection(collectionName);
 
-  float maxPt = 0;
+  float maxPt = -1;
   for (auto element : *collection) {
     float pt = element->Get("pt");
     if (pt > maxPt) maxPt = pt;
