@@ -151,4 +151,30 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariables(const std::shared_ptr<Even
     if(variableLocation[1] == "subleading_pt") FillAllSubLeadingPt(event, histName, variableLocation);
     else if(variableLocation[1] == "leading_pt") FillLeadingPt(event, histName, variableLocation);
   }
+
+  float weight = 1.0;
+  try {
+    weight = event->Get(weightsBranchName);
+  } catch (...) {
+  }
+
+  auto almostGoodMuons = event->GetCollection("AlmostGoodMuons");
+
+  for(int iMuon1=0; iMuon1 < almostGoodMuons->size(); iMuon1++){
+    auto muon1 = asMuon(almostGoodMuons->at(iMuon1));
+    auto muon1fourVector = TLorentzVector();
+    muon1fourVector.SetPtEtaPhiM(muon1->GetPt(), muon1->GetEta(), muon1->GetPhi(), 0.105);
+    
+    for(int iMuon2=iMuon1+1; iMuon2 < almostGoodMuons->size(); iMuon2++){
+      auto muon2 = asMuon(almostGoodMuons->at(iMuon2));
+      auto muon2fourVector = TLorentzVector();
+      muon2fourVector.SetPtEtaPhiM(muon2->GetPt(), muon2->GetEta(), muon2->GetPhi(), 0.105);
+      double diMuonMass = (muon1fourVector + muon2fourVector).M();
+
+      histogramsHandler->histograms1D["almost_good_dimuon_minv"]->Fill(diMuonMass, weight);    
+    }
+  }
+
+  
+
 }
