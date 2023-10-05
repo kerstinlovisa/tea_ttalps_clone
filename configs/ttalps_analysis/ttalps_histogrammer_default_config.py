@@ -4,8 +4,8 @@ printEveryNevents = 1000
 runDefaultHistograms = True
 runTriggerHistograms = False
 
-basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/"
-# basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/signals/"
+# basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/"
+basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/signals/"
 # basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/"
 
 # basePath = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/backgrounds/"
@@ -16,7 +16,7 @@ basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/"
 # sampleName = "ST_tW_top"
 # sampleName = "ST_tW_antitop"
 # sampleName = "ttWJets"
-sampleName = "ttZJets"
+# sampleName = "ttZJets"
 # sampleName = "ttHToMuMu"
 # sampleName = "QCD_Pt_30to50"
 # sampleName = "QCD_Pt_50to80"
@@ -32,7 +32,7 @@ sampleName = "ttZJets"
 # sampleName = "QCD_Pt_1800to2400"
 # sampleName = "QCD_Pt_2400to3200"
 # sampleName = "QCD_Pt_3200toInf"
-# sampleName = "tta_mAlp-0p35GeV"
+sampleName = "tta_mAlp-0p35GeV"
 # sampleName = "SingleMuon2018"
 
 # skim = ""
