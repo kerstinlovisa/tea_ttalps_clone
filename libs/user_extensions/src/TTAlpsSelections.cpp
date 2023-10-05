@@ -5,6 +5,7 @@
 #include "TTAlpsSelections.hpp"
 
 #include "ExtensionsHelpers.hpp"
+#include "TLorentzVector.h"
 
 using namespace std;
 
@@ -72,6 +73,38 @@ bool TTAlpsSelections::PassesSingleLeptonSelections(const shared_ptr<Event> even
     if (survivingLepton != leadingLepton) return false;
   }
   if(cutFlowManager) cutFlowManager->UpdateCutFlow("noAdditionalMuons");
+
+  return true;
+}
+
+bool TTAlpsSelections::PassesTTZLikeSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  float metPt = event->Get("MET_pt");
+  if (!inRange(metPt, eventSelections["MET_pt"])) return false;
+
+  if (!inRange(event->GetCollectionSize("GoodLeptons"), eventSelections["nGoodLeptons"])) return false;
+  if (!inRange(event->GetCollectionSize("GoodBtaggedJets"), eventSelections["nGoodBtaggedJets"])) return false;
+  if (!inRange(event->GetCollectionSize("GoodJets"), eventSelections["nGoodJets"])) return false;
+
+  auto almostGoodMuons = event->GetCollection("AlmostGoodMuons");
+  double zMass = 91.1876; // GeV
+  double smallestDifferenceToTmass = 999999;
+  double maxDistanceFromZ = 30;
+
+  for(int iMuon1=0; iMuon1 < almostGoodMuons->size(); iMuon1++){
+    auto muon1 = asMuon(almostGoodMuons->at(iMuon1))->GetFourVector();
+    
+    for(int iMuon2=iMuon1+1; iMuon2 < almostGoodMuons->size(); iMuon2++){
+      auto muon2 = asMuon(almostGoodMuons->at(iMuon2))->GetFourVector();
+      double diMuonMass = (muon1 + muon2).M();
+
+      if(fabs(diMuonMass-zMass) < smallestDifferenceToTmass){
+        smallestDifferenceToTmass = fabs(diMuonMass-zMass);
+      }
+    }
+    if(smallestDifferenceToTmass < maxDistanceFromZ) break;
+  }
+  if(smallestDifferenceToTmass > maxDistanceFromZ) return false;
+  if(cutFlowManager) cutFlowManager->UpdateCutFlow("inZpeak");
 
   return true;
 }

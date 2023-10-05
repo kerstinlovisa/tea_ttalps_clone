@@ -12,7 +12,8 @@ output_path = "../plots"
 # skim = ""
 # skim = "skimmed_looseSemileptonic"
 # skim = "skimmed_signalLike"
-skim = "skimmed_ttbarLike"
+# skim = "skimmed_ttbarLike"
+skim = "skimmed_ttZLike"
 
 # luminosity = 63670. # pb^-1
 luminosity = 59830. # recommended lumi from https://twiki.cern.ch/twiki/bin/view/CMS/LumiRecommendationsRun2
@@ -74,11 +75,13 @@ histograms = (
   # Histogram("good_jet_eta", "Jet #eta",                                   True, NormalizationType.to_lumi, 10, -3.5, 3.5, 1e0, 1e10,  "#eta^{j}",         "# events (2018)"),
   # Histogram("good_jet_btagDeepB", "Jet btagDeepB",                        True, NormalizationType.to_lumi, 2,  -1, 1,     1e0, 1e7,  "jet btagDeepB",    "# events (2018)"),
   
-  Histogram("cutFlow", "cutflow",                                         True, NormalizationType.to_data, 1,   0, 8,     1e2, 1e10,     "Selection",        "Number of events"),
-  Histogram("norm_check", "Norm check",                                   True, NormalizationType.to_data, 1,  0, 1,      1e-2, 1e7,  "norm check",    "# events (2018)"),
+  Histogram("almost_good_dimuon_minv", "Dimuon Mass",                       False, NormalizationType.to_lumi, 1,  70, 110,     0, 7e3,  "m_{#mu#mu} (GeV)",    "# events (2018)"),
+  
+  Histogram("cutFlow", "cutflow",                                         True, NormalizationType.to_lumi, 1,   0, 8,     1e2, 1e10,     "Selection",        "Number of events"),
+  Histogram("norm_check", "Norm check",                                   True, NormalizationType.to_lumi, 1,  0, 1,      1e-2, 1e7,  "norm check",    "# events (2018)"),
 )
 
-weightsBranchName = "weight"
+weightsBranchName = "genWeight"
 
 # data&signals must be listed after backgrounds for now
 samples = (
@@ -171,18 +174,19 @@ samples = (
     marker_size=0,
     legend_description="TTToSemiLeptonic",
   ),
-  Sample(
-    name="tta_mAlp-0p35GeV",
-    file_path=f"{base_path}/signals/tta_mAlp-0p35GeV/{skim}/histograms/tta_mAlp-0p35GeV_nEvents-100000.root",
-    type=SampleType.signal,
-    cross_section=1,
-    line_alpha=1,
-    line_color=ROOT.kRed,
-    fill_color=ROOT.kWhite,
-    fill_alpha=0,
-    marker_size=0,
-    legend_description="tta_mAlp-0p35GeV",
-  ),
+
+  # Sample(
+  #   name="tta_mAlp-0p35GeV",
+  #   file_path=f"{base_path}/signals/tta_mAlp-0p35GeV/{skim}/histograms/tta_mAlp-0p35GeV_nEvents-100000.root",
+  #   type=SampleType.signal,
+  #   cross_section=1,
+  #   line_alpha=1,
+  #   line_color=ROOT.kRed,
+  #   fill_color=ROOT.kWhite,
+  #   fill_alpha=0,
+  #   marker_size=0,
+  #   legend_description="tta_mAlp-0p35GeV",
+  # ),
 
 )
 
