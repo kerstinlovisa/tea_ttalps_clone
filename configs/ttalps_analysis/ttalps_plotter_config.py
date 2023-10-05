@@ -19,7 +19,7 @@ luminosity = 59830. # recommended lumi from https://twiki.cern.ch/twiki/bin/view
 
 legends = {
   SampleType.signal: Legend(0.15,0.85,0.25,0.89, "l"),
-  SampleType.background: Legend(0.7,0.65,0.85,0.9, "f"),
+  SampleType.background: Legend(0.7,0.65,0.85,0.89, "f"),
   SampleType.data: Legend(0.15,0.8,0.25,0.85, "pl"),
 }
 
@@ -38,55 +38,67 @@ color_palette = [
 histograms = (
 #           name       title                                    logy  norm_type                       rebin xmin xmax ymin ymax,  xlabel              ylabel
   Histogram("n_muons", "Number of muons",                       True, NormalizationType.to_lumi, 1,   0, 20,    1e1, 1e9,   "Number of muons",                    "# events (2018)"),
-  # Histogram("muon_pt", "Muon p_{T}",                            True, NormalizationType.to_lumi, 5,   0, 500,   1e-2, 1e6,   "p_{T}^{#mu} [GeV]",                 "# events (2018)"),
-  # Histogram("muon_leading_pt", "Leading muon p_{T}",            True, NormalizationType.to_lumi, 5,   0, 500,   1e-2, 1e6,   "Leading p_{T}^{#mu} [GeV]",         "# events (2018)"),
-  # Histogram("muon_subleading_pt", "All subleading muons p_{T}", True, NormalizationType.to_lumi, 5,   0, 500,   1e-2, 1e6,   "All subleading p_{T}^{#mu} [GeV]",  "# events (2018)"),
-  # Histogram("muon_eta","Muon #eta",                             True, NormalizationType.to_lumi, 5,-3.5, 3.5,    1e0, 1e6,  "#eta^{#mu}",                         "# events (2018)"),
-  # Histogram("muon_dxy","Muon d_{xy}",                           True, NormalizationType.to_lumi, 2,  -10, 10,   1e-2, 1e6,  "d_{xy}^{#mu}",                       "# events (2018)"),
-  # Histogram("muon_dz", "Muon d_{z}",                            True, NormalizationType.to_lumi, 2,  -10, 10,   1e-2, 1e6,  "d_{z}^{#mu}",                        "# events (2018)"),
+  Histogram("muon_pt", "Muon p_{T}",                            True, NormalizationType.to_lumi, 5,   0, 500,   1e-2, 1e6,   "p_{T}^{#mu} [GeV]",                 "# events (2018)"),
+  Histogram("muon_leading_pt", "Leading muon p_{T}",            True, NormalizationType.to_lumi, 5,   0, 500,   1e-2, 1e6,   "Leading p_{T}^{#mu} [GeV]",         "# events (2018)"),
+  Histogram("muon_subleading_pt", "All subleading muons p_{T}", True, NormalizationType.to_lumi, 5,   0, 500,   1e-2, 1e6,   "All subleading p_{T}^{#mu} [GeV]",  "# events (2018)"),
+  Histogram("muon_eta","Muon #eta",                             True, NormalizationType.to_lumi, 5,-3.5, 3.5,    1e0, 1e6,  "#eta^{#mu}",                         "# events (2018)"),
+  Histogram("muon_dxy","Muon d_{xy}",                           True, NormalizationType.to_lumi, 2,  -10, 10,   1e-2, 1e6,  "d_{xy}^{#mu}",                       "# events (2018)"),
+  Histogram("muon_dz", "Muon d_{z}",                            True, NormalizationType.to_lumi, 2,  -10, 10,   1e-2, 1e6,  "d_{z}^{#mu}",                        "# events (2018)"),
   
   Histogram("n_good_muons", "Number of good muons",                       True, NormalizationType.to_lumi, 1,   0, 20,    1e1, 1e9,   "Number of good muons",                    "# events (2018)"),
-  # Histogram("good_muon_pt", "Muon p_{T}",                            True, NormalizationType.to_lumi, 5,   0, 500,   1e-2, 1e6,   "p_{T}^{#mu} [GeV]",                 "# events (2018)"),
-  # Histogram("good_muon_leading_pt", "Leading muon p_{T}",            True, NormalizationType.to_lumi, 5,   0, 500,   1e-2, 1e6,   "Leading p_{T}^{#mu} [GeV]",         "# events (2018)"),
-  # Histogram("good_muon_subleading_pt", "All subleading muons p_{T}", True, NormalizationType.to_lumi, 5,   0, 500,   1e-2, 1e6,   "All subleading p_{T}^{#mu} [GeV]",  "# events (2018)"),
-  Histogram("good_muon_eta","Muon #eta",                             True, NormalizationType.to_background, 5,-3.5, 3.5,    1e0, 1e6,  "#eta^{#mu}",                         "# events (2018)"),
-  # Histogram("good_muon_dxy","Muon d_{xy}",                           True, NormalizationType.to_lumi, 2,  -10, 10,   1e-2, 1e6,  "d_{xy}^{#mu}",                       "# events (2018)"),
-  # Histogram("good_muon_dz", "Muon d_{z}",                            True, NormalizationType.to_lumi, 2,  -10, 10,   1e-2, 1e6,  "d_{z}^{#mu}",                        "# events (2018)"),
+  Histogram("good_muon_pt", "Muon p_{T}",                            True, NormalizationType.to_lumi, 5,   0, 500,   1e-2, 1e6,   "p_{T}^{#mu} [GeV]",                 "# events (2018)"),
+  Histogram("good_muon_leading_pt", "Leading muon p_{T}",            True, NormalizationType.to_lumi, 5,   0, 500,   1e-2, 1e6,   "Leading p_{T}^{#mu} [GeV]",         "# events (2018)"),
+  Histogram("good_muon_subleading_pt", "All subleading muons p_{T}", True, NormalizationType.to_lumi, 5,   0, 500,   1e-2, 1e6,   "All subleading p_{T}^{#mu} [GeV]",  "# events (2018)"),
+  Histogram("good_muon_eta","Muon #eta",                             True, NormalizationType.to_lumi, 5,-3.5, 3.5,    1e0, 1e6,  "#eta^{#mu}",                         "# events (2018)"),
+  Histogram("good_muon_dxy","Muon d_{xy}",                           True, NormalizationType.to_lumi, 2,  -10, 10,   1e-2, 1e6,  "d_{xy}^{#mu}",                       "# events (2018)"),
+  Histogram("good_muon_dz", "Muon d_{z}",                            True, NormalizationType.to_lumi, 2,  -10, 10,   1e-2, 1e6,  "d_{z}^{#mu}",                        "# events (2018)"),
   
-  # Histogram("n_electrons",  "Number of electrons",                   True, NormalizationType.to_lumi, 1,   0, 10,    1e1, 1e9,   "Number of electrons", "# events (2018)"),
-  # Histogram("electron_pt",  "Electron p_{T}",                        True, NormalizationType.to_lumi, 5,   0, 500,   1e-2, 1e6,   "p_{T}^{e} [GeV]",  "# events (2018)"),
-  # Histogram("electron_leading_pt",  "Leading electron p_{T}",        True, NormalizationType.to_lumi, 5,   0, 200,   1e-2, 1e6,   "Leading p_{T}^{e} [GeV]",  "# events (2018)"),
-  # Histogram("electron_subleading_pt","All subleading electron p_{T}",True, NormalizationType.to_lumi, 5,   0, 200,   1e-2, 1e6,   "All subleading p_{T}^{e} [GeV]",  "# events (2018)"),
-  # Histogram("electron_eta", "Electron #eta",                         True, NormalizationType.to_lumi, 10, -3.5, 3.5, 1e-2,  1e6,  "#eta^{e}",         "# events (2018)"),
-  # Histogram("electron_dxy", "Electron d_{xy}",                       True, NormalizationType.to_lumi, 1,   -10, 10,  1e-2, 1e6,  "d_{xy}^{e}",       "# events (2018)"),
-  # Histogram("electron_dz",  "Electron d_{z}",                        True, NormalizationType.to_lumi, 2,   -10, 10,  1e-2, 1e6,  "d_{z}^{e}",        "# events (2018)"),
+  Histogram("n_electrons",  "Number of electrons",                   True, NormalizationType.to_lumi, 1,   0, 10,    1e1, 1e9,   "Number of electrons", "# events (2018)"),
+  Histogram("electron_pt",  "Electron p_{T}",                        True, NormalizationType.to_lumi, 5,   0, 500,   1e-2, 1e6,   "p_{T}^{e} [GeV]",  "# events (2018)"),
+  Histogram("electron_leading_pt",  "Leading electron p_{T}",        True, NormalizationType.to_lumi, 5,   0, 500,   1e-2, 1e6,   "Leading p_{T}^{e} [GeV]",  "# events (2018)"),
+  Histogram("electron_subleading_pt","All subleading electron p_{T}",True, NormalizationType.to_lumi, 5,   0, 500,   1e-2, 1e6,   "All subleading p_{T}^{e} [GeV]",  "# events (2018)"),
+  Histogram("electron_eta", "Electron #eta",                         True, NormalizationType.to_lumi, 10, -3.5, 3.5, 1e-2,  1e6,  "#eta^{e}",         "# events (2018)"),
+  Histogram("electron_dxy", "Electron d_{xy}",                       True, NormalizationType.to_lumi, 1,   -10, 10,  1e-2, 1e6,  "d_{xy}^{e}",       "# events (2018)"),
+  Histogram("electron_dz",  "Electron d_{z}",                        True, NormalizationType.to_lumi, 2,   -10, 10,  1e-2, 1e6,  "d_{z}^{e}",        "# events (2018)"),
   
-  # Histogram("n_good_electrons",  "Number of electrons",                   True, NormalizationType.to_lumi, 1,   0, 10,    1e1, 1e9,   "Number of electrons", "# events (2018)"),
-  # Histogram("good_electron_pt",  "Electron p_{T}",                        True, NormalizationType.to_lumi, 5,   0, 500,   1e-2, 1e6,   "p_{T}^{e} [GeV]",  "# events (2018)"),
-  # Histogram("good_electron_leading_pt",  "Leading electron p_{T}",        True, NormalizationType.to_lumi, 5,   0, 200,   1e-2, 1e6,   "Leading p_{T}^{e} [GeV]",  "# events (2018)"),
-  # Histogram("good_electron_subleading_pt","All subleading electron p_{T}",True, NormalizationType.to_lumi, 5,   0, 200,   1e-2, 1e6,   "All subleading p_{T}^{e} [GeV]",  "# events (2018)"),
-  # Histogram("good_electron_eta", "Electron #eta",                         True, NormalizationType.to_lumi, 10, -3.5, 3.5, 1e-2,  1e6,  "#eta^{e}",         "# events (2018)"),
-  # Histogram("good_electron_dxy", "Electron d_{xy}",                       True, NormalizationType.to_lumi, 2,   -10, 10,  1e-2, 1e6,  "d_{xy}^{e}",       "# events (2018)"),
-  # Histogram("good_electron_dz",  "Electron d_{z}",                        True, NormalizationType.to_lumi, 2,   -10, 10,  1e-2, 1e6,  "d_{z}^{e}",        "# events (2018)"),
+  Histogram("n_good_electrons",  "Number of electrons",                   True, NormalizationType.to_lumi, 1,   0, 10,    1e1, 1e9,   "Number of electrons", "# events (2018)"),
+  Histogram("good_electron_pt",  "Electron p_{T}",                        True, NormalizationType.to_lumi, 5,   0, 500,   1e-2, 1e6,   "p_{T}^{e} [GeV]",  "# events (2018)"),
+  Histogram("good_electron_leading_pt",  "Leading electron p_{T}",        True, NormalizationType.to_lumi, 5,   0, 500,   1e-2, 1e6,   "Leading p_{T}^{e} [GeV]",  "# events (2018)"),
+  Histogram("good_electron_subleading_pt","All subleading electron p_{T}",True, NormalizationType.to_lumi, 5,   0, 500,   1e-2, 1e6,   "All subleading p_{T}^{e} [GeV]",  "# events (2018)"),
+  Histogram("good_electron_eta", "Electron #eta",                         True, NormalizationType.to_lumi, 10, -3.5, 3.5, 1e-2,  1e6,  "#eta^{e}",         "# events (2018)"),
+  Histogram("good_electron_dxy", "Electron d_{xy}",                       True, NormalizationType.to_lumi, 2,   -10, 10,  1e-2, 1e6,  "d_{xy}^{e}",       "# events (2018)"),
+  Histogram("good_electron_dz",  "Electron d_{z}",                        True, NormalizationType.to_lumi, 5,   -10, 10,  1e-2, 1e6,  "d_{z}^{e}",        "# events (2018)"),
   
-  # Histogram("n_jets",  "Number of jets",                        True, NormalizationType.to_lumi, 1,   0, 30,    1e0, 1e9,   "Number of jets",   "# events (2018)"),
-  # Histogram("jet_pt",  "Jet p_{T}",                             True, NormalizationType.to_lumi, 5,   0, 500,   10, 1e8,    "p_{T}^{j} [GeV]",  "# events (2018)"),
-  # Histogram("jet_eta", "Jet #eta",                              True, NormalizationType.to_lumi, 10, -3.5, 3.5, 1e0, 1e10,  "#eta^{j}",         "# events (2018)"),
-  # Histogram("jet_btagDeepB", "Jet btagDeepB",                   True, NormalizationType.to_lumi, 2,  -1, 1,     1e0, 1e7,  "jet btagDeepB",    "# events (2018)"),
+  Histogram("n_jets",  "Number of jets",                        True, NormalizationType.to_lumi, 1,   0, 30,    1e0, 1e9,   "Number of jets",   "# events (2018)"),
+  Histogram("jet_pt",  "Jet p_{T}",                             True, NormalizationType.to_lumi, 5,   0, 500,   10, 1e8,    "p_{T}^{j} [GeV]",  "# events (2018)"),
+  Histogram("jet_eta", "Jet #eta",                              True, NormalizationType.to_lumi, 10, -3.5, 3.5, 1e0, 1e10,  "#eta^{j}",         "# events (2018)"),
+  Histogram("jet_btagDeepB", "Jet btagDeepB",                   True, NormalizationType.to_lumi, 2,  -1, 1,     1e0, 1e7,  "jet btagDeepB",    "# events (2018)"),
   
-  # Histogram("n_good_jets",  "Number of jets",                        True, NormalizationType.to_lumi, 1,   0, 30,    1e0, 1e9,   "Number of jets",   "# events (2018)"),
-  # Histogram("good_jet_pt",  "Jet p_{T}",                             True, NormalizationType.to_lumi, 5,   0, 500,   10, 1e8,    "p_{T}^{j} [GeV]",  "# events (2018)"),
-  # Histogram("good_jet_eta", "Jet #eta",                              True, NormalizationType.to_lumi, 10, -3.5, 3.5, 1e0, 1e10,  "#eta^{j}",         "# events (2018)"),
-  # Histogram("good_jet_btagDeepB", "Jet btagDeepB",                   True, NormalizationType.to_lumi, 2,  -1, 1,     1e0, 1e7,  "jet btagDeepB",    "# events (2018)"),
+  Histogram("n_good_jets",  "Number of jets",                        True, NormalizationType.to_lumi, 1,   0, 30,    1e0, 1e9,   "Number of jets",   "# events (2018)"),
+  Histogram("good_jet_pt",  "Jet p_{T}",                             True, NormalizationType.to_lumi, 5,   0, 500,   10, 1e8,    "p_{T}^{j} [GeV]",  "# events (2018)"),
+  Histogram("good_jet_eta", "Jet #eta",                              True, NormalizationType.to_lumi, 10, -3.5, 3.5, 1e0, 1e10,  "#eta^{j}",         "# events (2018)"),
+  Histogram("good_jet_btagDeepB", "Jet btagDeepB",                   True, NormalizationType.to_lumi, 2,  -1, 1,     1e0, 1e7,  "jet btagDeepB",    "# events (2018)"),
   
-  Histogram("cutFlow", "cutflow",                               True, NormalizationType.to_background, 1,   0, 8,     1e2, 1e10,     "Selection",        "Number of events"),
-  Histogram("norm_check", "Norm check",                         True, NormalizationType.to_background, 1,  0, 1,      1e-2, 1e7,  "norm check",    "# events (2018)"),
+  Histogram("cutFlow", "cutflow",                               True, NormalizationType.to_lumi, 1,   0, 8,     1e2, 1e10,     "Selection",        "Number of events"),
+  Histogram("norm_check", "Norm check",                         True, NormalizationType.to_lumi, 1,  0, 1,      1e-2, 1e7,  "norm check",    "# events (2018)"),
 )
 
 weightsBranchName = "weight"
 
 # data&signals must be listed after backgrounds for now
 samples = (
+  Sample(
+    name="SingleMuon2018",
+    file_path=f"{base_path}/collision_data2018/SingleMuon2018_{skim}_histograms.root",
+    type=SampleType.data,
+    cross_section=1,
+    line_alpha=0,
+    fill_alpha=0,
+    marker_size=1,
+    marker_style=20,
+    marker_color=ROOT.kBlack,
+    legend_description="SingleMuon2018",
+  ),
   Sample(
     name="ttZJets",
     file_path=f"{base_path}/backgrounds2018/ttZJets/{skim}/histograms/histograms.root",
@@ -176,18 +188,7 @@ samples = (
     marker_size=0,
     legend_description="tta_mAlp-0p35GeV",
   ),
-  Sample(
-    name="SingleMuon2018",
-    file_path=f"{base_path}/collision_data2018/SingleMuon2018_{skim}_histograms.root",
-    type=SampleType.data,
-    cross_section=1,
-    line_alpha=0,
-    fill_alpha=0,
-    marker_size=1,
-    marker_style=20,
-    marker_color=ROOT.kBlack,
-    legend_description="SingleMuon2018",
-  ),
+
 )
 
 
