@@ -114,7 +114,9 @@ void TTAlpsHistogramFiller::FillLeadingPt(const std::shared_ptr<Event> event, st
     weight = event->Get(weightsBranchName);
   } catch (...) {
   }
-  histogramsHandler->histograms1D[histName]->Fill(eventProcessor->GetMaxPt(event, variableLocation[0]), weight);
+  float maxPt = eventProcessor->GetMaxPt(event, variableLocation[0]);
+  if(maxPt < 0) return;
+  histogramsHandler->histograms1D[histName]->Fill(maxPt, weight);
 }
 
 void TTAlpsHistogramFiller::FillNormCheck(const std::shared_ptr<Event> event) {
