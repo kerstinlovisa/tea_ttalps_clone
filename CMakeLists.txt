@@ -4,13 +4,11 @@ project(tea)
 set(CMAKE_OSX_ARCHITECTURES "arm64")
 SET(CMAKE_OSX_DEPLOYMENT_TARGET 13.2)
 
-list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
-
 set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/bin")
 
+list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
 find_package(ROOT REQUIRED COMPONENTS Minuit Eve Geom)
 include(${ROOT_USE_FILE})
-
 SET(CMAKE_SKIP_BUILD_RPATH FALSE)
 SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE) 
 SET(CMAKE_INSTALL_RPATH "/cvmfs/sft.cern.ch/lcg/releases/vdt/0.4.3-992df/x86_64-centos7-gcc8-opt/lib:/cvmfs/sft.cern.ch/lcg/releases/tbb/2019_U7-ba3eb/x86_64-centos7-gcc8-opt/lib:/cvmfs/sft.cern.ch/lcg/releases/Davix/0.7.3-d94fa/x86_64-centos7-gcc8-opt/lib64/:/cvmfs/sft.cern.ch/lcg/releases/png/1.6.37-9c2fe/x86_64-centos7-gcc8-opt/lib/:/cvmfs/sft.cern.ch/lcg/releases/GSL/2.5-32fc5/x86_64-centos7-gcc8-opt/lib/")
@@ -22,11 +20,11 @@ find_package(PythonLibs REQUIRED)
 
 set(LIBRARIES_DIR libs)
 
-if(TARGET user_extensions)
+# if(TARGET user_extensions)
     set(LIBRARIES  core extensions histogramming user_extensions)
-else()
-    set(LIBRARIES  core extensions histogramming)
-endif()
+# else()
+#     set(LIBRARIES  core extensions histogramming)
+# endif()
 
 foreach(LIBRARY ${LIBRARIES})
     add_subdirectory("${LIBRARIES_DIR}/${LIBRARY}")
@@ -37,7 +35,7 @@ add_subdirectory(pylibs)
 
 include_directories(${PYTHON_INCLUDE_DIRS})
 
-file(GLOB APP_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/apps/*/*.cpp")
+file(GLOB_RECURSE APP_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/apps/*/*.cpp")
 
 foreach(APP_SOURCE ${APP_SOURCES})
     get_filename_component(APP_NAME ${APP_SOURCE} NAME_WE)

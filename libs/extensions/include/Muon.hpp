@@ -23,6 +23,8 @@ class Muon {
   inline float GetEta() { return physicsObject->Get("eta"); }
   inline float GetPhi() { return physicsObject->Get("phi"); }
 
+  TLorentzVector GetFourVector();
+
  private:
   std::shared_ptr<PhysicsObject> physicsObject;
 };
