@@ -13,51 +13,55 @@ class HistogramNormalizer:
   def __init__(self, config):
     self.config = config
     self.__setBackgroundEntries()
-    
+  
   def normalize(self, hist, sample, data_hist=None):
-    lumi = self.config.luminosity
-    
     if hist.norm_type == NormalizationType.to_one:
-      if sample.type == SampleType.background:
-        hist.hist.Scale(1./self.total_background)
-      else:
-        hist.hist.Scale(1./hist.Integral())
-        
+      self.__normalizeToOne(hist, sample)
     elif hist.norm_type == NormalizationType.to_background:
-      
-      if sample.type == SampleType.background:
-        hist.hist.Scale(lumi*sample.cross_section/self.background_initial_sum_weights[sample.name])
-      
-      elif sample.type == SampleType.signal:
-        hist.hist.Scale(self.total_background/self.signal_final_sum_weights[sample.name])
-      
-      elif sample.type == SampleType.data:
-        hist.hist.Scale(self.total_background/self.data_final_entries[sample.name])
-        
+      self.__normalizeToBackground(hist, sample)
     elif hist.norm_type == NormalizationType.to_lumi:
-        
-      if sample.type == SampleType.background:
-        hist.hist.Scale(lumi*sample.cross_section/self.background_initial_sum_weights[sample.name])
-      
-      elif sample.type == SampleType.signal:
-        # print(f"{lumi=}, {sample.cross_section=}, {self.signal_final_sum_weights[sample.name]=}")
-        hist.hist.Scale(lumi*sample.cross_section/self.signal_final_sum_weights[sample.name])
-      
-      elif sample.type == SampleType.data:
-        pass
-      
+      self.__normalizeToLumi(hist, sample)
     elif hist.norm_type == NormalizationType.to_data:
-      
-      if sample.type == SampleType.background:
-        if hist.hist.Integral() == 0:
-          return  
-        hist.hist.Scale(hist.rebin * sample.cross_section/self.total_background_cross_section * data_hist.Integral()/hist.hist.Integral())
-      elif sample.type == SampleType.signal:
-        if hist.hist.Integral() == 0:
-          return
-        hist.hist.Scale(hist.rebin * data_hist.Integral()/hist.hist.Integral())
-      elif sample.type == SampleType.data:
-        pass
+      self.__normalizeToData(hist, sample, data_hist)
+  
+  def __normalizeToOne(self, hist, sample):
+    if sample.type == SampleType.background:
+      hist.hist.Scale(1./self.total_background)
+    else:
+      hist.hist.Scale(1./hist.Integral())
+  
+  def __normalizeToBackground(self, hist, sample):
+    if sample.type == SampleType.background:
+        hist.hist.Scale(self.config.luminosity*sample.cross_section/self.background_initial_sum_weights[sample.name])
+    elif sample.type == SampleType.signal:
+      hist.hist.Scale(self.total_background/self.signal_final_sum_weights[sample.name])
+    elif sample.type == SampleType.data:
+      hist.hist.Scale(self.total_background/self.data_final_entries[sample.name])
+  
+  def __normalizeToLumi(self, hist, sample):
+    scale = self.config.luminosity*sample.cross_section
+    
+    if sample.type == SampleType.background:
+      scale /= self.background_initial_sum_weights[sample.name]
+    elif sample.type == SampleType.signal:
+      scale /= self.signal_final_sum_weights[sample.name]
+    elif sample.type == SampleType.data:
+      scale = 1
+    
+    hist.hist.Scale(scale)
+  
+  def __normalizeToData(self, hist, sample, data_hist):
+    if hist.hist.Integral() == 0:
+        return  
+    
+    scale = hist.rebin * data_hist.Integral()/hist.hist.Integral()
+    
+    if sample.type == SampleType.background:
+      scale *= sample.cross_section/self.total_background_cross_section
+    elif sample.type == SampleType.data:
+      scale = 1
+    
+    hist.hist.Scale(scale)
   
   def __setBackgroundEntries(self):
     
@@ -72,7 +76,6 @@ class HistogramNormalizer:
       file = TFile.Open(sample.file_path, "READ")
 
       cut_flow = file.Get("cutFlow")
-
       initial_weight_sum = cut_flow.GetBinContent(1)
       final_weight_sum = cut_flow.GetBinContent(cut_flow.GetNbinsX())
       
