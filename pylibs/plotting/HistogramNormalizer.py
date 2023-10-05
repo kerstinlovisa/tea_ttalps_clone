@@ -52,7 +52,9 @@ class HistogramNormalizer:
   
   def __normalizeToData(self, hist, sample, data_hist):
     if hist.hist.Integral() == 0:
-        return  
+      return  
+    if data_hist is None:
+      return
     
     scale = hist.rebin * data_hist.Integral()/hist.hist.Integral()
     

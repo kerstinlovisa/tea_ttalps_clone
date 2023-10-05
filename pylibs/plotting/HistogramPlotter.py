@@ -39,7 +39,11 @@ class HistogramPlotter:
       if sample.type == SampleType.data:
         self.data_hists[hist.name] = hist.hist
 
-      self.normalizer.normalize(hist, sample, self.data_hists[hist.name])
+      data_hist = None
+      if hist.name in self.data_hists:
+        data_hist = self.data_hists[hist.name]
+
+      self.normalizer.normalize(hist, sample, data_hist)
       hist.setup(sample)
       
       self.stacks[sample.type][hist.name].Add(hist.hist)
@@ -82,21 +86,30 @@ class HistogramPlotter:
       gPad.SetLogy(hist.log_y)
       
       if self.backgrounds_included:
+        
+        n_entries = 0
+        for h in self.stacks[SampleType.background][hist.name].GetHists():
+          n_entries += h.GetEntries()
+        
+        print(f"Plotting hist: {hist.name} with {n_entries} entries")
+        
         self.stacks[SampleType.background][hist.name].Draw("hist")
         self.__setupFigure(self.stacks[SampleType.background][hist.name], hist)
         
         background_uncertainty_hist = self.__getBackgroundUncertaintyHist(hist)
-        background_uncertainty_hist.Draw("same e2")
+        if background_uncertainty_hist is not None:
+          background_uncertainty_hist.Draw("same e2")
         
-        canvas.cd(2)
-        ratio_uncertainty = background_uncertainty_hist.Clone("ratio_uncertainty_"+hist.name)
-        ratio_uncertainty.Divide(ratio_uncertainty)
-        ratio_uncertainty.SetFillColorAlpha(self.config.background_uncertainty_color, 
-                                            self.config.background_uncertainty_alpha)
-        ratio_uncertainty.SetLineColor(self.config.background_uncertainty_color)
-        ratio_uncertainty.SetFillStyle(self.config.background_uncertainty_style)
-        ratio_uncertainty.Draw("same e2")
-        canvas.cd(1)
+          canvas.cd(2)
+          ratio_uncertainty = background_uncertainty_hist.Clone("ratio_uncertainty_"+hist.name)
+          
+          ratio_uncertainty.Divide(ratio_uncertainty)
+          ratio_uncertainty.SetFillColorAlpha(self.config.background_uncertainty_color, 
+                                              self.config.background_uncertainty_alpha)
+          ratio_uncertainty.SetLineColor(self.config.background_uncertainty_color)
+          ratio_uncertainty.SetFillStyle(self.config.background_uncertainty_style)
+          ratio_uncertainty.Draw("same e2")
+          canvas.cd(1)
         
         self.stacks[SampleType.signal][hist.name].Draw("nostack same e")
       else:
