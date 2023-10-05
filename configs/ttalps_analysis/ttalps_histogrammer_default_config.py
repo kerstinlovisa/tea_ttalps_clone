@@ -80,6 +80,12 @@ extraEventCollections["GoodMuons"] = {
   "eta": (-2.4, 2.4),
 }
 
+extraEventCollections["AlmostGoodMuons"] = {
+  "inputCollections": ("Muon",),
+  "pt": (15., 9999999.),
+  "eta": (-2.4, 2.4),
+}
+
 extraEventCollections["GoodElectrons"] = {
   "inputCollections": ("Electron",),
   "pt": (30., 9999999.),
@@ -143,6 +149,8 @@ ttalpsHistParams = {
   
   "good_jet_leading_pt"    :   ("GoodJets",      "leading_pt",     2000,   0,       1000,    ""  ),
   "good_jet_subleading_pt" :   ("GoodJets",      "subleading_pt",  2000,   0,       1000,    ""  ),
+  
+  "almost_good_dimuon_minv" :   ("AlmostGoodMuons",      "dimuon_minv",  200,   0,       200,    ""  ),
   
   "norm_check"        :   ("",              "norm_check",     1,      0,       1,       ""  ),
 }
