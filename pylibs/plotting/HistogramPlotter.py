@@ -85,13 +85,26 @@ class HistogramPlotter:
         self.stacks[SampleType.background][hist.name].Draw("hist")
         self.__setupFigure(self.stacks[SampleType.background][hist.name], hist)
         
-        self.stacks[SampleType.signal][hist.name].Draw("nostack same")
+        background_uncertainty_hist = self.__getBackgroundUncertaintyHist(hist)
+        background_uncertainty_hist.Draw("same e2")
+        
+        canvas.cd(2)
+        ratio_uncertainty = background_uncertainty_hist.Clone("ratio_uncertainty_"+hist.name)
+        ratio_uncertainty.Divide(ratio_uncertainty)
+        ratio_uncertainty.SetFillColorAlpha(self.config.background_uncertainty_color, 
+                                            self.config.background_uncertainty_alpha)
+        ratio_uncertainty.SetLineColor(self.config.background_uncertainty_color)
+        ratio_uncertainty.SetFillStyle(self.config.background_uncertainty_style)
+        ratio_uncertainty.Draw("same e2")
+        canvas.cd(1)
+        
+        self.stacks[SampleType.signal][hist.name].Draw("nostack same e")
       else:
-        self.stacks[SampleType.signal][hist.name].Draw("nostack hist")
+        self.stacks[SampleType.signal][hist.name].Draw("nostack hist e")
         self.__setupFigure(self.stacks[SampleType.signal][hist.name], hist)
 
       if self.data_included:
-        self.stacks[SampleType.data][hist.name].Draw("nostack same P")
+        self.stacks[SampleType.data][hist.name].Draw("nostack same pe")
 
       for sample_type in SampleType:
         self.legends[sample_type][hist.name].Draw()
@@ -121,6 +134,28 @@ class HistogramPlotter:
     ratio_stack.Add(ratio_hist)
     
     return ratio_stack
+  
+  def __getBackgroundUncertaintyHist(self, hist):
+    try:
+      background_hist = self.stacks[SampleType.background][hist.name].GetHists()[0]
+    except:
+      return None
+    
+    uncertainty_hist = ROOT.TH1D("backgrounds_unc_"+hist.name, "backgrounds_unc_"+hist.name,
+                                  background_hist.GetNbinsX(),
+                                  background_hist.GetXaxis().GetBinLowEdge(1), 
+                                  background_hist.GetXaxis().GetBinUpEdge(background_hist.GetNbinsX()))
+    
+      
+    for background_hist in self.stacks[SampleType.background][hist.name].GetHists():  
+      uncertainty_hist.Add(background_hist)
+    
+    uncertainty_hist.SetFillColorAlpha(self.config.background_uncertainty_color,
+                                       self.config.background_uncertainty_alpha)
+    uncertainty_hist.SetLineColor(self.config.background_uncertainty_color)
+    uncertainty_hist.SetFillStyle(self.config.background_uncertainty_style)
+    
+    return uncertainty_hist
   
   def __getStackDict(self, sample_type):
     hists_dict = {}

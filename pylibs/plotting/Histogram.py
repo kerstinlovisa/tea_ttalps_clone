@@ -38,4 +38,4 @@ class Histogram:
     self.hist.SetFillColorAlpha(sample.fill_color, sample.fill_alpha)
     self.hist.Rebin(self.rebin)
     self.hist.Scale(1./self.rebin)
-    self.hist.Sumw2(False)
+    self.hist.Sumw2(True)
