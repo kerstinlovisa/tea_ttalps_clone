@@ -3,6 +3,7 @@ printEveryNevents = 1000
 
 applyLooseSkimming = False
 applyTTbarLikeSkimming = True
+applyTTZLikeSkimming = False
 applySignalLikeSkimming = False
 
 

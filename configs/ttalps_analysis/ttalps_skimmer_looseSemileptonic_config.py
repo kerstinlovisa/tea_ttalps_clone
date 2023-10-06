@@ -3,6 +3,7 @@ printEveryNevents = 10000
 
 applyLooseSkimming = True
 applyTTbarLikeSkimming = False
+applyTTZLikeSkimming = False
 applySignalLikeSkimming = False
 
 # basePath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds/"
