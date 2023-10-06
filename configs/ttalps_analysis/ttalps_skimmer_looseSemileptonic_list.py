@@ -47,8 +47,11 @@ max_files = -1
 # dataset = "/ttHToMuMu_M125_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM"
 # output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttHToMuMu/skimmed_looseSemileptonic/"
 
-dataset = "/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM"
-output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttHTobb/skimmed_looseSemileptonic/"
+# dataset = "/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM"
+# output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttHTobb/skimmed_looseSemileptonic/"
+
+dataset = "/DYJetsToMuMu_M-50_massWgtFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
+output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/DYJetsToMuMu_M-50/skimmed_looseSemileptonic/"
 
 # option 4: give DAS dataset name, output path and specify a particular file name you want to run on
 # max_files = -1
