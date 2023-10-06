@@ -88,8 +88,8 @@ class HistogramNormalizer:
         efficiency = final_weight_sum/initial_weight_sum
       
       if sample.type == SampleType.background:
-        print(f"{sample.name}: {sample.cross_section * self.config.luminosity * efficiency:.1e}")
-        print(f"{initial_weight_sum=:.1e}")
+        print(f"\tBackground: {sample.name}: {sample.cross_section * self.config.luminosity * efficiency:.1e}")
+        print(f"\t{initial_weight_sum=:.1e}")
         
         self.total_background += sample.cross_section * self.config.luminosity * efficiency
         self.background_initial_sum_weights[sample.name] = initial_weight_sum
@@ -98,9 +98,9 @@ class HistogramNormalizer:
         self.background_final_sum_weights[sample.name] = final_weight_sum
         
       elif sample.type == SampleType.signal:
-        print(f"{sample.name}: {final_weight_sum}")
+        print(f"\tSignal: {sample.name}: {final_weight_sum}")
         self.signal_final_sum_weights[sample.name] = final_weight_sum
         
       elif sample.type == SampleType.data:
-        print(f"{sample.name}: {final_weight_sum}")
+        print(f"\tData: {sample.name}: {final_weight_sum}")
         self.data_final_entries[sample.name] = final_weight_sum
