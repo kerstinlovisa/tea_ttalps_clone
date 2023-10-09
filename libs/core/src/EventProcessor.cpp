@@ -24,8 +24,9 @@ EventProcessor::EventProcessor(shared_ptr<ConfigManager> _config) {
 }
 
 bool EventProcessor::PassesTriggerSelections(const shared_ptr<Event> event) {
+  bool passes = true;
   for (auto &triggerName : triggerNames) {
-    bool passes = false;
+    passes = false;
     try {
       passes = event->Get(triggerName);
     } catch (Exception &) {
@@ -36,7 +37,7 @@ bool EventProcessor::PassesTriggerSelections(const shared_ptr<Event> event) {
     }
     if (passes) return true;
   }
-  return false;
+  return passes;
 }
 
 bool EventProcessor::PassesEventSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
