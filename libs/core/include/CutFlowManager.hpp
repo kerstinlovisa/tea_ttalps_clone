@@ -33,6 +33,7 @@ class CutFlowManager {
   int currentIndex;
 
   std::vector<std::string> existingCuts;
+  bool weightsBranchWarningPrinted = false;
 };
 
 #endif /* CutFlowManager_hpp */

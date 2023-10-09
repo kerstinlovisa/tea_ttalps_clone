@@ -66,7 +66,10 @@ void CutFlowManager::UpdateCutFlow(string cutName) {
   try {
     weight = eventReader->currentEvent->Get(weightsBranchName);
   } catch (...) {
-    error() << "Could not find weights branch " << weightsBranchName << endl;
+    if(!weightsBranchWarningPrinted){
+      error() << "Could not find weights branch " << weightsBranchName << endl;
+      weightsBranchWarningPrinted = true;
+    }
   }
 
   if (weightsAfterCuts.count(fullCutName)) {
