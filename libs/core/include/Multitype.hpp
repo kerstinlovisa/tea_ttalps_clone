@@ -7,34 +7,45 @@
 
 #include "Helpers.hpp"
 
+// Define custom exception class
+class BadTypeException : public std::exception {
+ public:
+  BadTypeException(const char *message) : msg_(message) {}
+  ~BadTypeException() {}
+  const char *what() const noexcept { return msg_.c_str(); }
+
+ private:
+  std::string msg_;
+};
+
 template <typename T>
 class Multitype {
  public:
   Multitype(T *object_, std::string branchName_) : object(object_), branchName(branchName_) {}
 
   operator UInt_t() {
-    if (!isCorrectType("UInt_t")) return 0;
+    checkType("UInt_t");
+    
     return object->GetUint(branchName);
   }
   operator Int_t() {
-    if (!isCorrectType("Int_t")) return 0;
+    checkType("Int_t");
     return object->GetInt(branchName);
   }
   operator Bool_t() {
-    if (!isCorrectType("Bool_t")) return 0;
+    checkType("Bool_t");
     return object->GetBool(branchName);
   }
   operator Float_t() {
-    if (!isCorrectType("Float_t")) return 0;
+    checkType("Float_t");
     return object->GetFloat(branchName);
-    ;
   }
   operator ULong64_t() {
-    if (!isCorrectType("ULong64_t")) return 0;
+    checkType("ULong64_t");
     return object->GetULong(branchName);
   }
   operator UChar_t() {
-    if (!isCorrectType("UChar_t")) return 0;
+    checkType("UChar_t");
     return object->GetUChar(branchName);
   }
 
@@ -42,14 +53,12 @@ class Multitype {
   T *object;
   std::string branchName;
 
-  bool isCorrectType(std::string typeName) {
+  void checkType(std::string typeName) {
     std::string branchType = object->valuesTypes.at(branchName);
     if (branchType != typeName) {
-      warn() << "Casting a physics object-level branch " << branchName;
-      warn() << " (" << branchType << ") to " << typeName << "\n";
-      return false;
+      std::string message = "Casting a physics object-level branch " + branchName + " (" + branchType + ") to " + typeName + "\n";
+      throw BadTypeException(message.c_str());
     }
-    return true;
   }
 };
 

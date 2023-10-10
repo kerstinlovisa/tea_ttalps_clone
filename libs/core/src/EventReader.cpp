@@ -93,7 +93,7 @@ void EventReader::SetupScalarBranch(string branchName, string branchType) {
     currentEvent->valuesUchar[branchName] = 0;
     inputTrees["Events"]->SetBranchAddress(branchName.c_str(), &currentEvent->valuesUchar[branchName]);
   } else {
-    cout << "ERROR -- unsupported branch type: " << branchType << "\t (branch name: " << branchName << ")" << endl;
+    error() << "unsupported branch type: " << branchType << "\t (branch name: " << branchName << ")" << endl;
   }
 }
 
@@ -128,8 +128,23 @@ void EventReader::SetupVectorBranch(string branchName, string branchType) {
     for (int i = 0; i < maxCollectionElements; i++) {
       currentEvent->collections[collectionName]->at(i)->valuesBool[variableName] = &currentEvent->valuesBoolVector[branchName][i];
     }
+  } else if (branchType == "UInt_t") {
+    inputTrees["Events"]->SetBranchAddress(branchName.c_str(), &currentEvent->valuesUintVector[branchName]);
+    for (int i = 0; i < maxCollectionElements; i++) {
+      currentEvent->collections[collectionName]->at(i)->valuesUint[variableName] = &currentEvent->valuesUintVector[branchName][i];
+    }
+  } else if (branchType == "UShort_t") {
+    inputTrees["Events"]->SetBranchAddress(branchName.c_str(), &currentEvent->valuesUshortVector[branchName]);
+    for (int i = 0; i < maxCollectionElements; i++) {
+      currentEvent->collections[collectionName]->at(i)->valuesUshort[variableName] = &currentEvent->valuesUshortVector[branchName][i];
+    }
+  } else if (branchType == "Short_t") {
+    inputTrees["Events"]->SetBranchAddress(branchName.c_str(), &currentEvent->valuesShortVector[branchName]);
+    for (int i = 0; i < maxCollectionElements; i++) {
+      currentEvent->collections[collectionName]->at(i)->valuesShort[variableName] = &currentEvent->valuesShortVector[branchName][i];
+    }
   } else {
-    cout << "ERROR -- unsupported branch type: " << branchType << "\t (branch name: " << branchName << ")" << endl;
+    error() << "unsupported branch type: " << branchType << "\t (branch name: " << branchName << ")" << endl;
   }
 }
 
@@ -139,6 +154,30 @@ void EventReader::InitializeCollection(string collectionName) {
   currentEvent->collections[collectionName] = make_shared<PhysicsObjects>();
   for (int i = 0; i < maxCollectionElements; i++) {
     currentEvent->collections[collectionName]->push_back(make_shared<PhysicsObject>(collectionName));
+  }
+}
+
+void EventReader::SetCollectionSizeFromHepMC(shared_ptr<PhysicsObjects> collection, string name) {
+  bool workedWithHepMC = true;
+
+  try {
+    Int_t collectionSize = currentEvent->Get("Event_numberP");
+    collection->ChangeVisibleSize(collectionSize);
+  } catch (Exception &e) {
+    workedWithHepMC = false;
+    if (find(sizeWarningsPrinted.begin(), sizeWarningsPrinted.end(), name) == sizeWarningsPrinted.end()) {
+      error() << "Could not set size of collection: " << name << "\n";
+      error() << "Range-based loops over this collection should not be used!\n";
+      sizeWarningsPrinted.push_back(name);
+    }
+  }
+
+  if (!workedWithHepMC) {
+    if (find(sizeWarningsPrinted.begin(), sizeWarningsPrinted.end(), name) == sizeWarningsPrinted.end()) {
+      error() << "Could not set size of collection: " << name << "\n";
+      error() << "Range-based loops over this collection should not be used!\n";
+      sizeWarningsPrinted.push_back(name);
+    }
   }
 }
 
@@ -158,28 +197,17 @@ shared_ptr<Event> EventReader::GetEvent(int iEvent) {
     try {
       UInt_t collectionSize = currentEvent->Get("n" + name);
       collection->ChangeVisibleSize(collectionSize);
-    } catch (Exception &e) {
-      bool workedWithHepMC = true;
-
+    } catch (BadTypeException &e) {
       try {
-        Int_t collectionSize = currentEvent->Get("Event_numberP");
+        Int_t collectionSize = currentEvent->Get("n" + name);
         collection->ChangeVisibleSize(collectionSize);
+      } catch (BadTypeException &e) {
+        error() << e.what() << endl;
       } catch (Exception &e) {
-        workedWithHepMC = false;
-        if (find(sizeWarningsPrinted.begin(), sizeWarningsPrinted.end(), name) == sizeWarningsPrinted.end()) {
-          error() << "Could not set size of collection: " << name << "\n";
-          error() << "Range-based loops over this collection should not be used!\n";
-          sizeWarningsPrinted.push_back(name);
-        }
+        SetCollectionSizeFromHepMC(collection, name);
       }
-
-      if (!workedWithHepMC) {
-        if (find(sizeWarningsPrinted.begin(), sizeWarningsPrinted.end(), name) == sizeWarningsPrinted.end()) {
-          error() << "Could not set size of collection: " << name << "\n";
-          error() << "Range-based loops over this collection should not be used!\n";
-          sizeWarningsPrinted.push_back(name);
-        }
-      }
+    } catch (Exception &e) {
+      SetCollectionSizeFromHepMC(collection, name);
     }
   }
 

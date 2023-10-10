@@ -33,6 +33,8 @@ private:
   void SetupVectorBranch(std::string branchName, std::string branchType);
   void InitializeCollection(std::string collectionName);
 
+  void SetCollectionSizeFromHepMC(std::shared_ptr<PhysicsObjects> collection, std::string name);
+
   std::vector<std::string> sizeWarningsPrinted;
 
   friend class EventWriter;

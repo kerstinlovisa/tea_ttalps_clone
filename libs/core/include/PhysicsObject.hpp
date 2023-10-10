@@ -36,6 +36,8 @@ class PhysicsObject {
   inline Float_t GetFloat(std::string branchName) { return *valuesFloat[branchName]; }
   inline ULong64_t GetULong(std::string branchName) { return *valuesUlong[branchName]; }
   inline UChar_t GetUChar(std::string branchName) { return *valuesUchar[branchName]; }
+  inline UShort_t GetUShort(std::string branchName) { return *valuesUshort[branchName]; }
+  inline Short_t GetShort(std::string branchName) { return *valuesShort[branchName]; }
 
   // contains all branch names and corresponding types
   std::map<std::string, std::string> valuesTypes;
@@ -46,6 +48,8 @@ class PhysicsObject {
   std::map<std::string, Float_t *> valuesFloat;
   std::map<std::string, ULong64_t *> valuesUlong;
   std::map<std::string, UChar_t *> valuesUchar;
+  std::map<std::string, UShort_t *> valuesUshort;
+  std::map<std::string, Short_t *> valuesShort;
 
   std::string originalCollection;
 
