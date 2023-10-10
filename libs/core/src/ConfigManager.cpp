@@ -269,6 +269,32 @@ void ConfigManager::GetExtraEventCollections(map<string, ExtraCollection> &extra
   }
 }
 
+void ConfigManager::GetHistogramsParams(std::map<std::string, HistogramParams> &histogramsParams) {
+  PyObject *pythonDict = GetPythonDict("histParams");
+
+  PyObject *histName, *params;
+  Py_ssize_t pos = 0;
+
+  while (PyDict_Next(pythonDict, &pos, &histName, &params)) {
+    if (!PyUnicode_Check(histName)) {
+      error() << "Failed retriving python hist name (string)\n";
+      continue;
+    }
+    PyObject *pyKey = nullptr;
+    PyObject *pyValue = nullptr;
+    Py_ssize_t pos2 = 0;
+    
+    HistogramParams histParams;
+
+    histParams.nBins = PyLong_AsLong(GetItem(params, 0));
+    histParams.min = PyFloat_AsDouble(GetItem(params, 1));
+    histParams.max = PyFloat_AsDouble(GetItem(params, 2));
+    histParams.directory = PyUnicode_AsUTF8(GetItem(params, 3));
+
+    histogramsParams[PyUnicode_AsUTF8(histName)] = histParams;
+  }
+}
+
 void ConfigManager::GetSelections(map<string, pair<float, float>> &selections) {
   PyObject *pythonDict = GetPythonDict("eventSelections");
 

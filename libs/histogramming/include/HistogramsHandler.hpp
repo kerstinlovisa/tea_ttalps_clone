@@ -24,12 +24,7 @@ class HistogramsHandler {
   std::map<std::string, TH2D*> histograms2D;
 
  private:
-  std::map<std::string, std::string> histTitles;
-  std::map<std::string, int> histNbins;
-  std::map<std::string, float> histMin;
-  std::map<std::string, float> histMax;
-  std::map<std::string, std::string> histOutputDir;
-
+  std::map<std::string, HistogramParams> histParams;
   std::string outputPath;
 };
 

@@ -33,9 +33,9 @@
 #include <filesystem>
 #include <iostream>
 #include <random>
+#include <regex>
 #include <sstream>
 #include <string>
-#include <regex>
 
 #include "Logger.hpp"
 
@@ -96,6 +96,13 @@ struct ExtraCollection {
       info() << "\t" << name << ": " << cuts.first << ", " << cuts.second << "\n";
     }
   }
+};
+
+struct HistogramParams {
+  std::string name, directory;
+  int nBins;
+  float min, max;
+  void Print() { info() << "Histogram: " << directory << "/" << name << "(" << nBins << ", " << min << ", " << max << ")" << std::endl; }
 };
 
 template <class T>

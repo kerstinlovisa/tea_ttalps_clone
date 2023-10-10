@@ -11,19 +11,15 @@
 using namespace std;
 
 HistogramsHandler::HistogramsHandler(std::shared_ptr<ConfigManager> _config) {
-  _config->GetMap("histTitles", histTitles);
-  _config->GetMap("histNbins", histNbins);
-  _config->GetMap("histMin", histMin);
-  _config->GetMap("histMax", histMax);
-  _config->GetMap("histOutputDir", histOutputDir);
+  _config->GetHistogramsParams(histParams);
   _config->GetValue("histogramsOutputFilePath", outputPath);
 }
 
 HistogramsHandler::~HistogramsHandler() {}
 
 void HistogramsHandler::SetupHistograms() {
-  for (auto &[name, title] : histTitles) {
-    histograms1D[name] = new TH1D(title.c_str(), title.c_str(), histNbins[name], histMin[name], histMax[name]);
+  for (auto &[name, params] : histParams) {
+    histograms1D[name] = new TH1D(name.c_str(), name.c_str(), params.nBins, params.min, params.max);
   }
 }
 
@@ -32,7 +28,7 @@ void HistogramsHandler::SaveHistograms() {
   outputFile->cd();
 
   for (auto &[name, hist] : histograms1D) {
-    string outputDir = histOutputDir[name];
+    string outputDir = histParams[name].directory;
     if (!outputFile->Get(outputDir.c_str())) outputFile->mkdir(outputDir.c_str());
     outputFile->cd(outputDir.c_str());
     hist->Write();
