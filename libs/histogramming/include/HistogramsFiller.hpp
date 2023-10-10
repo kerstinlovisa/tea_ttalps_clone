@@ -27,6 +27,9 @@ class HistogramsFiller {
   std::map<std::string, HistogramParams> defaultHistVariables;
   std::string weightsBranchName;
 
+  std::map<std::string, std::string> defaultCollectionsTypes;
+
+  float GetValue(std::shared_ptr<PhysicsObject> object, std::string branchName);
 };
 
 #endif /* HistogramsFiller_hpp */

@@ -28,6 +28,46 @@ HistogramsFiller::HistogramsFiller(shared_ptr<ConfigManager> _config, shared_ptr
 
 HistogramsFiller::~HistogramsFiller() {}
 
+float HistogramsFiller::GetValue(shared_ptr<PhysicsObject> object, string branchName) {
+
+  if(defaultCollectionsTypes.count(branchName)){
+    string branchType = defaultCollectionsTypes[branchName];
+    if(branchType == "int"){
+      int value = object->Get(branchName);
+      return value;
+    }
+    if(branchType == "bool"){
+      bool value = object->Get(branchName);
+      return value;
+    }
+    if(branchType == "float"){
+      float value = object->Get(branchName);
+      return value;
+    }
+  }
+
+  try {
+    float value = object->Get(branchName);
+    defaultCollectionsTypes[branchName] = "float";
+    return value;
+  } catch (BadTypeException& e) {
+    try {
+      int value = object->Get(branchName);
+      defaultCollectionsTypes[branchName] = "int";
+      return value;
+    } catch (BadTypeException& e) {
+      try {
+        bool value = object->Get(branchName);
+        defaultCollectionsTypes[branchName] = "bool";
+        return value;
+      } catch (BadTypeException& e) {
+        error() << "Couldn't get value for branch " << branchName << endl;
+      }
+    }
+  }
+  return 0;
+}
+
 void HistogramsFiller::FillDefaultVariables(const std::shared_ptr<Event> event) {
   float weight = 1.0;
   try {
@@ -49,24 +89,7 @@ void HistogramsFiller::FillDefaultVariables(const std::shared_ptr<Event> event) 
     } else {
       auto collection = event->GetCollection(collectionName);
       for (auto object : *collection) {
-        float value;
-        try {
-          value = object->Get(branchName);
-        } catch (BadTypeException& e) {
-          try {
-            int valueInt = object->Get(branchName);
-            value = valueInt;
-          } catch (BadTypeException& e) {
-            try {
-              bool valueBool = object->Get(branchName);
-              value = valueBool;
-            }
-            catch(BadTypeException& e) {
-              error() << "Couldn't get value for branch " << branchName << " in collection " << collectionName << endl;
-            }
-          }
-        }
-        histogramsHandler->histograms1D[branchName]->Fill(value, weight);
+        histogramsHandler->histograms1D[branchName]->Fill(GetValue(object, branchName), weight);
       }
     }
   }
