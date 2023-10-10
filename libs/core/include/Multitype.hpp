@@ -25,7 +25,6 @@ class Multitype {
 
   operator UInt_t() {
     checkType("UInt_t");
-    
     return object->GetUint(branchName);
   }
   operator Int_t() {
@@ -47,6 +46,14 @@ class Multitype {
   operator UChar_t() {
     checkType("UChar_t");
     return object->GetUChar(branchName);
+  }
+  operator UShort_t() {
+    checkType("UShort_t");
+    return object->GetUShort(branchName);
+  }
+  operator Short_t() {
+    checkType("Short_t");
+    return object->GetShort(branchName);
   }
 
  private:

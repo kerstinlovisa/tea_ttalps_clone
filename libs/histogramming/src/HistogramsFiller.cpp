@@ -29,39 +29,78 @@ HistogramsFiller::HistogramsFiller(shared_ptr<ConfigManager> _config, shared_ptr
 HistogramsFiller::~HistogramsFiller() {}
 
 float HistogramsFiller::GetValue(shared_ptr<PhysicsObject> object, string branchName) {
-
-  if(defaultCollectionsTypes.count(branchName)){
+  if (defaultCollectionsTypes.count(branchName)) {
     string branchType = defaultCollectionsTypes[branchName];
-    if(branchType == "int"){
-      int value = object->Get(branchName);
+    if (branchType == "Int_t") {
+      Int_t value = object->Get(branchName);
       return value;
     }
-    if(branchType == "bool"){
-      bool value = object->Get(branchName);
+    if (branchType == "Bool_t") {
+      Bool_t value = object->Get(branchName);
       return value;
     }
-    if(branchType == "float"){
-      float value = object->Get(branchName);
+    if (branchType == "Float_t") {
+      Float_t value = object->Get(branchName);
+      return value;
+    }
+    if (branchType == "UChar_t") {
+      UChar_t value = object->Get(branchName);
+      return value;
+    }
+    if (branchType == "UShort_t") {
+      UShort_t value = object->Get(branchName);
+      return value;
+    }
+    if (branchType == "Short_t") {
+      Short_t value = object->Get(branchName);
+      return value;
+    }
+    if (branchType == "UInt_t") {
+      UInt_t value = object->Get(branchName);
       return value;
     }
   }
 
   try {
-    float value = object->Get(branchName);
-    defaultCollectionsTypes[branchName] = "float";
+    Float_t value = object->Get(branchName);
+    defaultCollectionsTypes[branchName] = "Float_t";
     return value;
   } catch (BadTypeException& e) {
     try {
-      int value = object->Get(branchName);
-      defaultCollectionsTypes[branchName] = "int";
+      Int_t value = object->Get(branchName);
+      defaultCollectionsTypes[branchName] = "Int_t";
       return value;
     } catch (BadTypeException& e) {
       try {
-        bool value = object->Get(branchName);
-        defaultCollectionsTypes[branchName] = "bool";
+        UChar_t value = object->Get(branchName);
+        defaultCollectionsTypes[branchName] = "UChar_t";
         return value;
       } catch (BadTypeException& e) {
-        error() << "Couldn't get value for branch " << branchName << endl;
+        try {
+          UShort_t value = object->Get(branchName);
+          defaultCollectionsTypes[branchName] = "UShort_t";
+          return value;
+        } catch (BadTypeException& e) {
+          try {
+            Short_t value = object->Get(branchName);
+            defaultCollectionsTypes[branchName] = "Short_t";
+            return value;
+          } catch (BadTypeException& e) {
+            try {
+              UInt_t value = object->Get(branchName);
+              defaultCollectionsTypes[branchName] = "UInt_t";
+              return value;
+            } catch (BadTypeException& e) {
+              try {
+                Bool_t value = object->Get(branchName);
+                defaultCollectionsTypes[branchName] = "Bool_t";
+                return value;
+              } catch (BadTypeException& e) {
+                error() << "Couldn't get value for branch " << branchName << endl;
+              }
+            }
+          }
+        }
       }
     }
   }
