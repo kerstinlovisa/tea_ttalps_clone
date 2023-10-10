@@ -14,7 +14,7 @@ HistogramsFiller::HistogramsFiller(shared_ptr<ConfigManager> _config, shared_ptr
   eventProcessor = make_unique<EventProcessor>();
 
   try {
-    _config->GetMap("defaultHistVariables", defaultHistVariables);
+    _config->GetHistogramsParams(defaultHistVariables, "defaultHistParams");
   } catch (const Exception& e) {
     warn() << "Couldn't read defaultHistVariables from config file - no default histograms will be included" << endl;
   }
@@ -29,31 +29,44 @@ HistogramsFiller::HistogramsFiller(shared_ptr<ConfigManager> _config, shared_ptr
 HistogramsFiller::~HistogramsFiller() {}
 
 void HistogramsFiller::FillDefaultVariables(const std::shared_ptr<Event> event) {
-  
   float weight = 1.0;
   try {
     weight = event->Get(weightsBranchName);
   } catch (...) {
   }
-  
-  for (auto& [histName, variableLocation] : defaultHistVariables) {
-    string collectionName = variableLocation[0];
-    string branchName = variableLocation[1];
-    
+
+  for (auto& [branchName, params] : defaultHistVariables) {
+    string collectionName = params.collection;
+
     if (collectionName == "Event") {
-      
       uint eventVariable;
-      if(branchName[0] == 'n'){
+      if (branchName[0] == 'n') {
         eventVariable = event->GetCollectionSize(branchName.substr(1));
-      }
-      else{
+      } else {
         eventVariable = event->Get(branchName);
       }
-      histogramsHandler->histograms1D[histName]->Fill(eventVariable, weight);
+      histogramsHandler->histograms1D[branchName]->Fill(eventVariable, weight);
     } else {
       auto collection = event->GetCollection(collectionName);
       for (auto object : *collection) {
-        histogramsHandler->histograms1D[histName]->Fill(object->Get(branchName), weight);
+        float value;
+        try {
+          value = object->Get(branchName);
+        } catch (BadTypeException& e) {
+          try {
+            int valueInt = object->Get(branchName);
+            value = valueInt;
+          } catch (BadTypeException& e) {
+            try {
+              bool valueBool = object->Get(branchName);
+              value = valueBool;
+            }
+            catch(BadTypeException& e) {
+              error() << "Couldn't get value for branch " << branchName << " in collection " << collectionName << endl;
+            }
+          }
+        }
+        histogramsHandler->histograms1D[branchName]->Fill(value, weight);
       }
     }
   }

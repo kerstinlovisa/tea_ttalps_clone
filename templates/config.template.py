@@ -7,12 +7,25 @@ inputFilePath = "input_tree.root"
 treeOutputFilePath = "output_tree.root"
 histogramsOutputFilePath = "output_histograms.root"
 
-# define histograms
+# define default histograms (can be filled automatically with HistogramsFiller, based on collection and variable names)
+defaultHistParams = {
+# variable           bins    xmin     xmax      dir     collection
+  "pt"             : (100,    0,      1000,      "",     "Muon"),
+  "eta"            : (100,    -10,      10,      "",     "Electron"),
+}
+
+# define custom histograms (you will have to fill them in your HistogramsFiller)
 # title: (n_bins, min, max, "output_directory")
 histParams = {
     "m_inv":        (1000,  0,      10,     "kinematics"),
     "delta_phi":    (1000, -3.5,    3.5,    "kinematics"),
     "n_muons":      (20,    0,      20,     "counters"  ),
+}
+
+# define custom 2D histograms (you will have to fill them in your HistogramsFiller)
+# title: (n_bins_x, min_x, max_x, n_bins_y, min_y, max_y, "output_directory")
+histParams2D = {
+    "hit_xy": (100, -20, 20, 100, -20, 20, ""),
 }
 
 # define extra collections:

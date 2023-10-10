@@ -24,7 +24,8 @@ class ConfigManager {
   void GetMap(std::string name, std::map<T, U> &outputMap);
 
   void GetExtraEventCollections(std::map<std::string, ExtraCollection> &extraEventCollections);
-  void GetHistogramsParams(std::map<std::string, HistogramParams> &histogramsParams);
+  void GetHistogramsParams(std::map<std::string, HistogramParams> &histogramsParams, std::string collectionName);
+  void GetHistogramsParams(std::map<std::string, HistogramParams2D> &histogramsParams, std::string collectionName);
 
   void GetSelections(std::map<std::string, std::pair<float, float>> &selections);
 

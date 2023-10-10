@@ -269,8 +269,8 @@ void ConfigManager::GetExtraEventCollections(map<string, ExtraCollection> &extra
   }
 }
 
-void ConfigManager::GetHistogramsParams(std::map<std::string, HistogramParams> &histogramsParams) {
-  PyObject *pythonDict = GetPythonDict("histParams");
+void ConfigManager::GetHistogramsParams(map<std::string, HistogramParams> &histogramsParams, string collectionName) {
+  PyObject *pythonDict = GetPythonDict(collectionName);
 
   PyObject *histName, *params;
   Py_ssize_t pos = 0;
@@ -290,7 +290,37 @@ void ConfigManager::GetHistogramsParams(std::map<std::string, HistogramParams> &
     histParams.min = PyFloat_AsDouble(GetItem(params, 1));
     histParams.max = PyFloat_AsDouble(GetItem(params, 2));
     histParams.directory = PyUnicode_AsUTF8(GetItem(params, 3));
+    if(GetCollectionSize(params) == 5) {
+      histParams.collection = PyUnicode_AsUTF8(GetItem(params, 4));
+    }
+    histogramsParams[PyUnicode_AsUTF8(histName)] = histParams;
+  }
+}
 
+void ConfigManager::GetHistogramsParams(std::map<std::string, HistogramParams2D> &histogramsParams, string collectionName) {
+  PyObject *pythonDict = GetPythonDict(collectionName);
+
+  PyObject *histName, *params;
+  Py_ssize_t pos = 0;
+
+  while (PyDict_Next(pythonDict, &pos, &histName, &params)) {
+    if (!PyUnicode_Check(histName)) {
+      error() << "Failed retriving python hist name (string)\n";
+      continue;
+    }
+    PyObject *pyKey = nullptr;
+    PyObject *pyValue = nullptr;
+    Py_ssize_t pos2 = 0;
+    
+    HistogramParams2D histParams;
+
+    histParams.nBinsX = PyLong_AsLong(GetItem(params, 0));
+    histParams.minX = PyFloat_AsDouble(GetItem(params, 1));
+    histParams.maxX = PyFloat_AsDouble(GetItem(params, 2));
+    histParams.nBinsY = PyLong_AsLong(GetItem(params, 3));
+    histParams.minY = PyFloat_AsDouble(GetItem(params, 4));
+    histParams.maxY = PyFloat_AsDouble(GetItem(params, 5));
+    histParams.directory = PyUnicode_AsUTF8(GetItem(params, 6));
     histogramsParams[PyUnicode_AsUTF8(histName)] = histParams;
   }
 }
