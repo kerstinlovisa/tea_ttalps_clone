@@ -23,18 +23,6 @@ max_files = -1
 # dataset = "/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
 # output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttWJets/skimmed_looseSemileptonic/"
 
-# dataset = "/SingleMuon/Run2018A-UL2018_MiniAODv2_NanoAODv9-v2/NANOAOD"
-# output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018A/skimmed_looseSemileptonic/"
-
-# dataset = "/SingleMuon/Run2018B-UL2018_MiniAODv2_NanoAODv9-v2/NANOAOD"
-# output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018B/skimmed_looseSemileptonic/"
-
-# dataset = "/SingleMuon/Run2018C-UL2018_MiniAODv2_NanoAODv9-v2/NANOAOD"
-# output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018C/skimmed_looseSemileptonic/"
-
-# dataset = "/SingleMuon/Run2018D-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD"
-# output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018D/skimmed_looseSemileptonic/"
-
 # dataset = "/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM"
 # output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/TTToSemiLeptonic/skimmed_looseSemileptonic/"
 
@@ -52,6 +40,20 @@ max_files = -1
 
 dataset = "/DYJetsToMuMu_M-50_massWgtFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
 output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/DYJetsToMuMu_M-50/skimmed_looseSemileptonic/"
+file_name = "0117C5A4-D21A-7842-BE55-D7B72A7E81C7.root"
+
+# dataset = "/SingleMuon/Run2018A-UL2018_MiniAODv2_NanoAODv9-v2/NANOAOD"
+# output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018A/skimmed_looseSemileptonic/"
+# file_name = "6F8D4F7B-86FE-5241-84C4-D9BB19B19A08.root"
+
+# dataset = "/SingleMuon/Run2018B-UL2018_MiniAODv2_NanoAODv9-v2/NANOAOD"
+# output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018B/skimmed_looseSemileptonic/"
+
+# dataset = "/SingleMuon/Run2018C-UL2018_MiniAODv2_NanoAODv9-v2/NANOAOD"
+# output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018C/skimmed_looseSemileptonic/"
+
+# dataset = "/SingleMuon/Run2018D-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD"
+# output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018D/skimmed_looseSemileptonic/"
 
 # option 4: give DAS dataset name, output path and specify a particular file name you want to run on
 # max_files = -1
