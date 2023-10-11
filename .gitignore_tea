@@ -10,6 +10,11 @@
 !create.py
 !libs/core/
 !libs/extensions/
+!libs/extensions/*
+!libs/extensions/src
+!libs/extensions/src/*
+!libs/extensions/include/
+!libs/extensions/include/*
 !libs/histogramming/
 
 !pylibs/
