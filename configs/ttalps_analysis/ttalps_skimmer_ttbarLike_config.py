@@ -51,8 +51,6 @@ weightsBranchName = "genWeight"
 triggerSelection = (
     "HLT_Ele28_eta2p1_WPTight_Gsf_HT150",
     "HLT_Ele30_eta2p1_WPTight_Gsf_CentralPFJet35_EleCleaned",
-    "HLT_Ele28_WPTight_Gsf",
-    "HLT_Ele30_WPTight_Gsf",
     "HLT_Ele32_WPTight_Gsf",
     "HLT_IsoMu24",
 )
@@ -62,11 +60,6 @@ extraEventCollections = {
         "inputCollections": ("Muon", "Electron"),
         "pt": (30., 9999999.),
         "eta": (-2.4, 2.4),
-    },
-    "AlmostGoodLeptons": {
-        "inputCollections": ("Muon", "Electron"),
-        "pt": (15., 9999999.),
-        "eta": (-2.5, 2.5),
     },
     "GoodJets": {
         "inputCollections": ("Jet", ),
@@ -78,6 +71,11 @@ extraEventCollections = {
         "pt": (30., 9999999.),
         "eta": (-2.4, 2.4),
         "btagDeepB": (0.5, 9999999.),
+    },
+    "AlmostGoodLeptons": {
+        "inputCollections": ("Muon", "Electron"),
+        "pt": (15., 9999999.),
+        "eta": (-2.5, 2.5),
     },
 }
 

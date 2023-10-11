@@ -52,11 +52,14 @@ max_files = -1
 # input_directory = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttHToMuMu/skimmed_looseSemileptonic"
 # output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttHToMuMu/skimmed_ttbarLike/"
 
-input_directory = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttHTobb/skimmed_looseSemileptonic/"
-output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttHTobb/skimmed_ttbarLike/"
+# input_directory = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttHTobb/skimmed_looseSemileptonic/"
+# output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttHTobb/skimmed_ttbarLike/"
 
-# input_directory = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018A/skimmed_looseSemileptonic"
-# output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018A/skimmed_ttbarLike/"
+# input_directory = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/DYJetsToMuMu_M-50/skimmed_looseSemileptonic/"
+# output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/DYJetsToMuMu_M-50/skimmed_ttbarLike/"
+
+input_directory = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018A/skimmed_looseSemileptonic"
+output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018A/skimmed_ttbarLike/"
 
 # input_directory = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018B/skimmed_looseSemileptonic"
 # output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018B/skimmed_ttbarLike/"
