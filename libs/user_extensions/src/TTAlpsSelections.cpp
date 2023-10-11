@@ -87,7 +87,7 @@ bool TTAlpsSelections::PassesTTZLikeSelections(const shared_ptr<Event> event, sh
 
   auto almostGoodMuons = event->GetCollection("AlmostGoodMuons");
   double zMass = 91.1876; // GeV
-  double smallestDifferenceToTmass = 999999;
+  double smallestDifferenceToZmass = 999999;
   double maxDistanceFromZ = 30;
 
   for(int iMuon1=0; iMuon1 < almostGoodMuons->size(); iMuon1++){
@@ -97,13 +97,13 @@ bool TTAlpsSelections::PassesTTZLikeSelections(const shared_ptr<Event> event, sh
       auto muon2 = asMuon(almostGoodMuons->at(iMuon2))->GetFourVector();
       double diMuonMass = (muon1 + muon2).M();
 
-      if(fabs(diMuonMass-zMass) < smallestDifferenceToTmass){
-        smallestDifferenceToTmass = fabs(diMuonMass-zMass);
+      if(fabs(diMuonMass-zMass) < smallestDifferenceToZmass){
+        smallestDifferenceToZmass = fabs(diMuonMass-zMass);
       }
     }
-    if(smallestDifferenceToTmass < maxDistanceFromZ) break;
+    if(smallestDifferenceToZmass < maxDistanceFromZ) break;
   }
-  if(smallestDifferenceToTmass > maxDistanceFromZ) return false;
+  if(smallestDifferenceToZmass > maxDistanceFromZ) return false;
   if(cutFlowManager) cutFlowManager->UpdateCutFlow("inZpeak");
 
   return true;
