@@ -23,8 +23,10 @@ def main():
   for sample in config.samples:
     input_files[sample.name] = TFile.Open(sample.file_path, "READ")
     plotter.addHistsToStacks(input_files[sample.name], sample)
+    plotter.addHists2D(input_files[sample.name], sample)
 
   plotter.drawStacks()
+  plotter.drawHists2D()
 
 if __name__ == "__main__":
   main()

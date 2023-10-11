@@ -7,12 +7,22 @@ class NormalizationType(Enum):
   to_background = 1 # normalize background with cross section and luminosity, normalize signal and data to background
   to_lumi = 3 # normalize signal/background to lumi*crosssection, keep data unchanged
   to_data = 4 # normalize signal/background to data, keep data unchanged
+  none = 5 # do not normalize
 
 class HistogramNormalizer:
   
   def __init__(self, config):
     self.config = config
-    self.__setBackgroundEntries()
+    
+    # Check if any of histograms in the config chas NormalizationType different than none or to_one:
+    normalize_hists = False
+    for hist in self.config.histograms:
+      if hist.norm_type != NormalizationType.none and hist.norm_type != NormalizationType.to_one:
+        normalize_hists = True
+        break
+    
+    if normalize_hists:
+      self.__setBackgroundEntries()
   
   def normalize(self, hist, sample, data_hist=None):
     if hist.norm_type == NormalizationType.to_one:
@@ -28,7 +38,7 @@ class HistogramNormalizer:
     if sample.type == SampleType.background:
       hist.hist.Scale(1./self.total_background)
     else:
-      hist.hist.Scale(1./hist.Integral())
+      hist.hist.Scale(1./hist.hist.Integral())
   
   def __normalizeToBackground(self, hist, sample):
     if sample.type == SampleType.background:

@@ -19,9 +19,11 @@ class HistogramPlotter:
     
     self.legends = {sample_type: self.__getLegendDicts(sample_type) for sample_type in SampleType}
     self.stacks = {sample_type: self.__getStackDict(sample_type) for sample_type in SampleType}
+    self.hists2d = {sample_type: {} for sample_type in SampleType}
     
     self.data_included = any(sample.type == SampleType.data for sample in self.config.samples)
     self.backgrounds_included = any(sample.type == SampleType.background for sample in self.config.samples)
+    self.signals_included = any(sample.type == SampleType.signal for sample in self.config.samples)
     
     self.initial_background_weight = None
     
@@ -48,6 +50,16 @@ class HistogramPlotter:
       
       self.stacks[sample.type][hist.name].Add(hist.hist)
       self.legends[sample.type][hist.name].AddEntry(hist.hist, sample.legend_description, self.config.legends[sample.type].options)  
+  
+  def addHists2D(self, input_file, sample):
+    for hist in self.config.histograms2D:
+      hist.load(input_file)
+      
+      if not hist.isGood():
+        continue
+      
+      hist.setup()
+      self.hists2d[sample.type][hist.name] = hist.hist
   
   def drawStacks(self):
     if not os.path.exists(self.config.output_path):
@@ -112,18 +124,39 @@ class HistogramPlotter:
           canvas.cd(1)
         
         self.stacks[SampleType.signal][hist.name].Draw("nostack same e")
-      else:
+      elif self.signals_included:
         self.stacks[SampleType.signal][hist.name].Draw("nostack hist e")
         self.__setupFigure(self.stacks[SampleType.signal][hist.name], hist)
 
       if self.data_included:
-        self.stacks[SampleType.data][hist.name].Draw("nostack same pe")
+        
+        if self.backgrounds_included or self.signals_included:  
+          self.stacks[SampleType.data][hist.name].Draw("nostack same pe")
+        else:
+          self.stacks[SampleType.data][hist.name].Draw("nostack hist")
+          self.__setupFigure(self.stacks[SampleType.data][hist.name], hist)
 
       for sample_type in SampleType:
         self.legends[sample_type][hist.name].Draw()
       
       canvas.Update()
       canvas.SaveAs(self.config.output_path+"/"+hist.name+".pdf")
+  
+  def drawHists2D(self):
+    if not os.path.exists(self.config.output_path):
+      os.makedirs(self.config.output_path)
+
+    for hist in self.config.histograms2D:
+      for sample in self.config.samples:
+        title = hist.name + "_" + sample.name
+        canvas = TCanvas(title, title, self.config.canvas_size[0], self.config.canvas_size[1])  
+        canvas.cd()
+      
+        self.hists2d[sample.type][hist.name].Draw("colz")
+        self.__setupFigure2D(self.hists2d[sample.type][hist.name], hist)
+      
+        canvas.Update()
+        canvas.SaveAs(self.config.output_path+"/"+title+".pdf")
   
   def __getRatioStack(self, hist):
     
@@ -204,16 +237,64 @@ class HistogramPlotter:
       stack.SetTitle("" if is_ratio else hist.title)
       stack.GetXaxis().SetLimits(hist.x_min, hist.x_max)
       stack.GetXaxis().SetTitle(hist.x_label)
-      stack.GetXaxis().SetTitleSize(0.12)
-      stack.GetXaxis().SetTitleOffset(1.0)
-      stack.GetXaxis().SetLabelSize(0.08)
+      stack.GetXaxis().SetTitleSize(0.12 if is_ratio else 0.06)
+      stack.GetXaxis().SetTitleOffset(1.0 if is_ratio else 1.0)
+      stack.GetXaxis().SetLabelSize(0.08 if is_ratio else 0.06)
       
       stack.GetYaxis().SetTitle("Data/MC" if is_ratio else hist.y_label)
       stack.GetYaxis().SetTitleSize(0.09 if is_ratio else 0.06)
-      stack.GetYaxis().SetTitleOffset(0.4 if is_ratio else 0.8)
+      stack.GetYaxis().SetTitleOffset(0.4 if is_ratio else 1.2)
       stack.GetYaxis().CenterTitle()
       stack.GetYaxis().SetLabelSize(0.06)
       stack.GetYaxis().SetNdivisions(505)
+      
+      if not is_ratio:
+        gPad.SetLeftMargin(0.15)
+        gPad.SetBottomMargin(0.15)
+    except:
+      print("Couldn't set axes limits")
+      return
+
+  def __setupFigure2D(self, plot, hist):
+    if plot is None or type(plot) is TObject:
+      return
+
+    if (hist.y_min > 0):
+      plot.SetMinimum(hist.y_min)
+    if (hist.y_max > 0):
+      plot.SetMaximum(hist.y_max)
+      
+    if (hist.z_min > 0):
+      plot.SetMinimum(hist.z_min)
+    if (hist.z_max > 0):
+      plot.SetMaximum(hist.z_max)
+    
+    try:
+      plot.SetTitle(hist.title)
+      plot.GetXaxis().SetRangeUser(hist.x_min, hist.x_max)
+      plot.GetXaxis().SetTitle(hist.x_label)
+      plot.GetXaxis().SetTitleSize(0.06)
+      plot.GetXaxis().SetTitleOffset(1.0)
+      plot.GetXaxis().SetLabelSize(0.06)
+      
+      plot.GetYaxis().SetRangeUser(hist.y_min, hist.y_max)
+      plot.GetYaxis().SetTitle(hist.y_label)
+      plot.GetYaxis().SetTitleSize(0.06)
+      plot.GetYaxis().SetTitleOffset(1.2)
+      plot.GetYaxis().CenterTitle()
+      plot.GetYaxis().SetLabelSize(0.06)
+      plot.GetYaxis().SetNdivisions(505)
+      
+      plot.GetZaxis().SetTitle(hist.z_label)
+      plot.GetZaxis().SetTitleSize(0.06)
+      plot.GetZaxis().SetTitleOffset(0.8)
+      plot.GetZaxis().CenterTitle()
+      plot.GetZaxis().SetLabelSize(0.06)
+      plot.GetZaxis().SetNdivisions(505)
+
+      gPad.SetLeftMargin(0.15)
+      gPad.SetBottomMargin(0.15)
+      gPad.SetRightMargin(0.20)
     except:
       print("Couldn't set axes limits")
       return

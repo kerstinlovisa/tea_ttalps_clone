@@ -2,7 +2,7 @@ import ROOT
 from ROOT import TColor
 from Sample import Sample, SampleType
 from Legend import Legend
-from Histogram import Histogram
+from Histogram import Histogram, Histogram2D
 from HistogramNormalizer import NormalizationType
 
 base_path = "../samples/"
@@ -61,6 +61,12 @@ histograms = (
   Histogram("jet_pt",  "Jet p_{T}",       True, NormalizationType.to_background, 5,   0, 500,   10, 1e8,    "p_{T}^{j} [GeV]",  "# events (2018)"),
   Histogram("jet_eta", "Jet #eta",        True, NormalizationType.to_background, 10, -3.5, 3.5, 1e0, 1e10,  "#eta^{j}",         "# events (2018)"),
   Histogram("cutFlow", "cutflow",         True, NormalizationType.to_background, 1,   0, 8,     1e2, 1e6,     "Selection",        "Number of events"),
+)
+
+histograms2D = (
+#           name              title                rebin  xmin    xmax       ymin   ymax     zmin zmax xlabel               ylabel                        zlabel
+  Histogram2D("hit_xy",         "hit_xy"          , 1, 1, -15     , 15      , -15   , 15    , 0,  1e5, "x"             , "y"                         , "Counts"),
+  Histogram2D("time_vs_toa",    "time_vs_toa"     , 1, 1, -10     , 100     , -10   , 2000  , 0,  1e3, "Time (ns)"     , "Time of Arrival (ToA)"     , "Counts"),
 )
 
 legends = {
