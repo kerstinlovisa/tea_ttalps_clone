@@ -9,15 +9,15 @@
 
 class TTAlpsHistogramFiller {
  public:
-  TTAlpsHistogramFiller(std::shared_ptr<ConfigManager> _config, std::shared_ptr<HistogramsHandler> histogramsHandler_);
+  TTAlpsHistogramFiller(std::shared_ptr<HistogramsHandler> histogramsHandler_);
   ~TTAlpsHistogramFiller();
 
   void FillTriggerEfficiencies();
   void FillTriggerVariables(const std::shared_ptr<Event> event, std::string prefix = "", std::string suffix = "");
   void FillTriggerVariablesPerTriggerSet(const std::shared_ptr<Event> event, std::string ttbarCategory = "");
 
-  void FillLeadingPt(const std::shared_ptr<Event> event, std::string histName, std::vector<std::string> variableLocation);
-  void FillAllSubLeadingPt(const std::shared_ptr<Event> event, std::string histName, std::vector<std::string> variableLocation);
+  void FillLeadingPt(const std::shared_ptr<Event> event, std::string histName, const HistogramParams &params);
+  void FillAllSubLeadingPt(const std::shared_ptr<Event> event, std::string histName, const HistogramParams &params);
 
   void FillCustomTTAlpsVariables(const std::shared_ptr<Event> event);
 
@@ -28,8 +28,8 @@ class TTAlpsHistogramFiller {
   std::unique_ptr<EventProcessor> eventProcessor;
 
   std::map<std::string, std::vector<std::string>> triggerSets;
-  std::map<std::string, std::vector<std::string>> defaultHistVariables;
-  std::map<std::string, std::vector<std::string>> ttalpsHistVariables;
+  std::map<std::string, HistogramParams> defaultHistVariables;
+  std::map<std::string, HistogramParams> ttalpsHistVariables;
 
   std::string weightsBranchName;
 
