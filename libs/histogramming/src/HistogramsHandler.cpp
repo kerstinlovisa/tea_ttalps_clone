@@ -11,17 +11,43 @@
 using namespace std;
 
 HistogramsHandler::HistogramsHandler(std::shared_ptr<ConfigManager> _config) {
-  _config->GetHistogramsParams(histParams, "histParams");
-  _config->GetHistogramsParams(histParams, "defaultHistParams");
+  
+  try{
+    _config->GetHistogramsParams(histParams, "defaultHistParams");
+  }
+  catch(const Exception& e){
+    info() << "No defaultHistParams found in config file" << endl;
+  }
+
+  try{
+    _config->GetHistogramsParams(histParams, "histParams");
+  }
+  catch(const Exception& e){
+    info() << "No histParams found in config file" << endl;
+  }
+
+  try{
   _config->GetHistogramsParams(histParams2D, "histParams2D");
+  }
+  catch(const Exception& e){
+    info() << "No histParams2D found in config file" << endl;
+  }
+
+  try{
   _config->GetValue("histogramsOutputFilePath", outputPath);
+  }
+  catch(const Exception& e){
+    info() << "No histogramsOutputFilePath found in config file" << endl;
+  }
+
+  SetupHistograms();
 }
 
 HistogramsHandler::~HistogramsHandler() {}
 
 void HistogramsHandler::SetupHistograms() {
-  for (auto &[name, params] : histParams) {
-    histograms1D[name] = new TH1D(name.c_str(), name.c_str(), params.nBins, params.min, params.max);
+  for (auto &[title, params] : histParams) {
+    histograms1D[title] = new TH1D(title.c_str(), title.c_str(), params.nBins, params.min, params.max);
   }
 
   for (auto &[name, params] : histParams2D) {
@@ -31,6 +57,10 @@ void HistogramsHandler::SetupHistograms() {
 }
 
 void HistogramsHandler::SaveHistograms() {
+  string path = outputPath.substr(0, outputPath.find_last_of("/"));
+  string command = "mkdir -p " + path;
+  system(command.c_str());
+  
   auto outputFile = new TFile((outputPath).c_str(), "recreate");
   outputFile->cd();
 

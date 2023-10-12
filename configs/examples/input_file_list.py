@@ -1,16 +1,20 @@
 # option 1: list input files and one output directory
 # output files will have the same name as inputs, but be stored the output_dir
 # input_file_list = (
-#   "../samples/test_sample_1.root",
-#   "../samples/test_sample_2.root"
+#   "../samples/background_dy.root",
+#   "../samples/background_tt.root"
+#   "../samples/signal_ttz.root"
+#   "../samples/data.root"
 # )
 # output_dir = "../samples/skim"
 
 
 # option 2: list input files and output files
 # input_output_file_list = (
-#   ("../samples/test_sample_1.root", "../samples/skim/test_sample_A.root"),
-#   ("../samples/test_sample_2.root", "../samples/skim/test_sample_B.root"),
+#   ("../samples/background_dy.root", "../samples/background_dy_skimmed.root"),
+#   ("../samples/background_tt.root", "../samples/skim/background_tt_skimmed.root"),
+#   ("../samples/signal_ttz.root", "../samples/skim/signal_ttz_skimmed.root"),
+#   ("../samples/data.root", "../samples/skim/data_skimmed.root"),
 # )
 
 

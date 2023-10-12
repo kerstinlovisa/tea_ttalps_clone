@@ -8,25 +8,26 @@ treeOutputFilePath = "output_tree.root"
 histogramsOutputFilePath = "output_histograms.root"
 
 # define default histograms (can be filled automatically with HistogramsFiller, based on collection and variable names)
-defaultHistParams = {
-# variable           bins    xmin     xmax      dir     collection
-  "pt"             : (100,    0,      1000,      "",     "Muon"),
-  "eta"            : (100,    -10,      10,      "",     "Electron"),
-}
+defaultHistParams = (
+#  collection      variable          bins    xmin     xmax     dir
+    ("Event"       , "nMuon"         , 50,     0,       50,      ""  ),
+    ("Muon"        , "pt"            , 400,    0,       200,     ""  ),
+    ("Muon"        , "eta"           , 100,    -2.5,    2.5,     ""  ),
+)
 
 # define custom histograms (you will have to fill them in your HistogramsFiller)
 # title: (n_bins, min, max, "output_directory")
-histParams = {
-    "m_inv":        (1000,  0,      10,     "kinematics"),
-    "delta_phi":    (1000, -3.5,    3.5,    "kinematics"),
-    "n_muons":      (20,    0,      20,     "counters"  ),
-}
+histParams = (
+    ("m_inv",      1000,  0,      10,     "kinematics"),
+    ("delta_phi",  1000, -3.5,    3.5,    "kinematics"),
+    ("n_muons",    20,    0,      20,     "counters"  ),
+)
 
 # define custom 2D histograms (you will have to fill them in your HistogramsFiller)
 # title: (n_bins_x, min_x, max_x, n_bins_y, min_y, max_y, "output_directory")
-histParams2D = {
-    "hit_xy": (100, -20, 20, 100, -20, 20, ""),
-}
+histParams2D = (
+    ("hit_xy", 100, -20, 20, 100, -20, 20, ""),
+)
 
 # define extra collections:
 # - give it a name: e.g. GoodLeptons

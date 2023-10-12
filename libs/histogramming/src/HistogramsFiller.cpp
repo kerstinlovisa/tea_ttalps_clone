@@ -16,7 +16,7 @@ HistogramsFiller::HistogramsFiller(shared_ptr<ConfigManager> _config, shared_ptr
   try {
     _config->GetHistogramsParams(defaultHistVariables, "defaultHistParams");
   } catch (const Exception& e) {
-    warn() << "Couldn't read defaultHistVariables from config file - no default histograms will be included" << endl;
+    warn() << "Couldn't read defaultHistParams from config file - no default histograms will be included" << endl;
   }
 
   try {
@@ -114,8 +114,9 @@ void HistogramsFiller::FillDefaultVariables(const std::shared_ptr<Event> event) 
   } catch (...) {
   }
 
-  for (auto& [branchName, params] : defaultHistVariables) {
+  for (auto& [title, params] : defaultHistVariables) {
     string collectionName = params.collection;
+    string branchName = params.variable;
 
     if (collectionName == "Event") {
       uint eventVariable;
@@ -124,11 +125,11 @@ void HistogramsFiller::FillDefaultVariables(const std::shared_ptr<Event> event) 
       } else {
         eventVariable = event->Get(branchName);
       }
-      histogramsHandler->histograms1D[branchName]->Fill(eventVariable, weight);
+      histogramsHandler->histograms1D[title]->Fill(eventVariable, weight);
     } else {
       auto collection = event->GetCollection(collectionName);
       for (auto object : *collection) {
-        histogramsHandler->histograms1D[branchName]->Fill(GetValue(object, branchName), weight);
+        histogramsHandler->histograms1D[title]->Fill(GetValue(object, branchName), weight);
       }
     }
   }

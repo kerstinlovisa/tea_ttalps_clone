@@ -17,7 +17,6 @@ class HistogramsHandler {
     if (!histograms1D.count(name) && !histograms2D.count(name)) error() << "Couldn't find key: " << name << " in histograms map\n";
   }
 
-  void SetupHistograms();
   void SaveHistograms();
 
   std::map<std::string, TH1D*> histograms1D;
@@ -27,6 +26,8 @@ class HistogramsHandler {
   std::map<std::string, HistogramParams> histParams;
   std::map<std::string, HistogramParams2D> histParams2D;
   std::string outputPath;
+
+  void SetupHistograms();
 };
 
 #endif /* HistogramsHandler_hpp */

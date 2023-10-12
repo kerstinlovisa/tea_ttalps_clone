@@ -1,11 +1,11 @@
 #include "ConfigManager.hpp"
 #include "CutFlowManager.hpp"
-#include "Event.hpp"
 #include "EventReader.hpp"
 #include "EventWriter.hpp"
 #include "ExtensionsHelpers.hpp"
 #include "HistogramsHandler.hpp"
 #include "Profiler.hpp"
+#include "HistogramsFiller.hpp"
 
 // If you also created a histogram filler, you can include it here
 // #include "MyHistogramsFiller.hpp"
@@ -13,8 +13,10 @@
 using namespace std;
 
 void CheckArgs(int argc, char **argv) {
-  if (argc != 2) {
-    fatal() << "Usage: " << argv[0] << " config_path\n";
+  if (argc != 2 && argc != 4) {
+    fatal() << "Usage: " << argv[0] << " config_path"<<endl;
+    fatal() << "or"<<endl;
+    fatal() << argv[0] << " config_path input_path output_path"<<endl;
     exit(1);
   }
 }
@@ -36,9 +38,11 @@ int main(int argc, char **argv) {
   // If you want to fill some histograms, use HistogramsHandler to automatically create histograms
   // you need based on the config file, make them accessible to your HistogramFiller and save them at the end
   auto histogramsHandler = make_shared<HistogramsHandler>(config);
-  histogramsHandler->SetupHistograms();
-
-  // If you also created a HistogramFiller, construct it here to use it later on in the event loop
+  
+  // Create a HistogramFiller to fill default histograms
+  auto histogramsFiller = make_unique<HistogramsFiller>(config, histogramsHandler);
+  
+  // If you also created your custom HistogramFiller, construct it here to use it later on in the event loop
   // auto histogramsFiller = make_unique<MyHistogramsFiller>(config, histogramsHandler);
 
   // In case you're worried about the performance of your app, you can also create a profiler

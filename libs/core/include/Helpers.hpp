@@ -99,21 +99,21 @@ struct ExtraCollection {
 };
 
 struct HistogramParams {
-  std::string name, directory, collection;
+  std::string collection, variable, directory;
   int nBins;
   float min, max;
   void Print() { 
-    info() << "Histogram: " << directory << "/" << name << "[" << collection << "] ";
+    info() << "Histogram: " << directory << "/" << collection << "/" << variable;
     info() << "(" << nBins << ", " << min << ", " << max << ")" << std::endl; 
   }
 };
 
 struct HistogramParams2D {
-  std::string name, directory;
+  std::string variable, directory;
   int nBinsX, nBinsY;
   float minX, maxX, minY, maxY;
   void Print() { 
-    info() << "Histogram: " << directory << "/" << name; 
+    info() << "Histogram: " << directory << "/" << variable; 
     info() << "(" << nBinsX << ", " << minX << ", " << maxX;
     info() << "," << nBinsY << ", " << minY << ", " << maxY << ")" << std::endl;
   }
