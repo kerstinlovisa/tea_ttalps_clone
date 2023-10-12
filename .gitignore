@@ -21,6 +21,7 @@
 !pylibs/*
 !pylibs/*/*
 !samples/
+!samples/*
 !templates/
 !templates/*
 
