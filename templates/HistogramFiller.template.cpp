@@ -19,10 +19,6 @@ TemplateName::~TemplateName() {}
 
 
 void TemplateName::Fill(const std::shared_ptr<Event> event) {
-  // verify that the histogram exists
-  string histName = "test";
-  histogramsHandler->CheckHistogram(histName);
-
   // Fill the histogram for given event (e.g. use EventProcessor to get some variables)
-  histogramsHandler->histograms1D[histName]->Fill(eventProcessor->GetMaxPt(event, "Muon"));
+  histogramsHandler->Fill("test", eventProcessor->GetMaxPt(event, "Muon"));
 }

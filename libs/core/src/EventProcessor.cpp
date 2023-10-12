@@ -13,7 +13,7 @@ EventProcessor::EventProcessor() {
     config.GetVector("triggerSelection", triggerNames);
   } catch (const Exception &e) {
     warn() << "Couldn't read triggerSelection from _ file ";
-    warn() << "(which may be fine if you're not tyring to apply trigger selectinon)" << endl;
+    warn() << "(which may be fine if you're not tyring to apply trigger selection)" << endl;
   }
 
   try {

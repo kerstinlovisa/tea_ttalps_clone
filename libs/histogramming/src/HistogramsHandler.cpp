@@ -56,6 +56,28 @@ void HistogramsHandler::SetupHistograms() {
   }
 }
 
+void HistogramsHandler::Fill(std::string name, double value, double weight)
+{
+  CheckHistogram(name);
+  histograms1D[name]->Fill(value, weight);
+}
+
+void HistogramsHandler::Fill(std::string name, double valueX, double valueY, double weight)
+{
+  CheckHistogram(name);
+  histograms2D[name]->Fill(valueX, valueY, weight);
+}
+
+void HistogramsHandler::CheckHistogram(string name){
+  if (!histograms1D.count(name) && !histograms2D.count(name)) {
+    error() << "Couldn't find key: " << name << " in histograms map"<<endl;
+    info() << "Available histograms: " << endl;
+    for(auto [histName, hist] : histograms1D) info() << "\t" << histName << endl;
+    for(auto [histName, hist] : histograms2D) info() << "\t" << histName << endl;
+    exit(1);
+  }
+}
+
 void HistogramsHandler::SaveHistograms() {
   string path = outputPath.substr(0, outputPath.find_last_of("/"));
   string command = "mkdir -p " + path;

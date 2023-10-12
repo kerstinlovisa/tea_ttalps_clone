@@ -9,7 +9,6 @@
 #include "Helpers.hpp"
 #include "HistogramsHandler.hpp"
 #include "CutFlowManager.hpp"
-#include "EventProcessor.hpp"
 
 class HistogramsFiller {
  public:

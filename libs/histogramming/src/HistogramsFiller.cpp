@@ -124,11 +124,11 @@ void HistogramsFiller::FillDefaultVariables(const std::shared_ptr<Event> event) 
       } else {
         eventVariable = event->Get(branchName);
       }
-      histogramsHandler->histograms1D[title]->Fill(eventVariable, weight);
+      histogramsHandler->Fill(title, eventVariable, weight);
     } else {
       auto collection = event->GetCollection(collectionName);
       for (auto object : *collection) {
-        histogramsHandler->histograms1D[title]->Fill(GetValue(object, branchName), weight);
+        histogramsHandler->Fill(title, GetValue(object, branchName), weight);
       }
     }
   }
@@ -143,5 +143,5 @@ void HistogramsFiller::FillCutFlow(const std::shared_ptr<CutFlowManager> cutFlow
     cutFlowHist->GetXaxis()->SetBinLabel(bin, name.c_str());
     bin++;
   }
-  histogramsHandler->histograms1D["cutFlow"] = cutFlowHist;
+  histogramsHandler->SetHistogram1D("cutFlow", cutFlowHist);
 }

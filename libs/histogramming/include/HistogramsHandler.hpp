@@ -13,20 +13,23 @@ class HistogramsHandler {
   HistogramsHandler();
   ~HistogramsHandler();
 
-  void CheckHistogram(std::string name){
-    if (!histograms1D.count(name) && !histograms2D.count(name)) error() << "Couldn't find key: " << name << " in histograms map\n";
-  }
+  void Fill(std::string name, double value, double weight);
+  void Fill(std::string name, double valueX, double valueY, double weight);
 
+  void SetHistogram1D(std::string name, TH1D *histogram) { histograms1D[name] = histogram; }
+  TH1D* GetHistogram1D(std::string name) { return histograms1D[name]; }
+  std::map<std::string, TH1D*> GetHistograms1D() { return histograms1D; }
   void SaveHistograms();
 
+ private:
   std::map<std::string, TH1D*> histograms1D;
   std::map<std::string, TH2D*> histograms2D;
 
- private:
   std::map<std::string, HistogramParams> histParams;
   std::map<std::string, HistogramParams2D> histParams2D;
   std::string outputPath;
 
+  void CheckHistogram(std::string name);
   void SetupHistograms();
 };
 
