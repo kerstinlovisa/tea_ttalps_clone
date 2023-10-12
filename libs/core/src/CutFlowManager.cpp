@@ -9,12 +9,13 @@
 
 using namespace std;
 
-CutFlowManager::CutFlowManager(shared_ptr<ConfigManager> _config, shared_ptr<EventReader> eventReader_,
-                               shared_ptr<EventWriter> eventWriter_)
+CutFlowManager::CutFlowManager(shared_ptr<EventReader> eventReader_, shared_ptr<EventWriter> eventWriter_)
     : eventReader(eventReader_), eventWriter(eventWriter_), currentIndex(0) {
   
+  auto &config = ConfigManager::GetInstance();
+
   try {
-    _config->GetValue("weightsBranchName", weightsBranchName);
+    config.GetValue("weightsBranchName", weightsBranchName);
   } catch (const Exception& e) {
     info() << "Weights branch not specified -- will assume weight is 1 for all events" << endl;
   }

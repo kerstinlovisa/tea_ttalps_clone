@@ -12,8 +12,7 @@
 
 class EventWriter {
 public:
-  EventWriter(std::shared_ptr<ConfigManager> _config,
-              const std::shared_ptr<EventReader> &eventReader_);
+  EventWriter(const std::shared_ptr<EventReader> &eventReader_);
   ~EventWriter();
 
   void AddCurrentEvent(std::string treeName);

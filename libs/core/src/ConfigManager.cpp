@@ -10,7 +10,10 @@
 
 using namespace std;
 
-ConfigManager::ConfigManager(string configPath) {
+ConfigManager::ConfigManager(std::string* const _configPath) : configPath(move(*_configPath))
+{
+  if (nullptr == _configPath) throw std::runtime_error{ "ConfigManager not initialized" };
+
   Py_Initialize();
 
   pythonFile = fopen(configPath.c_str(), "r");

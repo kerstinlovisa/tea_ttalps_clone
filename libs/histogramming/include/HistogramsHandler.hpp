@@ -10,7 +10,7 @@
 
 class HistogramsHandler {
  public:
-  HistogramsHandler(std::shared_ptr<ConfigManager> _config);
+  HistogramsHandler();
   ~HistogramsHandler();
 
   void CheckHistogram(std::string name){

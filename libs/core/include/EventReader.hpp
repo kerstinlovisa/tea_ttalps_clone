@@ -11,15 +11,13 @@
 
 class EventReader {
 public:
-  EventReader(std::shared_ptr<ConfigManager> _config);
+  EventReader();
   ~EventReader();
 
   long long GetNevents() const;
   std::shared_ptr<Event> GetEvent(int iEvent);
 
 private:
-  std::shared_ptr<ConfigManager> config;
-
   int maxEvents;
   int printEveryNevents;
 

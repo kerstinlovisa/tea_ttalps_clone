@@ -8,10 +8,12 @@
 
 using namespace std;
 
-Event::Event(shared_ptr<ConfigManager> config) 
+Event::Event() 
 {
+  auto &config = ConfigManager::GetInstance();
+
   try{
-    config->GetExtraEventCollections(extraCollectionsDescriptions);
+    config.GetExtraEventCollections(extraCollectionsDescriptions);
   }
   catch(...){
     info() << "No extra event collections found" <<endl;

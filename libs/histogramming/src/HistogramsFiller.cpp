@@ -9,18 +9,17 @@
 
 using namespace std;
 
-HistogramsFiller::HistogramsFiller(shared_ptr<ConfigManager> _config, shared_ptr<HistogramsHandler> histogramsHandler_)
-    : histogramsHandler(histogramsHandler_) {
-  eventProcessor = make_unique<EventProcessor>();
+HistogramsFiller::HistogramsFiller(shared_ptr<HistogramsHandler> histogramsHandler_) : histogramsHandler(histogramsHandler_) {
+  auto &config = ConfigManager::GetInstance();
 
   try {
-    _config->GetHistogramsParams(defaultHistVariables, "defaultHistParams");
+    config.GetHistogramsParams(defaultHistVariables, "defaultHistParams");
   } catch (const Exception& e) {
     warn() << "Couldn't read defaultHistParams from config file - no default histograms will be included" << endl;
   }
 
   try {
-    _config->GetValue("weightsBranchName", weightsBranchName);
+    config.GetValue("weightsBranchName", weightsBranchName);
   } catch (const Exception& e) {
     info() << "Weights branch not specified -- will assume weight is 1 for all events" << endl;
   }

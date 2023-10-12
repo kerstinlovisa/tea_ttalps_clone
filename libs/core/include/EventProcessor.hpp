@@ -13,7 +13,7 @@
 
 class EventProcessor {
  public:
-  EventProcessor(std::shared_ptr<ConfigManager> _config=nullptr);
+  EventProcessor();
   
   float GetMaxPt(std::shared_ptr<Event> event, std::string collectionName);
   float GetHt(std::shared_ptr<Event> event, std::string collectionName);
@@ -22,7 +22,6 @@ class EventProcessor {
   bool PassesEventSelections(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
 
  private:
-  std::unique_ptr<ConfigManager> config;
   std::vector<std::string> triggerNames;
   std::map<std::string, std::pair<float, float>> eventSelections;
   std::vector<std::string> triggerWarningsPrinted;

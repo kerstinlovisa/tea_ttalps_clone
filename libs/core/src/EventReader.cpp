@@ -8,15 +8,17 @@
 
 using namespace std;
 
-EventReader::EventReader(shared_ptr<ConfigManager> _config) : config(_config) {
-  config->GetValue("nEvents", maxEvents);
-  config->GetValue("printEveryNevents", printEveryNevents);
+EventReader::EventReader() {
+  auto &config = ConfigManager::GetInstance();
+
+  config.GetValue("nEvents", maxEvents);
+  config.GetValue("printEveryNevents", printEveryNevents);
   if (printEveryNevents == 0) printEveryNevents = -1;
 
   string inputFilePath;
-  config->GetValue("inputFilePath", inputFilePath);
+  config.GetValue("inputFilePath", inputFilePath);
 
-  currentEvent = make_shared<Event>(config);
+  currentEvent = make_shared<Event>();
 
   // if inputFilePath is a DAS dataset name, insert a redirector into it
   if (inputFilePath.find("root://") == string::npos && inputFilePath.find("/store/") != string::npos) {

@@ -5,36 +5,36 @@
 #include "HistogramsHandler.hpp"
 
 #include "ConfigManager.hpp"
-#include "EventProcessor.hpp"
 #include "ExtensionsHelpers.hpp"
 
 using namespace std;
 
-HistogramsHandler::HistogramsHandler(std::shared_ptr<ConfigManager> _config) {
-  
+HistogramsHandler::HistogramsHandler() {
+  auto &config = ConfigManager::GetInstance();
+
   try{
-    _config->GetHistogramsParams(histParams, "defaultHistParams");
+    config.GetHistogramsParams(histParams, "defaultHistParams");
   }
   catch(const Exception& e){
     info() << "No defaultHistParams found in config file" << endl;
   }
 
   try{
-    _config->GetHistogramsParams(histParams, "histParams");
+    config.GetHistogramsParams(histParams, "histParams");
   }
   catch(const Exception& e){
     info() << "No histParams found in config file" << endl;
   }
 
   try{
-  _config->GetHistogramsParams(histParams2D, "histParams2D");
+  config.GetHistogramsParams(histParams2D, "histParams2D");
   }
   catch(const Exception& e){
     info() << "No histParams2D found in config file" << endl;
   }
 
   try{
-  _config->GetValue("histogramsOutputFilePath", outputPath);
+  config.GetValue("histogramsOutputFilePath", outputPath);
   }
   catch(const Exception& e){
     info() << "No histogramsOutputFilePath found in config file" << endl;

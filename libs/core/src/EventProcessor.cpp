@@ -6,20 +6,20 @@
 
 using namespace std;
 
-EventProcessor::EventProcessor(shared_ptr<ConfigManager> _config) {
-  if (_config) {
-    try {
-      _config->GetVector("triggerSelection", triggerNames);
-    } catch (const Exception &e) {
-      warn() << "Couldn't read triggerSelection from _ file ";
-      warn() << "(which may be fine if you're not tyring to apply trigger selectinon)\n";
-    }
+EventProcessor::EventProcessor() {
+  auto &config = ConfigManager::GetInstance();
 
-    try {
-      _config->GetSelections(eventSelections);
-    } catch (const Exception &e) {
-      warn() << "Couldn't read eventSelections from config file ";
-    }
+  try {
+    config.GetVector("triggerSelection", triggerNames);
+  } catch (const Exception &e) {
+    warn() << "Couldn't read triggerSelection from _ file ";
+    warn() << "(which may be fine if you're not tyring to apply trigger selectinon)" << endl;
+  }
+
+  try {
+    config.GetSelections(eventSelections);
+  } catch (const Exception &e) {
+    warn() << "Couldn't read eventSelections from config file " << endl;
   }
 }
 
@@ -75,5 +75,3 @@ float EventProcessor::GetHt(shared_ptr<Event> event, string collectionName) {
   }
   return ht;
 }
-
-

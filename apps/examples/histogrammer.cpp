@@ -17,22 +17,21 @@ void CheckArgs(int argc, char **argv) {
 
 int main(int argc, char **argv) {
   CheckArgs(argc, argv);
-
-  string configPath = argv[1];
-  auto config = make_shared<ConfigManager>(configPath);
-
+  ConfigManager::Initialize(argv[1]);
+  
   if(argc == 4){
-    config->SetInputPath(argv[2]);
-    config->SetOutputPath(argv[3]);
+    auto &config = ConfigManager::GetInstance();
+    config.SetInputPath(argv[2]);
+    config.SetOutputPath(argv[3]);
   }
 
-  auto eventReader = make_shared<EventReader>(config);
-  auto histogramsHandler = make_shared<HistogramsHandler>(config);
-  auto cutFlowManager = make_shared<CutFlowManager>(config, eventReader);
-  auto histogramsFiller = make_unique<HistogramsFiller>(config, histogramsHandler);
+  auto eventReader = make_shared<EventReader>();
+  auto histogramsHandler = make_shared<HistogramsHandler>();
+  auto cutFlowManager = make_shared<CutFlowManager>(eventReader);
+  auto histogramsFiller = make_unique<HistogramsFiller>(histogramsHandler);
 
-  for (int i_event = 0; i_event < eventReader->GetNevents(); i_event++) {
-    auto event = eventReader->GetEvent(i_event);
+  for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
+    auto event = eventReader->GetEvent(iEvent);
 
     cutFlowManager->UpdateCutFlow("initial");
     histogramsFiller->FillDefaultVariables(event);

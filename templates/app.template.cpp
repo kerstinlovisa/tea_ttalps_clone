@@ -23,10 +23,16 @@ void CheckArgs(int argc, char **argv) {
 
 int main(int argc, char **argv) {
   CheckArgs(argc, argv);
+  
+  // Initialize ConfigManager with the path passed as an argument to the app
+  ConfigManager::Initialize(argv[1]);
 
-  // Pass the path to config file as an argument to the app
-  string configPath = argv[1];
-  auto config = make_shared<ConfigManager>(configPath);
+  // If you want to override input/output paths, you can do it here  
+  if(argc == 4){
+    auto &config = ConfigManager::GetInstance();
+    config.SetInputPath(argv[2]);
+    config.SetOutputPath(argv[3]);
+  }
 
   // Create event reader and writer, which will handle input/output trees for you
   auto eventReader = make_shared<EventReader>(config);

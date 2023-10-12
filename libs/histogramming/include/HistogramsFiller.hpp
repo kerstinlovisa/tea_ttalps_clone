@@ -13,7 +13,7 @@
 
 class HistogramsFiller {
  public:
-  HistogramsFiller(std::shared_ptr<ConfigManager> _config, std::shared_ptr<HistogramsHandler> histogramsHandler_);
+  HistogramsFiller(std::shared_ptr<HistogramsHandler> histogramsHandler_);
   ~HistogramsFiller();
 
   void FillDefaultVariables(const std::shared_ptr<Event> event);
@@ -22,8 +22,6 @@ class HistogramsFiller {
 
  private:
   std::shared_ptr<HistogramsHandler> histogramsHandler;
-  std::unique_ptr<EventProcessor> eventProcessor;
-
   std::map<std::string, HistogramParams> defaultHistVariables;
   std::string weightsBranchName;
 

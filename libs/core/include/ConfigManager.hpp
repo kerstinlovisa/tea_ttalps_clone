@@ -11,8 +11,11 @@
 
 class ConfigManager {
  public:
-  ConfigManager(std::string configPath);
-  ~ConfigManager();
+  static ConfigManager& GetInstance(){ return getInstanceImpl(); }
+  static void Initialize(std::string _configPath) { getInstanceImpl(&_configPath); }
+
+  ConfigManager(ConfigManager const&) = delete;
+  void operator=(ConfigManager const&) = delete;
 
   template <typename T>
   void GetValue(std::string name, T &outputValue);
@@ -29,10 +32,20 @@ class ConfigManager {
 
   void GetSelections(std::map<std::string, std::pair<float, float>> &selections);
 
-  void SetInputPath(std::string path){inputPath = path;}
-  void SetOutputPath(std::string path){outputPath = path;}
+  void SetInputPath(std::string path) { inputPath = path; }
+  void SetOutputPath(std::string path) { outputPath = path; }
 
  private:
+  std::string configPath;
+  ConfigManager(std::string* const _configPath);
+  ~ConfigManager();
+
+  static ConfigManager& getInstanceImpl(std::string* const _configPath = nullptr)
+  {
+    static ConfigManager instance{ _configPath };
+    return instance;
+  }
+
   FILE *pythonFile;
   PyObject *pythonModule;
   PyObject *config;

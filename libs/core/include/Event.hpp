@@ -13,7 +13,7 @@
 
 class Event {
  public:
-  Event(std::shared_ptr<ConfigManager> config);
+  Event();
   ~Event();
 
   void Reset();
