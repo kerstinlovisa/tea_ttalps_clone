@@ -21,27 +21,25 @@ void CheckArgs(int argc, char **argv) {
 
 int main(int argc, char **argv) {
   CheckArgs(argc, argv);
-
-  string configPath = argv[1];
-  auto config = make_shared<ConfigManager>(configPath);
-
+  ConfigManager::Initialize(argv[1]);
+  auto &config = ConfigManager::GetInstance();
+  
   if(argc == 4){
-    config->SetInputPath(argv[2]);
-    config->SetOutputPath(argv[3]);
+    config.SetInputPath(argv[2]);
+    config.SetOutputPath(argv[3]);
   }
 
-  auto eventReader = make_shared<EventReader>(config);
-  auto eventWriter = make_shared<EventWriter>(config, eventReader);
-  auto cutFlowManager = make_shared<CutFlowManager>(config, eventReader, eventWriter);
-
-  auto eventProcessor = make_unique<EventProcessor>(config);
-  auto ttAlpsSelections = make_unique<TTAlpsSelections>(config);
+  auto eventReader = make_shared<EventReader>();
+  auto eventWriter = make_shared<EventWriter>(eventReader);
+  auto cutFlowManager = make_shared<CutFlowManager>(eventReader, eventWriter);
+  auto eventProcessor = make_unique<EventProcessor>();
+  auto ttAlpsSelections = make_unique<TTAlpsSelections>();
 
   bool applyLooseSkimming, applyTTbarLikeSkimming, applySignalLikeSkimming, applyTTZLikeSkimming;
-  config->GetValue("applyLooseSkimming", applyLooseSkimming);
-  config->GetValue("applyTTbarLikeSkimming", applyTTbarLikeSkimming);
-  config->GetValue("applySignalLikeSkimming", applySignalLikeSkimming);
-  config->GetValue("applyTTZLikeSkimming", applyTTZLikeSkimming);
+  config.GetValue("applyLooseSkimming", applyLooseSkimming);
+  config.GetValue("applyTTbarLikeSkimming", applyTTbarLikeSkimming);
+  config.GetValue("applySignalLikeSkimming", applySignalLikeSkimming);
+  config.GetValue("applyTTZLikeSkimming", applyTTZLikeSkimming);
 
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);

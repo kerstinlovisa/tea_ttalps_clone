@@ -20,30 +20,28 @@ void CheckArgs(int argc, char **argv) {
 
 int main(int argc, char **argv) {
   CheckArgs(argc, argv);
-
-  string configPath = argv[1];
-  auto config = make_shared<ConfigManager>(configPath);
+  ConfigManager::Initialize(argv[1]);
+  auto &config = ConfigManager::GetInstance();
 
   if(argc == 4){
-    config->SetInputPath(argv[2]);
-    config->SetOutputPath(argv[3]);
+    config.SetInputPath(argv[2]);
+    config.SetOutputPath(argv[3]);
   }
 
-  auto eventReader = make_shared<EventReader>(config);
-  auto cutFlowManager = make_shared<CutFlowManager>(config, eventReader);
-  auto histogramsHandler = make_shared<HistogramsHandler>(config);
-  histogramsHandler->SetupHistograms();
-
-  auto histogramFiller = make_unique<HistogramsFiller>(config, histogramsHandler);
-  auto ttalpsHistogramsFiller = make_unique<TTAlpsHistogramFiller>(config, histogramsHandler);
+  auto eventReader = make_shared<EventReader>();
+  auto cutFlowManager = make_shared<CutFlowManager>(eventReader);
+  auto histogramsHandler = make_shared<HistogramsHandler>();
+  auto histogramFiller = make_unique<HistogramsFiller>(histogramsHandler);
+  auto ttalpsHistogramsFiller = make_unique<TTAlpsHistogramFiller>(histogramsHandler);
 
   bool runDefaultHistograms, runTriggerHistograms;
-  config->GetValue("runDefaultHistograms", runDefaultHistograms);
-  config->GetValue("runTriggerHistograms", runTriggerHistograms);
+  config.GetValue("runDefaultHistograms", runDefaultHistograms);
+  config.GetValue("runTriggerHistograms", runTriggerHistograms);
 
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
 
+    cutFlowManager->UpdateCutFlow("initial");
     ttalpsHistogramsFiller->FillNormCheck(event);
 
     if (runDefaultHistograms) {
@@ -65,7 +63,6 @@ int main(int argc, char **argv) {
   if(runDefaultHistograms) histogramFiller->FillCutFlow(cutFlowManager);
   
   cutFlowManager->Print();
-
   histogramsHandler->SaveHistograms();
 
   return 0;

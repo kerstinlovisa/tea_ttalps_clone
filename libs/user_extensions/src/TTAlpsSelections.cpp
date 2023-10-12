@@ -9,13 +9,13 @@
 
 using namespace std;
 
-TTAlpsSelections::TTAlpsSelections(std::shared_ptr<ConfigManager> _config){
-  if (_config) {
-    try {
-      _config->GetSelections(eventSelections);
-    } catch (const Exception &e) {
-      warn() << "Couldn't read eventSelections from config file ";
-    }
+TTAlpsSelections::TTAlpsSelections(){
+  auto &config = ConfigManager::GetInstance();
+
+  try {
+    config.GetSelections(eventSelections);
+  } catch (const Exception &e) {
+    warn() << "Couldn't read eventSelections from config file ";
   }
 }
 
