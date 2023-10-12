@@ -310,7 +310,7 @@ void ConfigManager::GetHistogramsParams(std::map<std::string, HistogramParams2D>
     
     HistogramParams2D histParams;
 
-    histParams.variable = PyLong_AsLong(GetItem(params, 0));
+    histParams.variable = PyUnicode_AsUTF8(GetItem(params, 0));
     histParams.nBinsX = PyLong_AsLong(GetItem(params, 1));
     histParams.minX = PyFloat_AsDouble(GetItem(params, 2));
     histParams.maxX = PyFloat_AsDouble(GetItem(params, 3));
