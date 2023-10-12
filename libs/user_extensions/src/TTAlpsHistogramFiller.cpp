@@ -6,12 +6,13 @@
 
 using namespace std;
 
-TTAlpsHistogramFiller::TTAlpsHistogramFiller(shared_ptr<ConfigManager> _config, shared_ptr<HistogramsHandler> histogramsHandler_)
+TTAlpsHistogramFiller::TTAlpsHistogramFiller(shared_ptr<HistogramsHandler> histogramsHandler_)
     : histogramsHandler(histogramsHandler_) {
   eventProcessor = make_unique<EventProcessor>();
+  auto &config = ConfigManager::GetInstance();
 
   try {
-    _config->GetMap("triggerSets", triggerSets);
+    config.GetMap("triggerSets", triggerSets);
     for (auto it = triggerSets.begin(); it != triggerSets.end(); ++it) triggerNames.push_back(it->first);
   }
   catch (const Exception& e){
@@ -20,20 +21,20 @@ TTAlpsHistogramFiller::TTAlpsHistogramFiller(shared_ptr<ConfigManager> _config, 
   }
 
   try {
-    _config->GetMap("defaultHistVariables", defaultHistVariables);
+    config.GetHistogramsParams(defaultHistVariables, "defaultHistParams");
   }
   catch (const Exception& e){
-    warn() << "Couldn't read defaultHistVariables from config file - no default histograms will be included" << endl;
+    warn() << "Couldn't read defaultHistParams from config file - no default histograms will be included" << endl;
   }
   try {
-    _config->GetMap("ttalpsHistVariables", ttalpsHistVariables);
+    config.GetHistogramsParams(ttalpsHistVariables, "histParams");
   }
   catch (const Exception& e){
-    warn() << "Couldn't read ttalpsHistVariables from config file - no custom ttalps histograms will be included" << endl;
+    warn() << "Couldn't read histParams from config file - no custom ttalps histograms will be included" << endl;
   }
 
   try {
-    _config->GetValue("weightsBranchName", weightsBranchName);
+    config.GetValue("weightsBranchName", weightsBranchName);
   } catch (const Exception& e) {
     warn() << "Weights branch not specified -- will assume weight is 1 for all events" << endl;
   }
@@ -49,13 +50,13 @@ bool TTAlpsHistogramFiller::EndsWithTriggerName(string name) {
 void TTAlpsHistogramFiller::FillTriggerEfficiencies() {
   TH1D *hist_tmp;
 
-  for (auto &[name, hist] : histogramsHandler->histograms1D) {
+  for (auto &[name, hist] : histogramsHandler->GetHistograms1D()) {
     if (!EndsWithTriggerName(name)) continue;
     string nameWithoutTrigger = name.substr(0, name.rfind("_"));
     string newName = name + "_eff";
-    hist_tmp = (TH1D *)histogramsHandler->histograms1D[name]->Clone(newName.c_str());
-    hist_tmp->Divide(hist_tmp, histogramsHandler->histograms1D[nameWithoutTrigger], 1, 1, "B");
-    histogramsHandler->histograms1D[newName] = hist_tmp;
+    hist_tmp = (TH1D *)histogramsHandler->GetHistogram1D(name)->Clone(newName.c_str());
+    hist_tmp->Divide(hist_tmp, histogramsHandler->GetHistogram1D(nameWithoutTrigger), 1, 1, "B");
+    histogramsHandler->SetHistogram1D(newName, hist_tmp);
   }
 }
 
@@ -63,26 +64,16 @@ void TTAlpsHistogramFiller::FillTriggerVariables(const std::shared_ptr<Event> ev
   if (prefix != "") prefix = prefix + "_";
   if (suffix != "") suffix = "_" + suffix;
 
-  string muonName = prefix + "muonMaxPt" + suffix;
-  string eleName = prefix + "eleMaxPt" + suffix;
-  string jetPtName = prefix + "jetMaxPt" + suffix;
-  string jetHtName = prefix + "jetHt" + suffix;
-
-  if (!histogramsHandler->histograms1D.count(muonName)) error() << "Couldn't find key: " << muonName << " in histograms map\n";
-  if (!histogramsHandler->histograms1D.count(eleName)) error() << "Couldn't find key: " << eleName << " in histograms map\n";
-  if (!histogramsHandler->histograms1D.count(jetPtName)) error() << "Couldn't find key: " << jetPtName << " in histograms map\n";
-  if (!histogramsHandler->histograms1D.count(jetHtName)) error() << "Couldn't find key: " << jetHtName << " in histograms map\n";
-
   float weight = 1.0;
   try {
     weight = event->Get(weightsBranchName);
   } catch (...) {
   }
 
-  histogramsHandler->histograms1D[muonName]->Fill(eventProcessor->GetMaxPt(event, "Muon"), weight);
-  histogramsHandler->histograms1D[eleName]->Fill(eventProcessor->GetMaxPt(event, "Electron"), weight);
-  histogramsHandler->histograms1D[jetPtName]->Fill(eventProcessor->GetMaxPt(event, "Jet"), weight);
-  histogramsHandler->histograms1D[jetHtName]->Fill(eventProcessor->GetHt(event, "Jet"), weight);
+  histogramsHandler->Fill(prefix + "muonMaxPt" + suffix, eventProcessor->GetMaxPt(event, "Muon"), weight);
+  histogramsHandler->Fill(prefix + "eleMaxPt" + suffix, eventProcessor->GetMaxPt(event, "Electron"), weight);
+  histogramsHandler->Fill(prefix + "jetMaxPt" + suffix, eventProcessor->GetMaxPt(event, "Jet"), weight);
+  histogramsHandler->Fill(prefix + "jetHt" + suffix, eventProcessor->GetHt(event, "Jet"), weight);
 }
 
 void TTAlpsHistogramFiller::FillTriggerVariablesPerTriggerSet(const std::shared_ptr<Event> event, std::string ttbarCategory) {
@@ -108,48 +99,49 @@ void TTAlpsHistogramFiller::FillTriggerVariablesPerTriggerSet(const std::shared_
   }
 }
 
-void TTAlpsHistogramFiller::FillLeadingPt(const std::shared_ptr<Event> event, std::string histName, std::vector<std::string> variableLocation) {
-  float weight = 1.0;
-  try {
-    weight = event->Get(weightsBranchName);
-  } catch (...) {
-  }
-  float maxPt = eventProcessor->GetMaxPt(event, variableLocation[0]);
-  if(maxPt < 0) return;
-  histogramsHandler->histograms1D[histName]->Fill(maxPt, weight);
-}
-
 void TTAlpsHistogramFiller::FillNormCheck(const std::shared_ptr<Event> event) {
   float weight = 1.0;
   try {
     weight = event->Get(weightsBranchName);
   } catch (...) {
   }
-  histogramsHandler->histograms1D["norm_check"]->Fill(0.5, weight);
+  
+  histogramsHandler->Fill("Event_normCheck", 0.5, weight);
 }
 
-void TTAlpsHistogramFiller::FillAllSubLeadingPt(const std::shared_ptr<Event> event, std::string histName, std::vector<std::string> variableLocation) {
+void TTAlpsHistogramFiller::FillLeadingPt(const std::shared_ptr<Event> event, std::string histName, const HistogramParams &params) {
+  float weight = 1.0;
+  try {
+    weight = event->Get(weightsBranchName);
+  } catch (...) {
+  }
+  float maxPt = eventProcessor->GetMaxPt(event, params.collection);
+  if(maxPt < 0) return;
+  histogramsHandler->Fill(histName, maxPt, weight);
+}
+
+void TTAlpsHistogramFiller::FillAllSubLeadingPt(const std::shared_ptr<Event> event, std::string histName, const HistogramParams &params) {
   
-  float maxPt = eventProcessor->GetMaxPt(event, variableLocation[0]);
+  float maxPt = eventProcessor->GetMaxPt(event, params.collection);
   float weight = 1.0;
   try {
     weight = event->Get(weightsBranchName);
   } catch (...) {
   }
 
-  auto collection = event->GetCollection(variableLocation[0]);
+  auto collection = event->GetCollection(params.collection);
     for(auto object : *collection){
       float pt = object->Get("pt");
       if(pt == maxPt) continue;
-      histogramsHandler->histograms1D[histName]->Fill(pt, weight);
+      histogramsHandler->Fill(histName, pt, weight);
     }
 }
 
 void TTAlpsHistogramFiller::FillCustomTTAlpsVariables(const std::shared_ptr<Event> event) {
 
-  for(auto &[histName, variableLocation] : ttalpsHistVariables) {
-    if(variableLocation[1] == "subleading_pt") FillAllSubLeadingPt(event, histName, variableLocation);
-    else if(variableLocation[1] == "leading_pt") FillLeadingPt(event, histName, variableLocation);
+  for(auto &[histName, params] : ttalpsHistVariables) {
+    if(params.variable == "subleadingPt") FillAllSubLeadingPt(event, histName, params);
+    else if(params.variable == "leadingPt") FillLeadingPt(event, histName, params);
   }
 
   float weight = 1.0;
@@ -182,21 +174,17 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariables(const std::shared_ptr<Even
         deltaRclosestToZ = muon1fourVector.DeltaR(muon2fourVector);
       }
 
-      histogramsHandler->histograms1D["almost_good_dimuon_minv"]->Fill(diMuonMass, weight);    
+      histogramsHandler->Fill("AlmostGoodMuons_dimuonMinv", diMuonMass, weight);    
     }
   }
 
-  if(deltaRclosestToZ < 0) {
-    info()<<"n muons: "<<almostGoodMuons->size()<<endl;
-  }
-
-  histogramsHandler->histograms1D["dimuon_minv_closestToZ"]->Fill(massClosestToZ, weight);
-  histogramsHandler->histograms1D["dimuon_deltaR_closestToZ"]->Fill(deltaRclosestToZ, weight);
+  histogramsHandler->Fill("AlmostGoodMuons_dimuonMinvClosestToZ", massClosestToZ, weight);
+  histogramsHandler->Fill("AlmostGoodMuons_dimuonDeltaRclosestToZ", deltaRclosestToZ, weight);
 
   float metPhi = event->Get("MET_phi");
   float metPt = event->Get("MET_pt");
 
-  histogramsHandler->histograms1D["MET_pt"]->Fill(metPt, weight);
+  histogramsHandler->Fill("Event_METpt", metPt, weight);
 
   float leadingLeptonPhi = -1;
   float leadingLeptonPt = -1;
@@ -220,8 +208,8 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariables(const std::shared_ptr<Even
   metVector.SetPtEtaPhiM(metPt, 0, metPhi, 0);
   leptonPlusMet = leadingLepton + metVector;
 
-  histogramsHandler->histograms1D["deltaPhi_lepton_MET"]->Fill(metVector.DeltaPhi(leadingLepton), weight);
-  histogramsHandler->histograms1D["minv_lepton_MET"]->Fill(leptonPlusMet.M(), weight);
+  histogramsHandler->Fill("GoodLeptons_deltaPhiLeptonMET", metVector.DeltaPhi(leadingLepton), weight);
+  histogramsHandler->Fill("GoodLeptons_minvLeptonMET", leptonPlusMet.M(), weight);
 
   auto bJets = event->GetCollection("GoodBtaggedJets");
   auto jets = event->GetCollection("GoodNonBtaggedJets");
@@ -241,7 +229,7 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariables(const std::shared_ptr<Even
         jet2vector.SetPtEtaPhiM(jet2->Get("pt"), jet2->Get("eta"), jet2->Get("phi"), jet2->Get("mass"));
         sum = bJetVector + jet1vector + jet2vector;
 
-        histogramsHandler->histograms1D["minv_bjet_2jets"]->Fill(sum.M(), weight);
+        histogramsHandler->Fill("GoodJets_minvBjet2jets", sum.M(), weight);
 
       } 
     }
