@@ -1,10 +1,16 @@
-from skimmer_config import extraEventCollections
-
 nEvents = -1
 printEveryNevents = 1000
 
 inputFilePath = "../samples/background_dy.root"
 histogramsOutputFilePath = "../samples/histograms/background_dy.root"
+
+extraEventCollections = {
+    "GoodLeptons": {
+        "inputCollections": ("Muon", "Electron"),
+        "pt": (30., 9999999.),
+        "eta": (-2.4, 2.4),
+    },
+}
 
 defaultHistParams = (
 #  collection      variable          bins    xmin     xmax     dir

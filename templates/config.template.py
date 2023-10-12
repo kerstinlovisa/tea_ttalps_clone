@@ -29,6 +29,9 @@ histParams2D = (
     ("hit_xy", 100, -20, 20, 100, -20, 20, ""),
 )
 
+# specify name of the branch containing event weights
+weightsBranchName = "genWeight"
+
 # define extra collections:
 # - give it a name: e.g. GoodLeptons
 # - specify inputCollections: only those will be looped over to create your new collection
