@@ -1,6 +1,6 @@
 # Welcome to TEA!
 
-![tea_logo](tea_logo_black_extended_inv.jpg)
+![tea_logo](tea_logo_black_extended_inv_white.jpg)
 
 `tea` (toolkit for efficient analysis) is a set of tools developed at DESY for analysis of any ROOT trees. 
 
