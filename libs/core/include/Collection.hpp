@@ -6,6 +6,7 @@
 #define Collection_hpp
 
 #include <vector>
+#include <cstddef>
 
 template <typename T>
 class Collection : public std::vector<T> {
