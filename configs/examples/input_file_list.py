@@ -12,9 +12,9 @@
 # option 2: list input files and output files
 # input_output_file_list = (
 #   ("../samples/background_dy.root", "../samples/background_dy_skimmed.root"),
-#   ("../samples/background_tt.root", "../samples/skim/background_tt_skimmed.root"),
-#   ("../samples/signal_ttz.root", "../samples/skim/signal_ttz_skimmed.root"),
-#   ("../samples/data.root", "../samples/skim/data_skimmed.root"),
+#   ("../samples/background_tt.root", "../samples/background_tt_skimmed.root"),
+#   ("../samples/signal_ttz.root", "../samples/signal_ttz_skimmed.root"),
+#   ("../samples/data.root", "../samples/data_skimmed.root"),
 # )
 
 
