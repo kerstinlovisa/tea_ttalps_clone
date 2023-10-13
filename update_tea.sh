@@ -10,7 +10,7 @@ cp .github/README_tea.md .github/README.md
 
 # update tea
 git stash
-git pull --rebase -X theirs upstream main
+git pull --merge -X theirs upstream main
 git stash pop -q
 
 # restore user's gitignore & README
