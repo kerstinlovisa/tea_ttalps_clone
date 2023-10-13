@@ -11,7 +11,7 @@ cp .github/README_tea.md .github/README.md
 # update tea
 git stash
 git pull --rebase -X theirs upstream main
-git stash pop
+git stash pop -q
 
 # restore user's gitignore & README
 cp .gitignore_user .gitignore
