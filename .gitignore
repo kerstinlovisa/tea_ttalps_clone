@@ -30,6 +30,7 @@
 !.gitignore_user
 !.gitignore_tea
 !update_tea.sh
+!init.sh
 
 samples/*/*_hists.root
 samples/*/*/*
