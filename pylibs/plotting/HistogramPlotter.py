@@ -52,6 +52,9 @@ class HistogramPlotter:
       self.legends[sample.type][hist.name].AddEntry(hist.hist, sample.legend_description, self.config.legends[sample.type].options)  
   
   def addHists2D(self, input_file, sample):
+    if not hasattr(self.config, "histograms2D"):
+      return
+    
     for hist in self.config.histograms2D:
       hist.load(input_file)
       
@@ -112,16 +115,13 @@ class HistogramPlotter:
         if background_uncertainty_hist is not None:
           background_uncertainty_hist.Draw("same e2")
         
-          canvas.cd(2)
-          ratio_uncertainty = background_uncertainty_hist.Clone("ratio_uncertainty_"+hist.name)
-          
-          ratio_uncertainty.Divide(ratio_uncertainty)
-          ratio_uncertainty.SetFillColorAlpha(self.config.background_uncertainty_color, 
-                                              self.config.background_uncertainty_alpha)
-          ratio_uncertainty.SetLineColor(self.config.background_uncertainty_color)
-          ratio_uncertainty.SetFillStyle(self.config.background_uncertainty_style)
-          ratio_uncertainty.Draw("same e2")
-          canvas.cd(1)
+          if self.config.show_ratio_plots:
+            canvas.cd(2)
+            ratio_uncertainty = background_uncertainty_hist.Clone("ratio_uncertainty_"+hist.name)
+            
+            ratio_uncertainty.Divide(ratio_uncertainty)
+            ratio_uncertainty.Draw("same e2")
+            canvas.cd(1)
         
         self.stacks[SampleType.signal][hist.name].Draw("nostack same e")
       elif self.signals_included:
@@ -136,7 +136,9 @@ class HistogramPlotter:
           self.stacks[SampleType.data][hist.name].Draw("nostack hist")
           self.__setupFigure(self.stacks[SampleType.data][hist.name], hist)
 
-      for sample_type in SampleType:
+      for sample_type in self.legends.keys():
+        if hist.name not in self.legends[sample_type].keys():
+          continue
         self.legends[sample_type][hist.name].Draw()
       
       canvas.Update()
@@ -145,6 +147,9 @@ class HistogramPlotter:
   def drawHists2D(self):
     if not os.path.exists(self.config.output_path):
       os.makedirs(self.config.output_path)
+
+    if not hasattr(self.config, "histograms2D"):
+      return
 
     for hist in self.config.histograms2D:
       for sample in self.config.samples:
@@ -196,10 +201,24 @@ class HistogramPlotter:
     for background_hist in self.stacks[SampleType.background][hist.name].GetHists():  
       uncertainty_hist.Add(background_hist)
     
-    uncertainty_hist.SetFillColorAlpha(self.config.background_uncertainty_color,
-                                       self.config.background_uncertainty_alpha)
-    uncertainty_hist.SetLineColor(self.config.background_uncertainty_color)
-    uncertainty_hist.SetFillStyle(self.config.background_uncertainty_style)
+    if hasattr(self.config, "background_uncertainty"):
+      color = self.config.background_uncertainty_color
+    else:
+      color = ROOT.kBlack
+    
+    if hasattr(self.config, "background_uncertainty_alpha"):
+      alpha = self.config.background_uncertainty_alpha
+    else:
+      alpha = 0.3
+    
+    if hasattr(self.config, "background_uncertainty_style"):
+      style = self.config.background_uncertainty_style
+    else:
+      style = 3244
+    
+    uncertainty_hist.SetFillColorAlpha(color, alpha)
+    uncertainty_hist.SetLineColor(color)
+    uncertainty_hist.SetFillStyle(style)
     
     return uncertainty_hist
   
