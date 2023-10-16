@@ -35,18 +35,18 @@ int main(int argc, char **argv) {
   }
 
   // Create event reader and writer, which will handle input/output trees for you
-  auto eventReader = make_shared<EventReader>(config);
-  auto eventWriter = make_shared<EventWriter>(config, eventReader);
+  auto eventReader = make_shared<EventReader>();
+  auto eventWriter = make_shared<EventWriter>(eventReader);
   
   // Create a CutFlowManager to keep track of how many events passed selections
   auto cutFlowManager = make_shared<CutFlowManager>(eventReader, eventWriter);
 
   // If you want to fill some histograms, use HistogramsHandler to automatically create histograms
   // you need based on the config file, make them accessible to your HistogramFiller and save them at the end
-  auto histogramsHandler = make_shared<HistogramsHandler>(config);
+  auto histogramsHandler = make_shared<HistogramsHandler>();
   
   // Create a HistogramFiller to fill default histograms
-  auto histogramsFiller = make_unique<HistogramsFiller>(config, histogramsHandler);
+  auto histogramsFiller = make_unique<HistogramsFiller>(histogramsHandler);
   
   // If you also created your custom HistogramFiller, construct it here to use it later on in the event loop
   // auto histogramsFiller = make_unique<MyHistogramsFiller>(config, histogramsHandler);
@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
     auto event = eventReader->GetEvent(iEvent);
 
     // If you want to do something with one of the collections, extract it here and loop over it
-    shared_ptr<PhysicsObjects> physicsObjects = event->GetCollection("Particle");
+    auto physicsObjects = event->GetCollection("Particle");
     for (auto physicsObject : *physicsObjects) {
       // If you also created your custom PhysicsObject class, you can convert the physics object to your object type
       // auto myPhysicsObject = asMyPhysicsObject(physicsObject);
@@ -99,7 +99,7 @@ int main(int argc, char **argv) {
     if(!passesTrigger) continue;
     cutFlowManager->UpdateCutFlow("trigger");
 
-    int nMuons = event->Get("nMuon");
+    int nMuons = event->GetCollectionSize("Muon");
     if(nMuons < 2) continue;
     cutFlowManager->UpdateCutFlow("nMuons");
 

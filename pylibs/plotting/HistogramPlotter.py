@@ -216,7 +216,8 @@ class HistogramPlotter:
     legends_dict = {}
     
     for hist_name in self.hist_names:
-      legends_dict[hist_name] = self.config.legends[sample_type].getRootLegend()
+      if sample_type in self.config.legends.keys():
+        legends_dict[hist_name] = self.config.legends[sample_type].getRootLegend()
 
     return legends_dict
 
