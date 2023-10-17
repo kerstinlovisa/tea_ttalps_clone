@@ -8,7 +8,7 @@
 
 class TemplateName {
  public:
-  TemplateName(std::shared_ptr<ConfigManager> _config, std::shared_ptr<HistogramsHandler> histogramsHandler_);
+  TemplateName(std::shared_ptr<HistogramsHandler> histogramsHandler_);
   ~TemplateName();
 
   void Fill(const std::shared_ptr<Event> event);

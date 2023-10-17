@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
   auto histogramsFiller = make_unique<HistogramsFiller>(histogramsHandler);
   
   // If you also created your custom HistogramFiller, construct it here to use it later on in the event loop
-  // auto histogramsFiller = make_unique<MyHistogramsFiller>(config, histogramsHandler);
+  // auto histogramsFiller = make_unique<MyHistogramsFiller>(histogramsHandler);
 
   // In case you're worried about the performance of your app, you can also create a profiler
   Profiler &profiler = Profiler::GetInstance();
@@ -82,6 +82,8 @@ int main(int argc, char **argv) {
     // If you want to do something with one of the collections, extract it here and loop over it
     auto physicsObjects = event->GetCollection("Particle");
     for (auto physicsObject : *physicsObjects) {
+      float pt = physicsObject->Get("pt");
+      info() << "Physics object pt: " << pt << endl;
       // If you also created your custom PhysicsObject class, you can convert the physics object to your object type
       // auto myPhysicsObject = asMyPhysicsObject(physicsObject);
 

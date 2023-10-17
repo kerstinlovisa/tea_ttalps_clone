@@ -4,7 +4,7 @@ import os
 
 args = argparse.ArgumentParser()
 args.add_argument("--name", help="Name of the class/app to add", required=True)
-args.add_argument("--type", help="Type of the extension to add: PhysicsObject, Event, HistogramFiller, app", required=True)
+args.add_argument("--type", help="Type of the extension to add: PhysicsObject, Event, HistogramsFiller, app", required=True)
 args.add_argument("--path", help="In case type is app, specify directory name in which to put it", required=False, default="")
 args = args.parse_args()
 
@@ -71,9 +71,9 @@ def main():
       ("templates/PhysicsObject.template.cpp", f"libs/user_extensions/src/{class_name}.cpp"),
       ("templates/PhysicsObject.template.hpp", f"libs/user_extensions/include/{class_name}.hpp"),
     ),
-    "HistogramFiller": (
-      ("templates/HistogramFiller.template.cpp", f"libs/user_extensions/src/{class_name}.cpp"),
-      ("templates/HistogramFiller.template.hpp", f"libs/user_extensions/include/{class_name}.hpp"),
+    "HistogramsFiller": (
+      ("templates/HistogramsFiller.template.cpp", f"libs/user_extensions/src/{class_name}.cpp"),
+      ("templates/HistogramsFiller.template.hpp", f"libs/user_extensions/include/{class_name}.hpp"),
     ),
     "Event": (
       ("templates/Event.template.cpp", f"libs/user_extensions/src/{class_name}.cpp"),
@@ -88,7 +88,7 @@ def main():
   
   for i, entry in enumerate(files_to_copy[class_type]):
     copy_template_file(entry[0], entry[1], class_name)
-    if i==0 and class_type != "app" and class_type != "HistogramFiller":
+    if i==0 and class_type != "app" and class_type != "HistogramsFiller":
       insert_cast(class_name, class_type)
   
   remove_path("build/CMakeFiles/")

@@ -36,8 +36,8 @@ int main(int argc, char **argv) {
   auto cutFlowManager = make_shared<CutFlowManager>(eventReader, eventWriter);
   auto eventProcessor = make_unique<EventProcessor>();
   
-  for (int i_event = 0; i_event < eventReader->GetNevents(); i_event++) {    
-    auto event = eventReader->GetEvent(i_event);
+  for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {    
+    auto event = eventReader->GetEvent(iEvent);
 
     cutFlowManager->UpdateCutFlow("initial");
     if(!eventProcessor->PassesTriggerSelections(event)) continue;
@@ -48,7 +48,7 @@ int main(int argc, char **argv) {
     eventWriter->AddCurrentEvent("Events");
   }
   cutFlowManager->SaveCutFlow();
-
+  cutFlowManager->Print();
   eventWriter->Save();
 
   return 0;

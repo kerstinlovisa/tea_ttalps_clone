@@ -6,7 +6,7 @@ def get_args():
   parser = argparse.ArgumentParser(description="Submitter")
 
   parser.add_argument("--app", type=str, help="name of the app to run", required=True)
-  parser.add_argument("--config", type=str, required=True, help="config to be executred by the app")
+  parser.add_argument("--config", type=str, required=True, help="config to be executed by the app")
   
   parser.add_argument("--files_config", type=str, default=None, help="path to a python config with a list of input/output paths")
   
