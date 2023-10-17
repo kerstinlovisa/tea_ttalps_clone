@@ -16,30 +16,41 @@ luminosity = 63670. # pb^-1 (2018)
 
 samples = (
   Sample(
-    name="my_background", 
-    file_path=f"{base_path}/backgrounds/nanoAOD_hists.root", 
+    name="DY", 
+    file_path=f"{base_path}/histograms/background_dy.root", 
     type=SampleType.background,
     cross_section=0.4, 
     line_alpha=0.0,
     fill_color=41,
     fill_alpha=0.7,
     marker_size=0.0,
-    legend_description="my_background"
+    legend_description="DY"
   ),
   Sample(
-    name="my_signal", 
-    file_path=f"{base_path}/signals/nanoAOD_hists.root", 
+    name="tt", 
+    file_path=f"{base_path}/histograms/background_tt.root", 
+    type=SampleType.background,
+    cross_section=0.4, 
+    line_alpha=0.0,
+    fill_color=42,
+    fill_alpha=0.7,
+    marker_size=0.0,
+    legend_description="tt"
+  ),
+  Sample(
+    name="ttZ", 
+    file_path=f"{base_path}/histograms/signal_ttz.root", 
     type=SampleType.signal,
     cross_section=1, 
     line_color=TColor.GetColor(230, 159, 0), 
     line_style=ROOT.kSolid,
     fill_alpha=0.0,
     marker_size=0.0,
-    legend_description="my_signal"
+    legend_description="ttZ"
   ),
   Sample(
-    name="my_data", 
-    file_path=f"{base_path}/data/nanoAOD_hists.root", 
+    name="data", 
+    file_path=f"{base_path}/histograms/data.root", 
     type=SampleType.data,
     cross_section=1, 
     line_color=ROOT.kBlack,
@@ -48,7 +59,7 @@ samples = (
     marker_size=1.0,
     marker_color=ROOT.kBlack,
     fill_alpha=0.0,
-    legend_description="my_data"
+    legend_description="data"
   ),
 )
 

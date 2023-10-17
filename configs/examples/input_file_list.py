@@ -6,7 +6,7 @@
 #   "../samples/signal_ttz.root"
 #   "../samples/data.root"
 # )
-# output_dir = "../samples/skim"
+# output_dir = "../samples/skimmed"
 
 
 # option 2: list input files and output files
@@ -32,4 +32,4 @@
 
 # option 5: only specify local input and output directories
 input_directory = "../samples"
-output_dir = "../samples/skim"
+output_dir = "../samples/skimmed"
