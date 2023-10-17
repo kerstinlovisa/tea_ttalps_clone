@@ -1,5 +1,5 @@
 nEvents = -1
-printEveryNevents = 100
+printEveryNevents = 1000
 
 inputFilePath = "../samples/background_dy.root"
 treeOutputFilePath = "../samples/skimmed/background_dy.root"

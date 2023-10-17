@@ -16,6 +16,7 @@ class TemplateName {
  private:
   std::shared_ptr<HistogramsHandler> histogramsHandler;
   std::unique_ptr<EventProcessor> eventProcessor;
+  std::string weightsBranchName;
 };
 
 #endif /* TemplateName_hpp */

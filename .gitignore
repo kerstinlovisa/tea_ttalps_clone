@@ -5,7 +5,7 @@
 !CMakeLists.txt
 !LICENSE
 !apps/examples/
-!apps/tests/
+!apps/examples/*
 
 !build.sh
 !configs/examples/
