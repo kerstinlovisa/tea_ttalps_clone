@@ -9,6 +9,7 @@
 
 !build.sh
 !configs/examples/
+!configs/examples/*
 !create.py
 !libs/core/
 !libs/extensions/
