@@ -17,6 +17,8 @@ class TemplateName {
   std::shared_ptr<HistogramsHandler> histogramsHandler;
   std::unique_ptr<EventProcessor> eventProcessor;
   std::string weightsBranchName;
+
+  float GetWeight(const std::shared_ptr<Event> event);
 };
 
 #endif /* TemplateName_hpp */

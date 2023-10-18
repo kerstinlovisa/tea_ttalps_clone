@@ -22,14 +22,17 @@ TemplateName::TemplateName(shared_ptr<HistogramsHandler> histogramsHandler_) : h
 
 TemplateName::~TemplateName() {}
 
-void TemplateName::Fill(const std::shared_ptr<Event> event) {
+float TemplateName::GetWeight(const std::shared_ptr<Event> event) {
   // Try to get event weight, otherwise set to 1.0
   float weight = 1.0;
   try {
     weight = event->Get(weightsBranchName);
   } catch (...) {
   }
+  return weight;
+}
 
+void TemplateName::Fill(const std::shared_ptr<Event> event) {
   // Fill the histogram for given event (e.g. use EventProcessor to get some variables)
-  histogramsHandler->Fill("test", eventProcessor->GetMaxPt(event, "Muon"), weight);
+  histogramsHandler->Fill("test", eventProcessor->GetMaxPt(event, "Muon"), GetWeight(event));
 }
