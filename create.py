@@ -4,8 +4,8 @@ import os
 
 args = argparse.ArgumentParser()
 args.add_argument("--name", help="Name of the class/app to add", required=True)
-args.add_argument("--type", help="Type of the extension to add: PhysicsObject, Event, HistogramsFiller, app", required=True)
-args.add_argument("--path", help="In case type is app, specify directory name in which to put it", required=False, default="")
+args.add_argument("--type", help="Type of the extension to add: PhysicsObject, Event, HistogramsFiller, app, printer", required=True)
+args.add_argument("--path", help="In case type is app/printer, specify directory name in which to put it", required=False, default="")
 args = args.parse_args()
 
 def replace_string_in_file(file_path, old_string, new_string):
@@ -83,12 +83,17 @@ def main():
       ("templates/app.template.cpp", f"apps/{args.path}/{class_name}.cpp"),
       ("templates/config.template.py", f"configs/{args.path}/{class_name}_config.py"),
     ),
+    "printer":(
+      ("templates/printer.template.cpp", f"apps/{args.path}/{class_name}.cpp"),
+      ("templates/printer_config.template.py", f"configs/{args.path}/{class_name}_config.py"),
+    ),
   }
   
+  classes_with_cast = ("PhysicsObject", "Event")
   
   for i, entry in enumerate(files_to_copy[class_type]):
     copy_template_file(entry[0], entry[1], class_name)
-    if i==0 and class_type != "app" and class_type != "HistogramsFiller":
+    if i==0 and class_type in classes_with_cast:
       insert_cast(class_name, class_type)
   
   remove_path("build/CMakeFiles/")
