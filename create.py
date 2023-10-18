@@ -4,8 +4,8 @@ import os
 
 args = argparse.ArgumentParser()
 args.add_argument("--name", help="Name of the class/app to add", required=True)
-args.add_argument("--type", help="Type of the extension to add: PhysicsObject, Event, HistogramsFiller, app, printer", required=True)
-args.add_argument("--path", help="In case type is app/printer, specify directory name in which to put it", required=False, default="")
+args.add_argument("--type", help="Type of the extension to add: PhysicsObject, Event, HistogramsFiller, app, printer, histogrammer", required=True)
+args.add_argument("--path", help="In case the type is app/printer/histogrammer, specify the directory name in which to put it", required=False, default="")
 args = args.parse_args()
 
 def replace_string_in_file(file_path, old_string, new_string):
@@ -86,6 +86,10 @@ def main():
     "printer":(
       ("templates/printer.template.cpp", f"apps/{args.path}/{class_name}.cpp"),
       ("templates/printer_config.template.py", f"configs/{args.path}/{class_name}_config.py"),
+    ),
+    "histogrammer":(
+      ("templates/histogrammer.template.cpp", f"apps/{args.path}/{class_name}.cpp"),
+      ("templates/histogrammer_config.template.py", f"configs/{args.path}/{class_name}_config.py"),
     ),
   }
   
