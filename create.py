@@ -36,7 +36,7 @@ def insert_cast(class_name, type):
   new_string += "#endif /* UserExtensionsHelpers_hpp */"
   
   replace_string_in_file(file_path, old_string, new_string)
-  print(f"Added conversion from {type} to {class_name} in libs/extensions/include/ExtensionsHelpers.hpp")
+  print(f"Added conversion from {type} to {class_name} in {file_path}")
   
 def create_parent_directories(file_path):
   parent_dir = os.path.dirname(file_path)
