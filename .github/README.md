@@ -6,4 +6,4 @@
 
 It is designed for speed (CPU-intensive operations implemented in C++), based on intuitive loop-based logic, while hidding most of the tricky and tedious operations behind a user-friendly API and using Python for configuration and lightweight operations.
 
-To learn more about `tea`, visit the [official website](cern.ch/tea).
+To learn more about `tea`, visit the [official website](https://jniedzie.github.io/tea/docs/home/).
