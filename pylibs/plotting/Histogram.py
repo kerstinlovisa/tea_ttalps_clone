@@ -14,6 +14,10 @@ class Histogram:
   y_max: float = 0.0
   x_label: str = ""
   y_label: str = ""
+  suffix: str = ""
+  
+  def getName(self):
+    return self.name + self.suffix
   
   def load(self, input_file):
     self.hist = input_file.Get(self.name)

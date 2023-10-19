@@ -42,7 +42,7 @@ class HistogramNormalizer:
   
   def __normalizeToBackground(self, hist, sample):
     if sample.type == SampleType.background:
-        hist.hist.Scale(self.config.luminosity*sample.cross_section/self.background_initial_sum_weights[sample.name])
+      hist.hist.Scale(self.config.luminosity*sample.cross_section/self.background_initial_sum_weights[sample.name])
     elif sample.type == SampleType.signal:
       hist.hist.Scale(self.total_background/self.signal_final_sum_weights[sample.name])
     elif sample.type == SampleType.data:
@@ -92,15 +92,11 @@ class HistogramNormalizer:
       final_weight_sum = cut_flow.GetBinContent(cut_flow.GetNbinsX())
       
       if initial_weight_sum == 0:
-        print(f"Initial sum of weights is zero for sample: {sample.name}. Setting efficeincy to zero.")
         efficiency = 0
       else:
         efficiency = final_weight_sum/initial_weight_sum
       
       if sample.type == SampleType.background:
-        print(f"\tBackground: {sample.name}: {sample.cross_section * self.config.luminosity * efficiency:.1e}")
-        print(f"\t{initial_weight_sum=:.1e}")
-        
         self.total_background += sample.cross_section * self.config.luminosity * efficiency
         self.background_initial_sum_weights[sample.name] = initial_weight_sum
         self.total_background_cross_section += sample.cross_section
@@ -108,9 +104,7 @@ class HistogramNormalizer:
         self.background_final_sum_weights[sample.name] = final_weight_sum
         
       elif sample.type == SampleType.signal:
-        print(f"\tSignal: {sample.name}: {final_weight_sum}")
         self.signal_final_sum_weights[sample.name] = final_weight_sum
         
       elif sample.type == SampleType.data:
-        print(f"\tData: {sample.name}: {final_weight_sum}")
         self.data_final_entries[sample.name] = final_weight_sum

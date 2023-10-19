@@ -17,7 +17,7 @@ class HistogramPlotter:
     self.normalizer = HistogramNormalizer(config)
     self.styler = Styler()
     
-    self.hist_names = [hist.name for hist in self.config.histograms]
+    self.hist_names = [hist.name+hist.suffix for hist in self.config.histograms]
     
     self.legends = {sample_type: self.__getLegendDicts(sample_type) for sample_type in SampleType}
     self.stacks = {sample_type: self.__getStackDict(sample_type) for sample_type in SampleType}
@@ -31,6 +31,8 @@ class HistogramPlotter:
     
     self.data_hists = {}
     
+    self.show_ratios = self.backgrounds_included and self.data_included and self.config.show_ratio_plots
+    
   
   def addHistsToStacks(self, input_file, sample):
     
@@ -41,17 +43,17 @@ class HistogramPlotter:
         continue
 
       if sample.type == SampleType.data:
-        self.data_hists[hist.name] = hist.hist
+        self.data_hists[hist.getName()] = hist.hist
 
       data_hist = None
-      if hist.name in self.data_hists:
-        data_hist = self.data_hists[hist.name]
+      if hist.getName() in self.data_hists:
+        data_hist = self.data_hists[hist.getName()]
 
       self.normalizer.normalize(hist, sample, data_hist)
       hist.setup(sample)
       
-      self.stacks[sample.type][hist.name].Add(hist.hist)
-      self.legends[sample.type][hist.name].AddEntry(hist.hist, sample.legend_description, self.config.legends[sample.type].options)  
+      self.stacks[sample.type][hist.getName()].Add(hist.hist)
+      self.legends[sample.type][hist.getName()].AddEntry(hist.hist, sample.legend_description, self.config.legends[sample.type].options)  
   
   def addHists2D(self, input_file, sample):
     if not hasattr(self.config, "histograms2D"):
@@ -64,7 +66,7 @@ class HistogramPlotter:
         continue
       
       hist.setup()
-      self.hists2d[sample.type][hist.name] = hist.hist
+      self.hists2d[sample.type][hist.getName()] = hist.hist
   
   def __draw_line_at_one(self, hist):
     line = ROOT.TLine(hist.x_min, 1, hist.x_max, 1)
@@ -85,10 +87,10 @@ class HistogramPlotter:
       os.makedirs(self.config.output_path)
 
     for hist in self.config.histograms:
-      canvas = TCanvas(hist.name, hist.name, self.config.canvas_size[0], self.config.canvas_size[1])
+      canvas = TCanvas(hist.getName(), hist.getName(), self.config.canvas_size[0], self.config.canvas_size[1])
       self.__setup_canvas(canvas)
       
-      if self.backgrounds_included and self.data_included and self.config.show_ratio_plots:
+      if self.show_ratios:
         canvas.cd(2)
         
         ratio_hist = self.__getRatioStack(hist)
@@ -103,46 +105,44 @@ class HistogramPlotter:
       if self.backgrounds_included:
         
         n_entries = 0
-        for h in self.stacks[SampleType.background][hist.name].GetHists():
+        for h in self.stacks[SampleType.background][hist.getName()].GetHists():
           n_entries += h.GetEntries()
         
-        print(f"Plotting hist: {hist.name} with {n_entries} entries")
-        
-        self.stacks[SampleType.background][hist.name].Draw("hist")
-        self.styler.setupFigure(self.stacks[SampleType.background][hist.name], hist)
+        self.stacks[SampleType.background][hist.getName()].Draw("hist")
+        self.styler.setupFigure(self.stacks[SampleType.background][hist.getName()], hist)
         
         background_uncertainty_hist = self.__getBackgroundUncertaintyHist(hist)
         if background_uncertainty_hist is not None:
           background_uncertainty_hist.Draw("same e2")
         
-          if self.config.show_ratio_plots:
+          if self.show_ratios:
             canvas.cd(2)
-            ratio_uncertainty = background_uncertainty_hist.Clone("ratio_uncertainty_"+hist.name)
+            ratio_uncertainty = background_uncertainty_hist.Clone("ratio_uncertainty_"+hist.getName())
             
             ratio_uncertainty.Divide(ratio_uncertainty)
             ratio_uncertainty.Draw("same e2")
             canvas.cd(1)
         
-        self.stacks[SampleType.signal][hist.name].Draw("nostack same e")
+        self.stacks[SampleType.signal][hist.getName()].Draw("nostack same e")
       elif self.signals_included:
-        self.stacks[SampleType.signal][hist.name].Draw("nostack hist e")
-        self.styler.setupFigure(self.stacks[SampleType.signal][hist.name], hist)
+        self.stacks[SampleType.signal][hist.getName()].Draw("nostack hist e")
+        self.styler.setupFigure(self.stacks[SampleType.signal][hist.getName()], hist)
 
       if self.data_included:
         
         if self.backgrounds_included or self.signals_included:  
-          self.stacks[SampleType.data][hist.name].Draw("nostack same pe")
+          self.stacks[SampleType.data][hist.getName()].Draw("nostack same pe")
         else:
-          self.stacks[SampleType.data][hist.name].Draw("nostack hist")
-          self.styler.setupFigure(self.stacks[SampleType.data][hist.name], hist)
+          self.stacks[SampleType.data][hist.getName()].Draw("nostack hist")
+          self.styler.setupFigure(self.stacks[SampleType.data][hist.getName()], hist)
 
       for sample_type in self.legends.keys():
-        if hist.name not in self.legends[sample_type].keys():
+        if hist.getName() not in self.legends[sample_type].keys():
           continue
-        self.legends[sample_type][hist.name].Draw()
+        self.legends[sample_type][hist.getName()].Draw()
       
       canvas.Update()
-      canvas.SaveAs(self.config.output_path+"/"+hist.name+".pdf")
+      canvas.SaveAs(self.config.output_path+"/"+hist.getName()+".pdf")
   
   def drawHists2D(self):
     if not os.path.exists(self.config.output_path):
@@ -153,52 +153,51 @@ class HistogramPlotter:
 
     for hist in self.config.histograms2D:
       for sample in self.config.samples:
-        title = hist.name + "_" + sample.name
+        title = hist.getName() + "_" + sample.name
         canvas = TCanvas(title, title, self.config.canvas_size[0], self.config.canvas_size[1])  
         canvas.cd()
       
-        self.hists2d[sample.type][hist.name].Draw("colz")
-        self.styler.setupFigure2D(self.hists2d[sample.type][hist.name], hist)
+        self.hists2d[sample.type][hist.getName()].Draw("colz")
+        self.styler.setupFigure2D(self.hists2d[sample.type][hist.getName()], hist)
       
         canvas.Update()
         canvas.SaveAs(self.config.output_path+"/"+title+".pdf")
   
   def __getRatioStack(self, hist):
-    
     try:
-      data_hist = self.stacks[SampleType.data][hist.name].GetHists()[0]
+      data_hist = self.stacks[SampleType.data][hist.getName()].GetHists()[0]
     except:
       return None
-    ratio_hist = data_hist.Clone("ratio_"+hist.name)
+    ratio_hist = data_hist.Clone("ratio_"+hist.getName())
     
-    backgrounds_sum = ROOT.TH1D("backgrounds_sum_"+hist.name, "backgrounds_sum_"+hist.name,
+    backgrounds_sum = ROOT.TH1D("backgrounds_sum_"+hist.getName(), "backgrounds_sum_"+hist.getName(),
                                 data_hist.GetNbinsX(),
                                 data_hist.GetXaxis().GetBinLowEdge(1), 
                                 data_hist.GetXaxis().GetBinUpEdge(data_hist.GetNbinsX()))
     
-    for background_hist in self.stacks[SampleType.background][hist.name].GetHists():  
+    for background_hist in self.stacks[SampleType.background][hist.getName()].GetHists():  
       backgrounds_sum.Add(background_hist)
     
     ratio_hist.Divide(backgrounds_sum)
     
-    ratio_stack = THStack("ratio_stack_"+hist.name, "ratio_stack_"+hist.name)
+    ratio_stack = THStack("ratio_stack_"+hist.getName(), "ratio_stack_"+hist.getName())
     ratio_stack.Add(ratio_hist)
     
     return ratio_stack
   
   def __getBackgroundUncertaintyHist(self, hist):
     try:
-      background_hist = self.stacks[SampleType.background][hist.name].GetHists()[0]
+      background_hist = self.stacks[SampleType.background][hist.getName()].GetHists()[0]
     except:
       return None
     
-    uncertainty_hist = ROOT.TH1D("backgrounds_unc_"+hist.name, "backgrounds_unc_"+hist.name,
+    uncertainty_hist = ROOT.TH1D("backgrounds_unc_"+hist.getName(), "backgrounds_unc_"+hist.getName(),
                                   background_hist.GetNbinsX(),
                                   background_hist.GetXaxis().GetBinLowEdge(1), 
                                   background_hist.GetXaxis().GetBinUpEdge(background_hist.GetNbinsX()))
     
       
-    for background_hist in self.stacks[SampleType.background][hist.name].GetHists():  
+    for background_hist in self.stacks[SampleType.background][hist.getName()].GetHists():  
       uncertainty_hist.Add(background_hist)
     
     if hasattr(self.config, "background_uncertainty"):
@@ -225,18 +224,18 @@ class HistogramPlotter:
   def __getStackDict(self, sample_type):
     hists_dict = {}
     
-    for hist_name in self.hist_names:
-      title = hist_name + sample_type.name
-      hists_dict[hist_name] = ROOT.THStack(title, title)
+    for name in self.hist_names:
+      title = name + sample_type.name
+      hists_dict[name] = ROOT.THStack(title, title)
 
     return hists_dict
 
   def __getLegendDicts(self, sample_type):
     legends_dict = {}
     
-    for hist_name in self.hist_names:
+    for name in self.hist_names:
       if sample_type in self.config.legends.keys():
-        legends_dict[hist_name] = self.config.legends[sample_type].getRootLegend()
+        legends_dict[name] = self.config.legends[sample_type].getRootLegend()
 
     return legends_dict
   
