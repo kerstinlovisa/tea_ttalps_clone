@@ -23,6 +23,8 @@ samples = (
     fill_alpha=0.7,
     marker_size=0.0,
     legend_description="Drell-Yan (2018)",
+    # if you add a custom legend for this sample, it will override the default legend.
+    # custom_legend = Legend(0.5, 0.5, 0.7, 0.8, "f"),
   ),
   Sample(
     name="tt", 
@@ -33,7 +35,8 @@ samples = (
     fill_color=42,
     fill_alpha=0.7,
     marker_size=0.0,
-    legend_description="tt semi-leptonic (2018)"
+    legend_description="tt semi-leptonic (2018)",
+    # custom_legend = Legend(0.7, 0.5, 0.9, 0.8, "f"),
   ),
   Sample(
     name="ttZ", 
@@ -94,10 +97,11 @@ legend_max_x = 0.80
 legend_height = 0.05
 legend_max_y = 0.85
 
-n_signal = len([s for s in samples if s.type == SampleType.signal])
-n_data = len([s for s in samples if s.type == SampleType.data])
-n_background = len([s for s in samples if s.type == SampleType.background])
+n_signal = len([s for s in samples if s.type == SampleType.signal and s.custom_legend is None])
+n_data = len([s for s in samples if s.type == SampleType.data and s.custom_legend is None])
+n_background = len([s for s in samples if s.type == SampleType.background and s.custom_legend is None])
 
+# here default legends per sample type are defined. If you want to override them, specify custom_legend in the sample
 legends = {
   SampleType.signal     : Legend(legend_min_x               , legend_max_y - n_signal*legend_height           , legend_min_x+legend_width , legend_max_y                        , "l" ),
   SampleType.data       : Legend(legend_min_x               , legend_max_y - (n_signal+n_data)*legend_height  , legend_min_x+legend_width , legend_max_y-n_signal*legend_height , "pl"),

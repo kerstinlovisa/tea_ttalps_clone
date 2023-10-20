@@ -2,6 +2,8 @@ import ROOT
 from dataclasses import dataclass
 from enum import Enum
 
+from Legend import Legend
+
 # enum class with signal, background, data
 class SampleType(Enum):
   signal = 0
@@ -24,3 +26,4 @@ class Sample:
   fill_alpha: float = 0.7
   legend_description: str = ""
   plotting_options: str = ""
+  custom_legend: Legend = None

@@ -25,6 +25,9 @@ def main():
       input_files[sample.name] = TFile.Open(sample.file_path, "READ")
       plotter.addHistosample(hist, sample, input_files[sample.name])
   
+  print("Setting up legends")
+  plotter.setupLegends()
+  
   print("Building stacks")
   plotter.buildStacks()
   plotter.addHists2D(input_files[sample.name], sample)

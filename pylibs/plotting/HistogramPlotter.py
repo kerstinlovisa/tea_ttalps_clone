@@ -18,7 +18,8 @@ class HistogramPlotter:
     self.normalizer = HistogramNormalizer(config)
     self.styler = Styler(config)
     
-    self.legends = {sample_type: self.__getLegendDicts(sample_type) for sample_type in SampleType}
+    self.legends = {}
+    
     self.stacks = {sample_type: self.__getStackDict(sample_type) for sample_type in SampleType}
     self.histsAndSamples = {}
     self.hists2d = {sample_type: {} for sample_type in SampleType}
@@ -40,6 +41,19 @@ class HistogramPlotter:
     
     if sample.type is SampleType.data:
       self.data_integral[hist.getName()] = hist.hist.Integral()
+  
+  def setupLegends(self):
+    already_added = []
+    
+    for hist, sample in self.histosamples:
+      if hist.getName() not in self.legends.keys():
+        self.legends[hist.getName()] = {}
+      
+      if sample.custom_legend is not None:
+        self.legends[hist.getName()][sample.name] = sample.custom_legend.getRootLegend()
+      elif (hist.getName(), sample.type) not in already_added:
+        self.legends[hist.getName()][sample.type] = self.config.legends[sample.type].getRootLegend()
+        already_added.append((hist.getName(), sample.type))
   
   def __getDataIntegral(self, input_hist):
     if input_hist.getName() in self.data_integral.keys():
@@ -63,7 +77,11 @@ class HistogramPlotter:
       hist.setup(sample)
       
       self.stacks[sample.type][hist.getName()].Add(hist.hist)
-      self.legends[sample.type][hist.getName()].AddEntry(hist.hist, sample.legend_description, self.config.legends[sample.type].options)  
+      
+      
+      key = sample.type if sample.custom_legend is None else sample.name
+      
+      self.legends[hist.getName()][key].AddEntry(hist.hist, sample.legend_description, self.config.legends[sample.type].options)  
   
   def addHists2D(self, input_file, sample):
     if not hasattr(self.config, "histograms2D"):
@@ -124,11 +142,10 @@ class HistogramPlotter:
     
   def __drawLegends(self, canvas, hist):
     canvas.cd(1)
-    for sample_type in self.legends.keys():
-      if hist.getName() not in self.legends[sample_type].keys():
-        continue
-      self.legends[sample_type][hist.getName()].Draw()
-
+    
+    for legend in self.legends[hist.getName()].values():
+      legend.Draw()
+    
   def __drawHists(self, canvas, hist):
     canvas.cd(1)
     
@@ -232,12 +249,4 @@ class HistogramPlotter:
 
     return hists_dict
 
-  def __getLegendDicts(self, sample_type):
-    legends_dict = {}
-    
-    for hist in self.config.histograms:
-      if sample_type in self.config.legends.keys():
-        legends_dict[hist.getName()] = self.config.legends[sample_type].getRootLegend()
-
-    return legends_dict
   
