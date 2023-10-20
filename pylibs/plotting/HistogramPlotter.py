@@ -33,6 +33,8 @@ class HistogramPlotter:
     
     self.show_ratios = self.backgrounds_included and self.data_included and self.config.show_ratio_plots
     
+    if not os.path.exists(self.config.output_path):
+      os.makedirs(self.config.output_path)
   
   def addHistsToStacks(self, input_file, sample):
     
@@ -68,86 +70,92 @@ class HistogramPlotter:
       hist.setup()
       self.hists2d[sample.type][hist.getName()] = hist.hist
   
-  def __draw_line_at_one(self, hist):
+  def __drawLineAtOne(self, canvas, hist):
+    canvas.cd(2)
+    global line
     line = ROOT.TLine(hist.x_min, 1, hist.x_max, 1)
     line.SetLineColor(ROOT.kBlack)
     line.SetLineStyle(ROOT.kDashed)
     line.Draw()
   
-  def __setup_canvas(self, canvas):
-    if self.backgrounds_included and self.data_included and self.config.show_ratio_plots:
+  def __drawRatioPlot(self, canvas, hist):
+    if not self.show_ratios:
+      return
+    
+    canvas.cd(2)
+    global ratio_hist
+    ratio_hist = self.__getRatioStack(hist)
+    if ratio_hist:
+      ratio_hist.Draw("p")
+      self.styler.setupFigure(ratio_hist, hist, is_ratio=True)
+  
+  def __drawUncertainties(self, canvas, hist):
+    global background_uncertainty_hist
+    background_uncertainty_hist = self.__getBackgroundUncertaintyHist(hist)
+    if background_uncertainty_hist is  None:
+      return
+    
+    canvas.cd(1)
+    background_uncertainty_hist.Draw("same e2")
+  
+    if not self.show_ratios:
+      return
+    
+    global ratio_uncertainty
+    ratio_uncertainty = background_uncertainty_hist.Clone("ratio_uncertainty_"+hist.getName())
+    ratio_uncertainty.Divide(ratio_uncertainty)
+    
+    canvas.cd(2)
+    ratio_uncertainty.Draw("same e2")
+    
+  def __drawLegens(self, canvas, hist):
+    canvas.cd(1)
+    for sample_type in self.legends.keys():
+      if hist.getName() not in self.legends[sample_type].keys():
+        continue
+      self.legends[sample_type][hist.getName()].Draw()
+
+  def __drawHists(self, canvas, hist):
+    canvas.cd(1)
+    
+    options = {
+      SampleType.background: "hist",
+      SampleType.signal: "nostack e",
+      SampleType.data: "nostack pe",
+    }
+    
+    for i, sample_type in enumerate(SampleType):
+      opt = options[sample_type] if i==0 else options[sample_type]+" same"
+      self.stacks[sample_type][hist.getName()].Draw(opt)
+      self.styler.setupFigure(self.stacks[sample_type][hist.getName()], hist)
+  
+  def __setup_canvas(self, canvas, hist):
+    if self.show_ratios:
       canvas.Divide(1, 2)
       self.styler.setup_ratio_pad(canvas.GetPad(2))
       self.styler.setup_main_pad_with_ratio(canvas.GetPad(1))
     else:
+      canvas.Divide(1, 1)
       self.styler.setup_main_pad_without_ratio(canvas.GetPad(1))
+    
+    canvas.GetPad(1).SetLogy(hist.log_y)
   
   def drawStacks(self):
-    if not os.path.exists(self.config.output_path):
-      os.makedirs(self.config.output_path)
-
+    
     for hist in self.config.histograms:
       canvas = TCanvas(hist.getName(), hist.getName(), self.config.canvas_size[0], self.config.canvas_size[1])
-      self.__setup_canvas(canvas)
+      self.__setup_canvas(canvas, hist)
       
-      if self.show_ratios:
-        canvas.cd(2)
-        
-        ratio_hist = self.__getRatioStack(hist)
-        if ratio_hist:
-          ratio_hist.Draw("p")
-        self.styler.setupFigure(ratio_hist, hist, is_ratio=True)
-        self.__draw_line_at_one(hist)
-      
-      canvas.cd(1)
-      gPad.SetLogy(hist.log_y)
-      
-      if self.backgrounds_included:
-        
-        n_entries = 0
-        for h in self.stacks[SampleType.background][hist.getName()].GetHists():
-          n_entries += h.GetEntries()
-        
-        self.stacks[SampleType.background][hist.getName()].Draw("hist")
-        self.styler.setupFigure(self.stacks[SampleType.background][hist.getName()], hist)
-        
-        background_uncertainty_hist = self.__getBackgroundUncertaintyHist(hist)
-        if background_uncertainty_hist is not None:
-          background_uncertainty_hist.Draw("same e2")
-        
-          if self.show_ratios:
-            canvas.cd(2)
-            ratio_uncertainty = background_uncertainty_hist.Clone("ratio_uncertainty_"+hist.getName())
-            
-            ratio_uncertainty.Divide(ratio_uncertainty)
-            ratio_uncertainty.Draw("same e2")
-            canvas.cd(1)
-        
-        self.stacks[SampleType.signal][hist.getName()].Draw("nostack same e")
-      elif self.signals_included:
-        self.stacks[SampleType.signal][hist.getName()].Draw("nostack hist e")
-        self.styler.setupFigure(self.stacks[SampleType.signal][hist.getName()], hist)
-
-      if self.data_included:
-        
-        if self.backgrounds_included or self.signals_included:  
-          self.stacks[SampleType.data][hist.getName()].Draw("nostack same pe")
-        else:
-          self.stacks[SampleType.data][hist.getName()].Draw("nostack hist")
-          self.styler.setupFigure(self.stacks[SampleType.data][hist.getName()], hist)
-
-      for sample_type in self.legends.keys():
-        if hist.getName() not in self.legends[sample_type].keys():
-          continue
-        self.legends[sample_type][hist.getName()].Draw()
+      self.__drawRatioPlot(canvas, hist)
+      self.__drawLineAtOne(canvas, hist)
+      self.__drawHists(canvas, hist)
+      self.__drawUncertainties(canvas, hist)
+      self.__drawLegens(canvas, hist)
       
       canvas.Update()
       canvas.SaveAs(self.config.output_path+"/"+hist.getName()+".pdf")
   
   def drawHists2D(self):
-    if not os.path.exists(self.config.output_path):
-      os.makedirs(self.config.output_path)
-
     if not hasattr(self.config, "histograms2D"):
       return
 
