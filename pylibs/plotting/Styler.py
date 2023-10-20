@@ -1,14 +1,12 @@
-from ROOT import TCanvas, TPad, TObject, gPad, gStyle, THStack
+from ROOT import TObject
 import ROOT
 
 class Styler:
   
-  def __init__(self):
-    pass
+  def __init__(self, config):
+    self.config = config
   
   def setup_ratio_pad(self, pad):
-    print("Setting up ratio pad")
-    
     pad.SetPad(0, 0, 1, 0.3)
     pad.SetLeftMargin(0.15)
     pad.SetTopMargin(0)
@@ -16,7 +14,6 @@ class Styler:
     pad.SetLogy(False)
     
   def setup_main_pad_with_ratio(self, pad):
-    print("Setting up main pad with ratio")
     pad.SetPad(0, 0.3, 1, 1)
     pad.SetLeftMargin(0.15)
     pad.SetBottomMargin(0.0)
@@ -102,3 +99,23 @@ class Styler:
     except:
       print("Couldn't set axes limits")
       return
+    
+  def setupUncertaintyHistogram(self, hist):
+    if hasattr(self.config, "background_uncertainty"):
+      color = self.config.background_uncertainty_color
+    else:
+      color = ROOT.kBlack
+    
+    if hasattr(self.config, "background_uncertainty_alpha"):
+      alpha = self.config.background_uncertainty_alpha
+    else:
+      alpha = 0.3
+    
+    if hasattr(self.config, "background_uncertainty_style"):
+      style = self.config.background_uncertainty_style
+    else:
+      style = 3244
+    
+    hist.SetFillColorAlpha(color, alpha)
+    hist.SetLineColor(color)
+    hist.SetFillStyle(style)

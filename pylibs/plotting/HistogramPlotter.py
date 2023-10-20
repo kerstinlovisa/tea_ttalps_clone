@@ -1,7 +1,8 @@
-from ROOT import TCanvas, TObject, gPad, gStyle, THStack
+from ROOT import TCanvas, gStyle, THStack
 import ROOT
 import os
 import os.path
+import copy
 
 from Sample import SampleType
 from Styler import Styler
@@ -15,43 +16,43 @@ class HistogramPlotter:
     self.config = config
     
     self.normalizer = HistogramNormalizer(config)
-    self.styler = Styler()
-    
-    self.hist_names = [hist.name+hist.suffix for hist in self.config.histograms]
+    self.styler = Styler(config)
     
     self.legends = {sample_type: self.__getLegendDicts(sample_type) for sample_type in SampleType}
     self.stacks = {sample_type: self.__getStackDict(sample_type) for sample_type in SampleType}
+    self.histsAndSamples = {}
     self.hists2d = {sample_type: {} for sample_type in SampleType}
     
     self.data_included = any(sample.type == SampleType.data for sample in self.config.samples)
     self.backgrounds_included = any(sample.type == SampleType.background for sample in self.config.samples)
     self.signals_included = any(sample.type == SampleType.signal for sample in self.config.samples)
     
-    self.initial_background_weight = None
-    
-    self.data_hists = {}
-    
     self.show_ratios = self.backgrounds_included and self.data_included and self.config.show_ratio_plots
+    
+    self.histosamples = []
     
     if not os.path.exists(self.config.output_path):
       os.makedirs(self.config.output_path)
+
+  def addHistosample(self, hist, sample, input_file):
+    hist.load(input_file)
+    self.histosamples.append((copy.deepcopy(hist), sample))
+
+  def __getDataHist(self, input_hist):
+    for hist, sample in self.histosamples:
+      if sample.type is not SampleType.data:
+        continue
+      if input_hist.getName() == hist.getName():
+        return hist.hist
+    return None
   
-  def addHistsToStacks(self, input_file, sample):
-    
-    for hist in self.config.histograms:
-      hist.load(input_file)
-      
+  
+  def buildStacks(self):
+    for hist, sample in self.histosamples:
       if not hist.isGood():
         continue
-
-      if sample.type == SampleType.data:
-        self.data_hists[hist.getName()] = hist.hist
-
-      data_hist = None
-      if hist.getName() in self.data_hists:
-        data_hist = self.data_hists[hist.getName()]
-
-      self.normalizer.normalize(hist, sample, data_hist)
+      
+      self.normalizer.normalize(hist, sample, self.__getDataHist(hist))
       hist.setup(sample)
       
       self.stacks[sample.type][hist.getName()].Add(hist.hist)
@@ -96,6 +97,7 @@ class HistogramPlotter:
       return
     
     canvas.cd(1)
+    self.styler.setupUncertaintyHistogram(background_uncertainty_hist)
     background_uncertainty_hist.Draw("same e2")
   
     if not self.show_ratios:
@@ -208,42 +210,23 @@ class HistogramPlotter:
     for background_hist in self.stacks[SampleType.background][hist.getName()].GetHists():  
       uncertainty_hist.Add(background_hist)
     
-    if hasattr(self.config, "background_uncertainty"):
-      color = self.config.background_uncertainty_color
-    else:
-      color = ROOT.kBlack
-    
-    if hasattr(self.config, "background_uncertainty_alpha"):
-      alpha = self.config.background_uncertainty_alpha
-    else:
-      alpha = 0.3
-    
-    if hasattr(self.config, "background_uncertainty_style"):
-      style = self.config.background_uncertainty_style
-    else:
-      style = 3244
-    
-    uncertainty_hist.SetFillColorAlpha(color, alpha)
-    uncertainty_hist.SetLineColor(color)
-    uncertainty_hist.SetFillStyle(style)
-    
     return uncertainty_hist
   
   def __getStackDict(self, sample_type):
     hists_dict = {}
     
-    for name in self.hist_names:
-      title = name + sample_type.name
-      hists_dict[name] = ROOT.THStack(title, title)
+    for hist in self.config.histograms:
+      title = hist.getName() + sample_type.name
+      hists_dict[hist.getName()] = ROOT.THStack(title, title)
 
     return hists_dict
 
   def __getLegendDicts(self, sample_type):
     legends_dict = {}
     
-    for name in self.hist_names:
+    for hist in self.config.histograms:
       if sample_type in self.config.legends.keys():
-        legends_dict[name] = self.config.legends[sample_type].getRootLegend()
+        legends_dict[hist.getName()] = self.config.legends[sample_type].getRootLegend()
 
     return legends_dict
   

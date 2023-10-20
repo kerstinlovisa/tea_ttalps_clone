@@ -16,8 +16,14 @@ class Histogram:
   y_label: str = ""
   suffix: str = ""
   
+  def __post_init__(self):
+    self.hist = None
+  
   def getName(self):
     return self.name + self.suffix
+  
+  def print(self):
+    print(f"Histogram {self.name}, {self.hist}")
   
   def load(self, input_file):
     self.hist = input_file.Get(self.name)

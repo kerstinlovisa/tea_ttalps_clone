@@ -62,11 +62,12 @@ class HistogramNormalizer:
   
   def __normalizeToData(self, hist, sample, data_hist):
     if hist.hist.Integral() == 0:
+      print(f"Couldn't normalize to data: {hist.name}, {sample.name}")
       return  
     if data_hist is None:
+      print(f"Couldn't normalize to data: {hist.name}, {sample.name}")
       return
-    
-    scale = hist.rebin * data_hist.Integral()/hist.hist.Integral()
+    scale = data_hist.Integral()/hist.hist.Integral()
     
     if sample.type == SampleType.background:
       scale *= sample.cross_section/self.total_background_cross_section
