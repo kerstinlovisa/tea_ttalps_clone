@@ -19,7 +19,7 @@ samples = (
     name="DY", 
     file_path=f"{base_path}/histograms/background_dy.root", 
     type=SampleType.background,
-    cross_section=0.4, 
+    cross_section=1976.0, 
     line_alpha=0.0,
     fill_color=41,
     fill_alpha=0.7,
@@ -30,7 +30,7 @@ samples = (
     name="tt", 
     file_path=f"{base_path}/histograms/background_tt.root", 
     type=SampleType.background,
-    cross_section=0.4, 
+    cross_section=687.1, 
     line_alpha=0.0,
     fill_color=42,
     fill_alpha=0.7,
@@ -41,7 +41,7 @@ samples = (
     name="ttZ", 
     file_path=f"{base_path}/histograms/signal_ttz.root", 
     type=SampleType.signal,
-    cross_section=1, 
+    cross_section=0.5407, 
     line_color=TColor.GetColor(230, 159, 0), 
     line_style=ROOT.kSolid,
     fill_alpha=0.0,
@@ -67,14 +67,15 @@ y_label = "# events (2018)"
 
 histograms = (
 #           name                  title logy    norm_type                       rebin xmin   xmax  ymin    ymax,    xlabel                ylabel            suffix
-  # Histogram("Event_nMuon"         , "", False , NormalizationType.to_background, 1  ,   0   , 20  , 1e1   , 5e4   , "Number of muons"   , y_label           ),
-  Histogram("Event_nMuon"         , "", True  , NormalizationType.to_background, 1  ,   0   , 20  , 1e1   , 1e9   , "Number of muons"   , y_label          , "_log" ),
-  Histogram("Muon_pt"             , "", True  , NormalizationType.to_background, 5  ,   0   , 500 , 1e-2  , 1e3   , "p_{T}^{#mu} [GeV]" , y_label           ),
-  Histogram("Muon_eta"            , "", True  , NormalizationType.to_background, 10 , -3.5  , 3.5 , 1e0   , 1e3   , "#eta^{#mu}"        , y_label           ),
-  Histogram("Event_nGoodLeptons"  , "", True  , NormalizationType.to_background, 1  ,   0   , 30  , 1e0   , 1e9   , "Number of jets"    , y_label           ),
-  Histogram("GoodLeptons_pt"      , "", True  , NormalizationType.to_background, 5  ,   0   , 500 , 10    , 1e8   , "p_{T}^{j} [GeV]"   , y_label           ),
-  Histogram("GoodLeptons_eta"     , "", True  , NormalizationType.to_background, 10 , -3.5  , 3.5 , 1e0   , 1e10  , "#eta^{j}"          , y_label           ),
-  Histogram("cutFlow"             , "", True  , NormalizationType.to_background, 1  ,   0   , 8   , 1e2   , 1e6   , "Selection"         , "#sum genWeight"  ),
+  Histogram("Event_nMuon"         , "", False , NormalizationType.to_data, 1  ,   0   , 20  , 1e1   , 5e4   , "Number of muons"   , y_label           ),
+  Histogram("Event_nMuon"         , "", True  , NormalizationType.to_data, 1  ,   0   , 20  , 1e1   , 1e9   , "Number of muons"   , y_label          , "_log" ),
+  Histogram("Muon_pt"             , "", True  , NormalizationType.to_data, 5  ,   0   , 500 , 1e-2  , 1e3   , "p_{T}^{#mu} [GeV]" , y_label           ),
+  Histogram("Muon_eta"            , "", False , NormalizationType.to_data, 10 , -3.5  , 3.5 , 1e0   , 1e3   , "#eta^{#mu}"        , y_label          , "_log" ),
+  Histogram("Muon_eta"            , "", True  , NormalizationType.to_data, 10 , -3.5  , 3.5 , 1e0   , 1e3   , "#eta^{#mu}"        , y_label           ),
+  Histogram("Event_nGoodLeptons"  , "", True  , NormalizationType.to_data, 1  ,   0   , 30  , 1e0   , 1e9   , "Number of jets"    , y_label           ),
+  Histogram("GoodLeptons_pt"      , "", True  , NormalizationType.to_data, 5  ,   0   , 500 , 10    , 1e8   , "p_{T}^{j} [GeV]"   , y_label           ),
+  Histogram("GoodLeptons_eta"     , "", True  , NormalizationType.to_data, 10 , -3.5  , 3.5 , 1e0   , 1e10  , "#eta^{j}"          , y_label           ),
+  Histogram("cutFlow"             , "", True  , NormalizationType.to_data, 1  ,   0   , 8   , 1e2   , 1e6   , "Selection"         , "#sum genWeight"  ),
 )
 
 histograms2D = (
