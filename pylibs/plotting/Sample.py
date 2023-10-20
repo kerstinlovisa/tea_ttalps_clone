@@ -7,8 +7,6 @@ class SampleType(Enum):
   signal = 0
   background = 1
   data = 2
-  
-  
 
 @dataclass
 class Sample:
@@ -25,3 +23,4 @@ class Sample:
   fill_color: int = ROOT.kGreen
   fill_alpha: float = 0.7
   legend_description: str = ""
+  plotting_options: str = ""

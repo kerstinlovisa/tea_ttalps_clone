@@ -12,8 +12,6 @@ output_path = "../plots"
 
 luminosity = 63670. # pb^-1 (2018)
 
-# data&signals must be listed after backgrounds for now
-
 samples = (
   Sample(
     name="DY", 
@@ -24,7 +22,7 @@ samples = (
     fill_color=41,
     fill_alpha=0.7,
     marker_size=0.0,
-    legend_description="DY"
+    legend_description="DY",
   ),
   Sample(
     name="tt", 
@@ -42,8 +40,10 @@ samples = (
     file_path=f"{base_path}/histograms/signal_ttz.root", 
     type=SampleType.signal,
     cross_section=0.5407, 
+    # line_alpha=0.0,
     line_color=TColor.GetColor(230, 159, 0), 
     line_style=ROOT.kSolid,
+    # fill_color=TColor.GetColor(230, 159, 0), 
     fill_alpha=0.0,
     marker_size=0.0,
     legend_description="ttZ"
@@ -62,6 +62,9 @@ samples = (
     legend_description="data"
   ),
 )
+
+# You can specify custom order for stacks. If you don't, they will be ordered by cross-section
+# custom_stacks_order = ("DY", "tt", "ttZ", "data")
 
 y_label = "# events (2018)"
 
@@ -90,5 +93,12 @@ legends = {
   SampleType.data: Legend(0.15,0.8,0.25,0.85, "pl"),
 }
 
+plotting_options = {
+  SampleType.background: "hist",
+  SampleType.signal: "nostack e",
+  SampleType.data: "nostack pe",
+}
+
 canvas_size = (800, 600)
 show_ratio_plots = True
+

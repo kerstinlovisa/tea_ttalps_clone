@@ -25,11 +25,11 @@ class HistogramPlotter:
     
     self.data_included = any(sample.type == SampleType.data for sample in self.config.samples)
     self.backgrounds_included = any(sample.type == SampleType.background for sample in self.config.samples)
-    self.signals_included = any(sample.type == SampleType.signal for sample in self.config.samples)
     
     self.show_ratios = self.backgrounds_included and self.data_included and self.config.show_ratio_plots
     
     self.histosamples = []
+    self.data_integral = {}
     
     if not os.path.exists(self.config.output_path):
       os.makedirs(self.config.output_path)
@@ -37,22 +37,29 @@ class HistogramPlotter:
   def addHistosample(self, hist, sample, input_file):
     hist.load(input_file)
     self.histosamples.append((copy.deepcopy(hist), sample))
-
-  def __getDataHist(self, input_hist):
-    for hist, sample in self.histosamples:
-      if sample.type is not SampleType.data:
-        continue
-      if input_hist.getName() == hist.getName():
-        return hist.hist
+    
+    if sample.type is SampleType.data:
+      self.data_integral[hist.getName()] = hist.hist.Integral()
+  
+  def __getDataIntegral(self, input_hist):
+    if input_hist.getName() in self.data_integral.keys():
+      return self.data_integral[input_hist.getName()]
     return None
   
-  
+  def __sortHistosamples(self):
+    if hasattr(self.config, "custom_stacks_order"):
+      self.histosamples.sort(key=lambda x: self.config.custom_stacks_order.index(x[1].name))
+    else:
+      self.histosamples.sort(key=lambda x: x[1].cross_section, reverse=False)
+    
   def buildStacks(self):
+    self.__sortHistosamples()
+    
     for hist, sample in self.histosamples:
       if not hist.isGood():
         continue
       
-      self.normalizer.normalize(hist, sample, self.__getDataHist(hist))
+      self.normalizer.normalize(hist, sample, self.__getDataIntegral(hist))
       hist.setup(sample)
       
       self.stacks[sample.type][hist.getName()].Add(hist.hist)
@@ -72,21 +79,26 @@ class HistogramPlotter:
       self.hists2d[sample.type][hist.getName()] = hist.hist
   
   def __drawLineAtOne(self, canvas, hist):
-    canvas.cd(2)
+    if not self.show_ratios:
+      return
+    
     global line
     line = ROOT.TLine(hist.x_min, 1, hist.x_max, 1)
     line.SetLineColor(ROOT.kBlack)
     line.SetLineStyle(ROOT.kDashed)
+    
+    canvas.cd(2)
     line.Draw()
   
   def __drawRatioPlot(self, canvas, hist):
     if not self.show_ratios:
       return
     
-    canvas.cd(2)
     global ratio_hist
     ratio_hist = self.__getRatioStack(hist)
     if ratio_hist:
+      
+      canvas.cd(2)
       ratio_hist.Draw("p")
       self.styler.setupFigure(ratio_hist, hist, is_ratio=True)
   
@@ -110,7 +122,7 @@ class HistogramPlotter:
     canvas.cd(2)
     ratio_uncertainty.Draw("same e2")
     
-  def __drawLegens(self, canvas, hist):
+  def __drawLegends(self, canvas, hist):
     canvas.cd(1)
     for sample_type in self.legends.keys():
       if hist.getName() not in self.legends[sample_type].keys():
@@ -120,16 +132,15 @@ class HistogramPlotter:
   def __drawHists(self, canvas, hist):
     canvas.cd(1)
     
-    options = {
-      SampleType.background: "hist",
-      SampleType.signal: "nostack e",
-      SampleType.data: "nostack pe",
-    }
+    firstPlotted = False
     
-    for i, sample_type in enumerate(SampleType):
-      opt = options[sample_type] if i==0 else options[sample_type]+" same"
-      self.stacks[sample_type][hist.getName()].Draw(opt)
-      self.styler.setupFigure(self.stacks[sample_type][hist.getName()], hist)
+    for sample_type in SampleType:
+      options = self.config.plotting_options[sample_type]
+      options = f"{options} same" if firstPlotted else options
+      if self.stacks[sample_type][hist.getName()].GetNhists() > 0:
+        self.stacks[sample_type][hist.getName()].Draw(options)
+        self.styler.setupFigure(self.stacks[sample_type][hist.getName()], hist)
+        firstPlotted = True
   
   def __setup_canvas(self, canvas, hist):
     if self.show_ratios:
@@ -152,7 +163,7 @@ class HistogramPlotter:
       self.__drawLineAtOne(canvas, hist)
       self.__drawHists(canvas, hist)
       self.__drawUncertainties(canvas, hist)
-      self.__drawLegens(canvas, hist)
+      self.__drawLegends(canvas, hist)
       
       canvas.Update()
       canvas.SaveAs(self.config.output_path+"/"+hist.getName()+".pdf")
