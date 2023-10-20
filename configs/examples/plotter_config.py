@@ -22,7 +22,7 @@ samples = (
     fill_color=41,
     fill_alpha=0.7,
     marker_size=0.0,
-    legend_description="DY",
+    legend_description="Drell-Yan (2018)",
   ),
   Sample(
     name="tt", 
@@ -33,7 +33,7 @@ samples = (
     fill_color=42,
     fill_alpha=0.7,
     marker_size=0.0,
-    legend_description="tt"
+    legend_description="tt semi-leptonic (2018)"
   ),
   Sample(
     name="ttZ", 
@@ -46,7 +46,7 @@ samples = (
     # fill_color=TColor.GetColor(230, 159, 0), 
     fill_alpha=0.0,
     marker_size=0.0,
-    legend_description="ttZ"
+    legend_description="ttZ+jets (2018)"
   ),
   Sample(
     name="data", 
@@ -59,7 +59,7 @@ samples = (
     marker_size=1.0,
     marker_color=ROOT.kBlack,
     fill_alpha=0.0,
-    legend_description="data"
+    legend_description="data (2018)"
   ),
 )
 
@@ -87,10 +87,21 @@ histograms2D = (
   # Histogram2D("time_vs_toa",    "time_vs_toa"     , 1, 1, -10     , 100     , -10   , 2000  , 0,  1e3, "Time (ns)"     , "Time of Arrival (ToA)"     , "Counts"),
 )
 
+legend_width = 0.15
+legend_min_x = 0.20
+legend_max_x = 0.80
+
+legend_height = 0.05
+legend_max_y = 0.85
+
+n_signal = len([s for s in samples if s.type == SampleType.signal])
+n_data = len([s for s in samples if s.type == SampleType.data])
+n_background = len([s for s in samples if s.type == SampleType.background])
+
 legends = {
-  SampleType.signal: Legend(0.15,0.85,0.25,0.89, "l"),
-  SampleType.background: Legend(0.7,0.5,0.85,0.85, "f"),
-  SampleType.data: Legend(0.15,0.8,0.25,0.85, "pl"),
+  SampleType.signal     : Legend(legend_min_x               , legend_max_y - n_signal*legend_height           , legend_min_x+legend_width , legend_max_y                        , "l" ),
+  SampleType.data       : Legend(legend_min_x               , legend_max_y - (n_signal+n_data)*legend_height  , legend_min_x+legend_width , legend_max_y-n_signal*legend_height , "pl"),
+  SampleType.background : Legend(legend_max_x-legend_width  , legend_max_y - n_background*legend_height       , legend_max_x              , legend_max_y                        , "f" ),
 }
 
 plotting_options = {
