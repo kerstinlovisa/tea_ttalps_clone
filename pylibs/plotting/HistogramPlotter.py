@@ -18,7 +18,7 @@ class HistogramPlotter:
     
     self.normalizer = HistogramNormalizer(config)
     self.styler = Styler(config)
-    self.cmsLabelsManager = CmsLabelsManager()
+    self.cmsLabelsManager = CmsLabelsManager(config)
     
     self.legends = {}
     
@@ -185,7 +185,7 @@ class HistogramPlotter:
       self.__drawUncertainties(canvas, hist)
       self.__drawLegends(canvas, hist)
       
-      self.cmsLabelsManager.CMS_lumi(canvas, iPeriod=3, iPosX=10)
+      self.cmsLabelsManager.drawLabels(canvas)
       
       canvas.Update()
       canvas.SaveAs(self.config.output_path+"/"+hist.getName()+".pdf")
