@@ -91,7 +91,7 @@ histograms2D = (
 )
 
 legend_width = 0.15
-legend_min_x = 0.20
+legend_min_x = 0.40
 legend_max_x = 0.80
 
 legend_height = 0.05

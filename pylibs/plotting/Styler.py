@@ -12,16 +12,24 @@ class Styler:
     pad.SetTopMargin(0)
     pad.SetBottomMargin(0.3)
     pad.SetLogy(False)
+    pad.SetTickx(0)
+    pad.SetTicky(0)
     
   def setup_main_pad_with_ratio(self, pad):
     pad.SetPad(0, 0.3, 1, 1)
     pad.SetLeftMargin(0.15)
     pad.SetBottomMargin(0.0)
+    pad.SetTopMargin(0.08)
+    pad.SetTickx(0)
+    pad.SetTicky(0)
   
   def setup_main_pad_without_ratio(self, pad):
     pad.SetLeftMargin(0.15)
     pad.SetBottomMargin(0.15)
     pad.SetRightMargin(0.20)
+    pad.SetTopMargin(0.08)
+    pad.SetTickx(0)
+    pad.SetTicky(0)
   
   def setupFigure(self, plot, hist, is_ratio=False):
     if plot is None or type(plot) is TObject:
@@ -119,3 +127,4 @@ class Styler:
     hist.SetFillColorAlpha(color, alpha)
     hist.SetLineColor(color)
     hist.SetFillStyle(style)
+    hist.SetMarkerSize(0.0)

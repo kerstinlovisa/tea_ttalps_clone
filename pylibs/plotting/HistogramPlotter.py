@@ -7,6 +7,7 @@ import copy
 from Sample import SampleType
 from Styler import Styler
 from HistogramNormalizer import HistogramNormalizer
+from CmsLabelsManager import CmsLabelsManager
 
 
 class HistogramPlotter:
@@ -17,6 +18,7 @@ class HistogramPlotter:
     
     self.normalizer = HistogramNormalizer(config)
     self.styler = Styler(config)
+    self.cmsLabelsManager = CmsLabelsManager()
     
     self.legends = {}
     
@@ -154,9 +156,10 @@ class HistogramPlotter:
     for sample_type in SampleType:
       options = self.config.plotting_options[sample_type]
       options = f"{options} same" if firstPlotted else options
-      if self.stacks[sample_type][hist.getName()].GetNhists() > 0:
-        self.stacks[sample_type][hist.getName()].Draw(options)
-        self.styler.setupFigure(self.stacks[sample_type][hist.getName()], hist)
+      stack = self.stacks[sample_type][hist.getName()]
+      if stack.GetNhists() > 0:
+        stack.Draw(options)
+        self.styler.setupFigure(stack, hist)
         firstPlotted = True
   
   def __setup_canvas(self, canvas, hist):
@@ -181,6 +184,8 @@ class HistogramPlotter:
       self.__drawHists(canvas, hist)
       self.__drawUncertainties(canvas, hist)
       self.__drawLegends(canvas, hist)
+      
+      self.cmsLabelsManager.CMS_lumi(canvas, iPeriod=3, iPosX=10)
       
       canvas.Update()
       canvas.SaveAs(self.config.output_path+"/"+hist.getName()+".pdf")
