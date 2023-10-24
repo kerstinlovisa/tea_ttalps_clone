@@ -7,7 +7,7 @@ class Styler:
     self.config = config
     
     self.topMargin = 0.06
-    self.bottomMargin = 0.13
+    self.bottomMargin = 0.3
     self.leftMargin = 0.16
     self.rightMargin = 0.06
     

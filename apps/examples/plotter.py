@@ -25,6 +25,10 @@ def main():
     
     for hist in config.histograms:
       plotter.addHistosample(hist, sample, input_files[sample.name])
+    
+    if not hasattr(config, "histograms2D"):
+      continue
+    
     for hist in config.histograms2D:
       plotter.addHistosample2D(hist, sample, input_files[sample.name])
   
