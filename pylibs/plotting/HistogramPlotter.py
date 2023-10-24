@@ -7,6 +7,7 @@ import copy
 from Sample import SampleType
 from Styler import Styler
 from HistogramNormalizer import HistogramNormalizer
+from CmsLabelsManager import CmsLabelsManager
 
 
 class HistogramPlotter:
@@ -17,6 +18,7 @@ class HistogramPlotter:
     
     self.normalizer = HistogramNormalizer(config)
     self.styler = Styler(config)
+    self.cmsLabelsManager = CmsLabelsManager(config)
     
     self.legends = {}
     
@@ -30,6 +32,7 @@ class HistogramPlotter:
     self.show_ratios = self.backgrounds_included and self.data_included and self.config.show_ratio_plots
     
     self.histosamples = []
+    self.histosamples2D = []
     self.data_integral = {}
     
     if not os.path.exists(self.config.output_path):
@@ -41,6 +44,10 @@ class HistogramPlotter:
     
     if sample.type is SampleType.data:
       self.data_integral[hist.getName()] = hist.hist.Integral()
+  
+  def addHistosample2D(self, hist, sample, input_file):
+    hist.load(input_file)
+    self.histosamples2D.append((copy.deepcopy(hist), sample))
   
   def setupLegends(self):
     already_added = []
@@ -154,9 +161,10 @@ class HistogramPlotter:
     for sample_type in SampleType:
       options = self.config.plotting_options[sample_type]
       options = f"{options} same" if firstPlotted else options
-      if self.stacks[sample_type][hist.getName()].GetNhists() > 0:
-        self.stacks[sample_type][hist.getName()].Draw(options)
-        self.styler.setupFigure(self.stacks[sample_type][hist.getName()], hist)
+      stack = self.stacks[sample_type][hist.getName()]
+      if stack.GetNhists() > 0:
+        stack.Draw(options)
+        self.styler.setupFigure(stack, hist)
         firstPlotted = True
   
   def __setup_canvas(self, canvas, hist):
@@ -181,6 +189,7 @@ class HistogramPlotter:
       self.__drawHists(canvas, hist)
       self.__drawUncertainties(canvas, hist)
       self.__drawLegends(canvas, hist)
+      self.cmsLabelsManager.drawLabels(canvas)
       
       canvas.Update()
       canvas.SaveAs(self.config.output_path+"/"+hist.getName()+".pdf")
@@ -189,17 +198,15 @@ class HistogramPlotter:
     if not hasattr(self.config, "histograms2D"):
       return
 
-    for hist in self.config.histograms2D:
-      for sample in self.config.samples:
-        title = hist.getName() + "_" + sample.name
-        canvas = TCanvas(title, title, self.config.canvas_size[0], self.config.canvas_size[1])  
-        canvas.cd()
-      
-        self.hists2d[sample.type][hist.getName()].Draw("colz")
-        self.styler.setupFigure2D(self.hists2d[sample.type][hist.getName()], hist)
-      
-        canvas.Update()
-        canvas.SaveAs(self.config.output_path+"/"+title+".pdf")
+    for hist, sample in self.histosamples2D:  
+      title = hist.getName() + "_" + sample.name
+      canvas = TCanvas(title, title, self.config.canvas_size[0], self.config.canvas_size[1])  
+      canvas.cd()
+      hist.hist.Draw("colz")
+      self.styler.setupFigure2D(hist.hist, hist)
+    
+      canvas.Update()
+      canvas.SaveAs(self.config.output_path+"/"+title+".pdf")
   
   def __getRatioStack(self, hist):
     try:

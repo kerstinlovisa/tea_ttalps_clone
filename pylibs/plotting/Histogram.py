@@ -65,10 +65,11 @@ class Histogram2D:
   x_label: str = ""
   y_label: str = ""
   z_label: str = ""
+  suffix: str = ""
   
   def load(self, input_file):
     self.hist = input_file.Get(self.name)
-    
+  
   def isGood(self):
     if self.hist is None or type(self.hist) is TObject:
       print(f"Could not find histogram: {self.name}")
@@ -81,3 +82,6 @@ class Histogram2D:
     
   def setup(self):
     self.hist.Rebin2D(self.x_rebin, self.y_rebin)
+
+  def getName(self):
+    return self.name + self.suffix
