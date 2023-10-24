@@ -32,7 +32,10 @@ class CmsLabelsManager:
     self.extraOverCmsTextSize  = 0.76
 
     # get lumi and convert from pb to fb
-    self.lumi = f"{self.config.luminosity / 1000.0:.1f} fb^{{-1}}"
+    if hasattr(self.config, "luminosity"):
+      self.lumi = f"{self.config.luminosity / 1000.0:.1f} fb^{{-1}}"
+    else:
+      self.lumi = ""
     self.collision_energy = " (13 TeV)"
 
     self.drawLogo = False
