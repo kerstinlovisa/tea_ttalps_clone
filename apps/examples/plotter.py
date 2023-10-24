@@ -20,10 +20,13 @@ def main():
 
   input_files = {}
   
-  for hist in config.histograms:
-    for sample in config.samples:
-      input_files[sample.name] = TFile.Open(sample.file_path, "READ")
+  for sample in config.samples:
+    input_files[sample.name] = TFile.Open(sample.file_path, "READ")
+    
+    for hist in config.histograms:
       plotter.addHistosample(hist, sample, input_files[sample.name])
+    for hist in config.histograms2D:
+      plotter.addHistosample2D(hist, sample, input_files[sample.name])
   
   print("Setting up legends")
   plotter.setupLegends()
