@@ -232,17 +232,17 @@ class HistogramPlotter:
   
   def __getBackgroundUncertaintyHist(self, hist):
     try:
-      background_hist = self.stacks[SampleType.background][hist.getName()].GetHists()[0]
+      base_hist = self.stacks[SampleType.background][hist.getName()].GetHists()[0]
     except:
       return None
     
     uncertainty_hist = ROOT.TH1D("backgrounds_unc_"+hist.getName(), "backgrounds_unc_"+hist.getName(),
-                                  background_hist.GetNbinsX(),
-                                  background_hist.GetXaxis().GetBinLowEdge(1), 
-                                  background_hist.GetXaxis().GetBinUpEdge(background_hist.GetNbinsX()))
+                                  base_hist.GetNbinsX(),
+                                  base_hist.GetXaxis().GetBinLowEdge(1), 
+                                  base_hist.GetXaxis().GetBinUpEdge(base_hist.GetNbinsX()))
     
       
-    for background_hist in self.stacks[SampleType.background][hist.getName()].GetHists():  
+    for background_hist in self.stacks[SampleType.background][hist.getName()].GetHists():
       uncertainty_hist.Add(background_hist)
     
     return uncertainty_hist
