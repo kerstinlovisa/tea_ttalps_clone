@@ -24,7 +24,7 @@ class PhysicsObject {
 
   inline auto Get(std::string branchName) {
     if (valuesTypes.count(branchName) == 0) {
-      throw Exception(("Trying to access incorrect physics object-level branch: " + branchName).c_str());
+      throw Exception(("Trying to access incorrect physics object-level branch: " + branchName + " from " + originalCollection + " collection").c_str());
     }
     return Multitype(this, branchName);
   }
