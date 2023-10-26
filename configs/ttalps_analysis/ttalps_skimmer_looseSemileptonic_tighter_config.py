@@ -1,8 +1,8 @@
-nEvents = 10000
-printEveryNevents = 1000
+nEvents = -1
+printEveryNevents = 10000
 
-applyLooseSkimming = False
-applyTTbarLikeSkimming = True
+applyLooseSkimming = True
+applyTTbarLikeSkimming = False
 applyTTZLikeSkimming = False
 applySignalLikeSkimming = False
 
@@ -16,7 +16,7 @@ triggerSelection = (
 )
 
 extraEventCollections = {
-    "TightMuons": {
+     "TightMuons": {
         "inputCollections": ("Muon",),
         "pt": (30., 9999999.),
         "eta": (-2.4, 2.4),
@@ -36,26 +36,13 @@ extraEventCollections = {
         "btagDeepB": (0.5, 9999999.),
         "jetId": 6, #  bit1 is loose (always false in 2017 since it does not exist), bit2 is tight, bit3 is tightLepVeto*
     },
-    "LooseMuons": {
-        "inputCollections": ("Muon",),
-        "pt": (15., 9999999.),
-        "eta": (-2.5, 2.5),
-        "looseId": True,
-        "pfIsoId": 1, # 1=PFIsoVeryLoose, 2=PFIsoLoose, 3=PFIsoMedium, 4=PFIsoTight, 5=PFIsoVeryTight, 6=PFIsoVeryVeryTight
-    },
-    "LooseElectrons": {
-        "inputCollections": ("Electron",),
-        "pt": (15., 9999999.),
-        "eta": (-2.5, 2.5),
-    },
 }
 
 eventSelections = {
     "MET_pt": (30, 9999999),
-    "nTightMuons": (1, 1),
-    "nLooseElectrons": (0, 0),
+    "nTightMuons": (1, 9999999),
     "nGoodJets": (4, 9999999),
-    "nGoodBtaggedJets": (2, 9999999),
+    "nGoodBtaggedJets": (1, 9999999),
 }
 
 requiredFlags = (
