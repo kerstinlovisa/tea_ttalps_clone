@@ -49,9 +49,11 @@ int main(int argc, char **argv) {
     if (!eventProcessor->PassesTriggerSelections(event)) continue;
     cutFlowManager->UpdateCutFlow("trigger");
 
-    if (applyLooseSkimming) {
-      if (!ttAlpsSelections->PassesLooseSemileptonicSelections(event, cutFlowManager)) continue;
-    }
+    if(!eventProcessor->PassesEventSelections(event, cutFlowManager)) continue;
+
+    // if (applyLooseSkimming) {
+    //   if (!ttAlpsSelections->PassesLooseSemileptonicSelections(event, cutFlowManager)) continue;
+    // }
 
     if(applyTTbarLikeSkimming){
       if(!ttAlpsSelections->PassesSingleLeptonSelections(event, cutFlowManager)) continue;
