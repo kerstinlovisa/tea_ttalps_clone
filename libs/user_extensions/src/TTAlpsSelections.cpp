@@ -17,6 +17,12 @@ TTAlpsSelections::TTAlpsSelections(){
   } catch (const Exception &e) {
     warn() << "Couldn't read eventSelections from config file ";
   }
+
+  try {
+    config.GetVector("requiredFlags", requiredFlags);
+  } catch (const Exception &e) {
+    warn() << "Couldn't read requiredFlags from config file ";
+  }
 }
 
 bool TTAlpsSelections::PassesLooseSemileptonicSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
@@ -61,18 +67,30 @@ bool TTAlpsSelections::PassesSingleLeptonSelections(const shared_ptr<Event> even
   float metPt = event->Get("MET_pt");
   if (!inRange(metPt, eventSelections["MET_pt"])) return false;
 
-  if (!inRange(event->GetCollectionSize("GoodLeptons"), eventSelections["nGoodLeptons"])) return false;
+  if (!inRange(event->GetCollectionSize("GoodMuons"), eventSelections["nGoodMuons"])) return false;
+  if(cutFlowManager) cutFlowManager->UpdateCutFlow("nGoodMuons");
   if (!inRange(event->GetCollectionSize("GoodBtaggedJets"), eventSelections["nGoodBtaggedJets"])) return false;
   if (!inRange(event->GetCollectionSize("GoodJets"), eventSelections["nGoodJets"])) return false;
 
-  int almostGoodLeptons = event->GetCollectionSize("AlmostGoodLeptons");
-  if (almostGoodLeptons > 1) return false;
-  if (almostGoodLeptons == 1) {
-    auto leadingLepton = event->GetCollection("GoodLeptons")->at(0);
-    auto survivingLepton = event->GetCollection("AlmostGoodLeptons")->at(0);
-    if (survivingLepton != leadingLepton) return false;
+
+  for(string flag : requiredFlags){
+    bool flagValue = event->Get(flag);
+    if(!flagValue) return false;
+  }
+  if(cutFlowManager) cutFlowManager->UpdateCutFlow("metFilters");
+
+  int almostGoodMuons = event->GetCollectionSize("AlmostGoodMuons");
+  if (almostGoodMuons > 1) return false;
+  if (almostGoodMuons == 1) {
+    auto leadingMuon = event->GetCollection("GoodMuons")->at(0);
+    auto survivingMuon = event->GetCollection("AlmostGoodMuons")->at(0);
+    if (survivingMuon != leadingMuon) return false;
   }
   if(cutFlowManager) cutFlowManager->UpdateCutFlow("noAdditionalMuons");
+
+  int almostGoodElectrons = event->GetCollectionSize("AlmostGoodElectrons");
+  if (almostGoodElectrons != 0) return false;
+  if(cutFlowManager) cutFlowManager->UpdateCutFlow("noAdditionalElectrons");
 
   return true;
 }

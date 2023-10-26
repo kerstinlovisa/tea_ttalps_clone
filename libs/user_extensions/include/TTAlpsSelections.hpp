@@ -52,6 +52,7 @@ class TTAlpsSelections {
 
  private:
   std::map<std::string, std::pair<float, float>> eventSelections;
+  std::vector<std::string> requiredFlags;
 };
 
 #endif /* TTAlpsSelections_hpp */
