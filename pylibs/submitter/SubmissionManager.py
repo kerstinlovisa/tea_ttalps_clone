@@ -101,7 +101,14 @@ class SubmissionManager:
       path = "/".join(input_file_list[0].strip().split("/")[:-1])
       input_file_list = [f"{path}/{file_name}"]
     
-    for input_file_path in input_file_list:
+    max_files = -1
+    if hasattr(self.files_config, "max_files"):
+      max_files = self.files_config.max_files
+    
+    for i, input_file_path in enumerate(input_file_list):
+      if max_files > 0 and i >= max_files:
+        return
+      
       input_file_name = input_file_path.strip().split("/")[-1]
       output_file_path = f"{self.files_config.output_dir}/{input_file_name}"
       command_for_file = f"{self.command} {input_file_path} {output_file_path}"
