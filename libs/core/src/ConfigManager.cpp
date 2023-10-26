@@ -261,10 +261,14 @@ void ConfigManager::GetExtraEventCollections(map<string, ExtraCollection> &extra
           PyObject *item = GetItem(pyValue, i);
           extraCollection.inputCollections.push_back(PyUnicode_AsUTF8(item));
         }
-      } else {
+      } else if(PyTuple_Check(pyValue)){
         PyObject *min = GetItem(pyValue, 0);
         PyObject *max = GetItem(pyValue, 1);
         extraCollection.selections[keyStr] = {PyFloat_AsDouble(min), PyFloat_AsDouble(max)};
+      } else if(PyBool_Check(pyValue)){
+        extraCollection.flags[keyStr] = PyLong_AsLong(pyValue);
+      } else if(PyLong_Check(pyValue)){
+        extraCollection.options[keyStr] = PyLong_AsLong(pyValue);
       }
     }
 

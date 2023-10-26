@@ -86,14 +86,22 @@ inline void makeParentDirectories(std::string filePath) {
 struct ExtraCollection {
   std::vector<std::string> inputCollections;
   std::map<std::string, std::pair<float, float>> selections;
+  std::map<std::string, bool> flags;
+  std::map<std::string, UChar_t> options;
 
   void Print() {
     info() << "Input collections: \n";
-    for (std::string name : inputCollections) info() << name << "\n";
+    for (std::string name : inputCollections) info() << name << std::endl;
 
     info() << "Selections: \n";
     for (auto &[name, cuts] : selections) {
-      info() << "\t" << name << ": " << cuts.first << ", " << cuts.second << "\n";
+      info() << "\t" << name << ": " << cuts.first << ", " << cuts.second << std::endl;
+    }
+    for (auto &[name, flag] : flags) {
+      info() << "\t" << name << ": " << flag << std::endl;
+    }
+    for (auto &[name, option] : options) {
+      info() << "\t" << name << ": " << option << std::endl;
     }
   }
 };

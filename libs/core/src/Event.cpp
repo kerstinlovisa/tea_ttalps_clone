@@ -3,6 +3,9 @@
 //  Created by Jeremi Niedziela on 04/08/2023.
 
 #include "Event.hpp"
+#include "Helpers.hpp"
+
+using namespace std;
 
 #include "Helpers.hpp"
 
@@ -57,6 +60,24 @@ void Event::AddExtraCollections() {
           float value = physicsObject->Get(branchName);
 
           if (value < cuts.first || value > cuts.second) {
+            passes = false;
+            break;
+          }
+        }
+
+        for (auto &[branchName, flag] : extraCollection.flags) {
+          bool value = physicsObject->Get(branchName);
+
+          if (value != flag) {
+            passes = false;
+            break;
+          }
+        }
+
+        for (auto &[branchName, option] : extraCollection.options) {
+          UChar_t value = physicsObject->Get(branchName);
+
+          if (value != option) {
             passes = false;
             break;
           }
