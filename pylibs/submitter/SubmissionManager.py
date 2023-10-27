@@ -80,7 +80,10 @@ class SubmissionManager:
   def __get_intput_file_list(self):
     if hasattr(self.files_config, "dataset"):
       max_files = getattr(self.files_config, "max_files", -1)
-      return self.__get_das_files_list(self.files_config.dataset)[:max_files]
+      files = self.__get_das_files_list(self.files_config.dataset)
+      if max_files > 0:
+        return files[:max_files]
+      return files
     
     if hasattr(self.files_config, "input_file_list"):
       return self.files_config.input_file_list
