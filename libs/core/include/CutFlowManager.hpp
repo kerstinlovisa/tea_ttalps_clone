@@ -14,6 +14,7 @@ class CutFlowManager {
   CutFlowManager(std::shared_ptr<EventReader> eventReader_, std::shared_ptr<EventWriter> eventWriter_ = nullptr);
   ~CutFlowManager();
 
+  void RegisterCut(std::string cutName);
   void UpdateCutFlow(std::string cutName);
   void SaveCutFlow();
   std::map<std::string, float> GetCutFlow();
@@ -30,9 +31,13 @@ class CutFlowManager {
   std::map<std::string, float> weightsAfterCuts;
 
   int currentIndex;
+  bool inputContainsInitial;
 
   std::vector<std::string> existingCuts;
   bool weightsBranchWarningPrinted = false;
+
+  float GetCurrentEventWeight();
+  std::string GetFullCutName(std::string cutName);
 };
 
 #endif /* CutFlowManager_hpp */
