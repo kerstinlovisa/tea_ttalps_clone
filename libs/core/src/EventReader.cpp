@@ -22,11 +22,35 @@ EventReader::EventReader() {
 
   // if inputFilePath is a DAS dataset name, insert a redirector into it
   if (inputFilePath.find("root://") == string::npos && inputFilePath.find("/store/") != string::npos) {
-    inputFilePath = "root://cms-xrd-global.cern.ch/" + inputFilePath;
+    vector<string> redirectors = {
+      "cms-xrd-global.cern.ch",
+      "cmsxrootd.fnal.gov",
+      "xrootd-cms.infn.it",
+    };
+    
+    string tmpInputFilePath;
+    for(string redirector : redirectors){
+      info() << "Trying to read ROOT file with redirector:" << redirector << endl;
+      tmpInputFilePath = "root://" + redirector + "/" + inputFilePath;
+      inputFile = TFile::Open(tmpInputFilePath.c_str());
+      
+      if(!inputFile || inputFile->IsZombie()){
+        warn() << "Failed to read ROOT file with redirector: " << redirector << endl;
+      }
+      else{
+        break;
+      }
+    }
+    if(!inputFile || inputFile->IsZombie()){
+      fatal() <<"All redirectors failed" << endl;
+      exit(1);
+    }
+    inputFilePath = tmpInputFilePath;  
   }
-
-  inputFile = TFile::Open(inputFilePath.c_str());
-
+  else{
+    inputFile = TFile::Open(inputFilePath.c_str());
+  }
+  
   SetupBranches(inputFilePath);
 }
 
