@@ -40,6 +40,10 @@ class HistogramPlotter:
 
   def addHistosample(self, hist, sample, input_file):
     hist.load(input_file)
+    
+    if not hist.isGood():
+      return
+    
     self.histosamples.append((copy.deepcopy(hist), sample))
     
     if sample.type is SampleType.data:
@@ -149,6 +153,10 @@ class HistogramPlotter:
     
   def __drawLegends(self, canvas, hist):
     canvas.cd(1)
+    
+    if hist.getName() not in self.legends:
+      print(f"Couldn't find legends for histogram: {hist.getName()}")
+      return
     
     for legend in self.legends[hist.getName()].values():
       legend.Draw()
