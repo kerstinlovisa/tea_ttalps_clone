@@ -12,15 +12,16 @@ output_path = "../plots"
 # skim = ""
 # skim = "skimmed_looseSemileptonic"
 # skim = "skimmed_signalLike"
-skim = "skimmed_ttbarLike"
+# skim = "skimmed_ttbarLike"
 # skim = "skimmed_ttZLike"
+skim = "skimmed_ttbarSemimuonicCR_tightMuon"
 
 # luminosity = 63670. # pb^-1
 luminosity = 59830. # recommended lumi from https://twiki.cern.ch/twiki/bin/view/CMS/LumiRecommendationsRun2
 
 legends = {
   SampleType.signal: Legend(0.35, 0.85, 0.5, 0.89, "l"),
-  SampleType.background: Legend(0.7, 0.65, 0.85, 0.89, "f"),
+  SampleType.background: Legend(0.7, 0.45, 0.85, 0.89, "f"),
   SampleType.data: Legend(0.30, 0.8, 0.5, 0.85, "pl"),
 }
 
@@ -38,48 +39,48 @@ plotting_options = {
 
 histograms = (
 #           name       title                                              logy  norm_type                 rebin xmin xmax ymin ymax,  xlabel              ylabel
-  Histogram("n_good_muons"                , "", True, NormalizationType.to_lumi, 1,   0, 20,    1e1, 1e9,   "Number of good muons",                    "# events (2018)"),
-  Histogram("n_almost_good_muons"         , "", True, NormalizationType.to_lumi, 1,   0, 20,    1e1, 1e9,   "Number of almost good muons",                    "# events (2018)"),
-  Histogram("good_muon_pt"                , "", True, NormalizationType.to_lumi, 10,   0, 500,   1e-2, 1e6,   "p_{T}^{#mu} [GeV]",                 "# events (2018)"),
-  Histogram("good_muon_leading_pt"        , "", True, NormalizationType.to_lumi, 10,   0, 500,   1e-2, 1e6,   "Leading p_{T}^{#mu} [GeV]",         "# events (2018)"),
-  Histogram("good_muon_subleading_pt"     , "", True, NormalizationType.to_lumi, 10,   0, 500,   1e-2, 1e6,   "All subleading p_{T}^{#mu} [GeV]",  "# events (2018)"),
-  Histogram("good_muon_eta"               , "", True, NormalizationType.to_lumi, 5,-3.5, 3.5,    1e0, 1e6,  "#eta^{#mu}",                         "# events (2018)"),
-  Histogram("good_muon_dxy"               , "", True, NormalizationType.to_lumi, 10,  -10, 10,   1e-2, 1e6,  "d_{xy}^{#mu}",                       "# events (2018)"),
-  Histogram("good_muon_dz"                , "", True, NormalizationType.to_lumi, 10,  -10, 10,   1e-2, 1e6,  "d_{z}^{#mu}",                        "# events (2018)"),
+  # Histogram("Event_nTightMuons"                , "", True, NormalizationType.to_lumi, 1,   0, 20,    1e1, 1e9,   "Number of good muons",                    "# events (2018)"),
+  # Histogram("Event_nLooseMuons"         , "", True, NormalizationType.to_lumi, 1,   0, 20,    1e1, 1e9,   "Number of almost good muons",                    "# events (2018)"),
+  # Histogram("TightMuons_pt"                , "", True, NormalizationType.to_lumi, 10,   0, 500,   1e-2, 1e6,   "p_{T}^{#mu} [GeV]",                 "# events (2018)"),
+  # Histogram("TightMuons_leadingPt"        , "", True, NormalizationType.to_lumi, 10,   0, 500,   1e-2, 1e6,   "Leading p_{T}^{#mu} [GeV]",         "# events (2018)"),
+  # Histogram("TightMuons_subleadingPt"     , "", True, NormalizationType.to_lumi, 10,   0, 500,   1e-2, 1e6,   "All subleading p_{T}^{#mu} [GeV]",  "# events (2018)"),
+  # Histogram("TightMuons_eta"               , "", True, NormalizationType.to_lumi, 5,-3.5, 3.5,    1e0, 1e6,  "#eta^{#mu}",                         "# events (2018)"),
+  # Histogram("TightMuons_dxy"               , "", True, NormalizationType.to_lumi, 10,  -10, 10,   1e-2, 1e6,  "d_{xy}^{#mu}",                       "# events (2018)"),
+  # Histogram("TightMuons_dz"                , "", True, NormalizationType.to_lumi, 10,  -10, 10,   1e-2, 1e6,  "d_{z}^{#mu}",                        "# events (2018)"),
   
-  Histogram("n_good_electrons"            , "", True, NormalizationType.to_lumi, 1,   0, 10,    1e1, 1e9,   "Number of electrons", "# events (2018)"),
-  Histogram("good_electron_pt"            , "", True, NormalizationType.to_lumi, 10,   0, 500,   1e-2, 1e6,   "p_{T}^{e} [GeV]",  "# events (2018)"),
-  Histogram("good_electron_leading_pt"    , "", True, NormalizationType.to_lumi, 10,   0, 500,   1e-2, 1e6,   "Leading p_{T}^{e} [GeV]",  "# events (2018)"),
-  Histogram("good_electron_subleading_pt" , "", True, NormalizationType.to_lumi, 10,   0, 500,   1e-2, 1e6,   "All subleading p_{T}^{e} [GeV]",  "# events (2018)"),
-  Histogram("good_electron_eta"           , "", True, NormalizationType.to_lumi, 5, -3.5, 3.5, 1e-2,  1e6,  "#eta^{e}",         "# events (2018)"),
-  Histogram("good_electron_dxy"           , "", True, NormalizationType.to_lumi, 10,   -10, 10,  1e-2, 1e6,  "d_{xy}^{e}",       "# events (2018)"),
-  Histogram("good_electron_dz"            , "", True, NormalizationType.to_lumi, 10,   -10, 10,  1e-2, 1e6,  "d_{z}^{e}",        "# events (2018)"),
+  # Histogram("Event_nLooseElectrons"            , "", True, NormalizationType.to_lumi, 1,   0, 10,    1e1, 1e9,   "Number of electrons", "# events (2018)"),
+  # Histogram("LooseElectrons_pt"            , "", True, NormalizationType.to_lumi, 10,   0, 500,   1e-2, 1e6,   "p_{T}^{e} [GeV]",  "# events (2018)"),
+  # Histogram("LooseElectrons_leadingPt"    , "", True, NormalizationType.to_lumi, 10,   0, 500,   1e-2, 1e6,   "Leading p_{T}^{e} [GeV]",  "# events (2018)"),
+  # Histogram("LooseElectrons_subleadingPt" , "", True, NormalizationType.to_lumi, 10,   0, 500,   1e-2, 1e6,   "All subleading p_{T}^{e} [GeV]",  "# events (2018)"),
+  # Histogram("LooseElectrons_eta"           , "", True, NormalizationType.to_lumi, 5, -3.5, 3.5, 1e-2,  1e6,  "#eta^{e}",         "# events (2018)"),
+  # Histogram("LooseElectrons_dxy"           , "", True, NormalizationType.to_lumi, 10,   -10, 10,  1e-2, 1e6,  "d_{xy}^{e}",       "# events (2018)"),
+  # Histogram("LooseElectrons_dz"            , "", True, NormalizationType.to_lumi, 10,   -10, 10,  1e-2, 1e6,  "d_{z}^{e}",        "# events (2018)"),
   
-  Histogram("n_good_jets"                 , "", True, NormalizationType.to_lumi, 1,   0, 30,    1e0, 1e9,   "Number of jets",   "# events (2018)"),
-  Histogram("good_jet_pt"                 , "", True, NormalizationType.to_lumi, 5,   0, 500,   10, 1e8,    "p_{T}^{j} [GeV]",  "# events (2018)"),
-  Histogram("good_jet_eta"                , "", True, NormalizationType.to_lumi, 5, -3.5, 3.5, 1e0, 1e10,  "#eta^{j}",         "# events (2018)"),
-  Histogram("good_jet_btagDeepB"          , "", True, NormalizationType.to_lumi, 2,  -1, 1,     1e0, 1e7,  "jet btagDeepB",    "# events (2018)"),
+  # Histogram("Event_nGoodJets"                 , "", True, NormalizationType.to_lumi, 1,   0, 30,    1e0, 1e9,   "Number of jets",   "# events (2018)"),
+  # Histogram("GoodJets_pt"                 , "", True, NormalizationType.to_lumi, 5,   0, 500,   10, 1e8,    "p_{T}^{j} [GeV]",  "# events (2018)"),
+  # Histogram("GoodJets_eta"                , "", True, NormalizationType.to_lumi, 5, -3.5, 3.5, 1e0, 1e10,  "#eta^{j}",         "# events (2018)"),
+  # Histogram("GoodJets_btagDeepB"          , "", True, NormalizationType.to_lumi, 2,  -1, 1,     1e0, 1e7,  "jet btagDeepB",    "# events (2018)"),
   
-  Histogram("n_good_bjets"                , "", True, NormalizationType.to_lumi, 1,   0, 30,    1e0, 1e9,   "Number of b-jets",   "# events (2018)"),
-  Histogram("good_bjet_pt"                , "", True, NormalizationType.to_lumi, 5,   0, 500,   10, 1e8,    "p_{T}^{j} [GeV]",  "# events (2018)"),
-  Histogram("good_bjet_eta"               , "", True, NormalizationType.to_lumi, 5, -3.5, 3.5, 1e0, 1e10,  "#eta^{j}",         "# events (2018)"),
-  Histogram("good_bjet_btagDeepB"         , "", True, NormalizationType.to_lumi, 2,  -1, 1,     1e0, 1e7,  "b-jet btagDeepB",    "# events (2018)"),
+  # Histogram("Event_nGoodBtaggedJets"                , "", True, NormalizationType.to_lumi, 1,   0, 30,    1e0, 1e9,   "Number of b-jets",   "# events (2018)"),
+  # Histogram("GoodBtaggedJets_pt"                , "", True, NormalizationType.to_lumi, 5,   0, 500,   10, 1e8,    "p_{T}^{j} [GeV]",  "# events (2018)"),
+  # Histogram("GoodBtaggedJets_eta"               , "", True, NormalizationType.to_lumi, 5, -3.5, 3.5, 1e0, 1e10,  "#eta^{j}",         "# events (2018)"),
+  # Histogram("GoodBtaggedJets_btagDeepB"         , "", True, NormalizationType.to_lumi, 2,  -1, 1,     1e0, 1e7,  "b-jet btagDeepB",    "# events (2018)"),
   
-  Histogram("n_good_nonbjets"             , "", True, NormalizationType.to_lumi, 1,   0, 30,    1e0, 1e9,   "Number of non-b jets",   "# events (2018)"),
-  Histogram("good_nonbjet_pt"             , "", True, NormalizationType.to_lumi, 5,   0, 500,   1, 1e5,    "p_{T}^{j} [GeV]",  "# events (2018)"),
-  Histogram("good_nonbjet_eta"            , "", True, NormalizationType.to_lumi, 5, -3.5, 3.5, 1e0, 1e10,  "#eta^{j}",         "# events (2018)"),
-  Histogram("good_nonbjet_btagDeepB"      , "", True, NormalizationType.to_lumi, 2,  -1, 1,     1e0, 1e7,  "non-b jet btagDeepB",    "# events (2018)"),
+  # Histogram("Event_nGoodNonBtaggedJets"             , "", True, NormalizationType.to_lumi, 1,   0, 30,    1e0, 1e9,   "Number of non-b jets",   "# events (2018)"),
+  # Histogram("GoodNonBtaggedJets_pt"             , "", True, NormalizationType.to_lumi, 5,   0, 500,   1, 1e5,    "p_{T}^{j} [GeV]",  "# events (2018)"),
+  # Histogram("GoodNonBtaggedJets_eta"            , "", True, NormalizationType.to_lumi, 5, -3.5, 3.5, 1e0, 1e10,  "#eta^{j}",         "# events (2018)"),
+  # Histogram("GoodNonBtaggedJets_btagDeepB"      , "", True, NormalizationType.to_lumi, 2,  -1, 1,     1e0, 1e7,  "non-b jet btagDeepB",    "# events (2018)"),
   
-  Histogram("MET_pt"                      , "", True, NormalizationType.to_lumi, 5,  0, 1000,     1e0, 1e5,  "MET p_{T} (GeV)",    "# events (2018)"),
-  Histogram("almost_good_dimuon_minv"     , "", True, NormalizationType.to_lumi, 1,  70, 110,     1e0, 1e6,  "m_{#mu#mu} (GeV)",    "# events (2018)"),
-  Histogram("dimuon_minv_closestToZ"      , "", True, NormalizationType.to_lumi, 1,  70, 110,     1e0, 1e6,  "m_{#mu#mu} (GeV)",    "# events (2018)"),
-  Histogram("dimuon_deltaR_closestToZ"    , "", True, NormalizationType.to_lumi, 1,  -1, 6,     1e0, 1e5,  "#Delta R_{#mu#mu}",    "# events (2018)"),
-  Histogram("deltaPhi_lepton_MET"         , "", True, NormalizationType.to_lumi, 1,  -4, 4,     1e0, 1e5,  "#Delta #phi(MET, l)",    "# events (2018)"),
-  Histogram("minv_lepton_MET"             , "", True, NormalizationType.to_lumi, 2,  0, 500,     1e0, 1e6,  "m_{MET, l} (GeV)",    "# events (2018)"),
-  Histogram("minv_bjet_2jets"             , "", True, NormalizationType.to_lumi, 5,  0, 500,     1e0, 1e6,  "m_(bjj) (GeV)",    "# events (2018)"),
+  # Histogram("Event_METpt"                      , "", True, NormalizationType.to_lumi, 5,  0, 1000,     1e0, 1e5,  "MET p_{T} (GeV)",    "# events (2018)"),
+  # Histogram("LooseMuons_dimuonMinv"     , "", True, NormalizationType.to_lumi, 1,  70, 110,     1e0, 1e6,  "m_{#mu#mu} (GeV)",    "# events (2018)"),
+  # Histogram("LooseMuons_dimuonMinvClosestToZ"      , "", True, NormalizationType.to_lumi, 1,  70, 110,     1e0, 1e6,  "m_{#mu#mu} (GeV)",    "# events (2018)"),
+  # Histogram("LooseMuons_dimuonDeltaRclosestToZ"    , "", True, NormalizationType.to_lumi, 1,  -1, 6,     1e0, 1e5,  "#Delta R_{#mu#mu}",    "# events (2018)"),
+  # Histogram("TightMuons_deltaPhiMuonMET"         , "", True, NormalizationType.to_lumi, 1,  -4, 4,     1e0, 1e5,  "#Delta #phi(MET, l)",    "# events (2018)"),
+  # Histogram("TightMuons_minvMuonMET"             , "", True, NormalizationType.to_lumi, 2,  0, 500,     1e0, 1e6,  "m_{MET, l} (GeV)",    "# events (2018)"),
+  # Histogram("GoodJets_minvBjet2jets"             , "", True, NormalizationType.to_lumi, 5,  0, 500,     1e0, 1e6,  "m_(bjj) (GeV)",    "# events (2018)"),
   
-  Histogram("cutFlow"                     , "", True, NormalizationType.to_lumi, 1,   0, 8,     1e2, 1e10,     "Selection",        "Number of events"),
-  Histogram("norm_check"                  , "", True, NormalizationType.to_lumi, 1,  0, 1,      1e-2, 1e7,  "norm check",    "# events (2018)"),
+  Histogram("cutFlow"                     , "", True, NormalizationType.to_lumi, 1,   0, 9,     1e2, 1e12,     "Selection",        "Number of events"),
+  # Histogram("Event_normCheck"                  , "", True, NormalizationType.to_lumi, 1,  0, 1,      1e-2, 1e7,  "norm check",    "# events (2018)"),
 )
 
 weightsBranchName = "genWeight"
@@ -174,6 +175,99 @@ samples = (
     marker_size=0,
     legend_description="TTToSemiLeptonic",
   ),
+  
+  Sample(
+    name="qcd_120to170",
+    file_path=f"{base_path}/backgrounds2018/QCD_Pt_120to170/{skim}/histograms/histograms.root",
+    type=SampleType.background,
+    cross_section=406800.0,
+    line_alpha=0,
+    fill_color=ROOT.kGreen+1,
+    fill_alpha=0.7,
+    marker_size=0,
+    legend_description="QCD pt = 120to170 GeV",
+  ),
+  Sample(
+    name="qcd_170to300",
+    file_path=f"{base_path}/backgrounds2018/QCD_Pt_170to300/{skim}/histograms/histograms.root",
+    type=SampleType.background,
+    cross_section=103300.0,
+    line_alpha=0,
+    fill_color=ROOT.kGreen+1,
+    fill_alpha=0.7,
+    marker_size=0,
+    legend_description="QCD pt = 170to300 GeV",
+  ),
+  Sample(
+    name="qcd_300to470",
+    file_path=f"{base_path}/backgrounds2018/QCD_Pt_300to470/{skim}/histograms/histograms.root",
+    type=SampleType.background,
+    cross_section=6826.0,
+    line_alpha=0,
+    fill_color=ROOT.kGreen+1,
+    fill_alpha=0.7,
+    marker_size=0,
+    legend_description="QCD pt = 300to470 GeV",
+  ),
+  Sample(
+    name="qcd_470to600",
+    file_path=f"{base_path}/backgrounds2018/QCD_Pt_470to600/{skim}/histograms/histograms.root",
+    type=SampleType.background,
+    cross_section=552.6,
+    line_alpha=0,
+    fill_color=ROOT.kGreen+1,
+    fill_alpha=0.7,
+    marker_size=0,
+    legend_description="QCD pt = 470to600 GeV",
+  ),
+  Sample(
+    name="qcd_600to800",
+    file_path=f"{base_path}/backgrounds2018/QCD_Pt_600to800/{skim}/histograms/histograms.root",
+    type=SampleType.background,
+    cross_section=156.6,
+    line_alpha=0,
+    fill_color=ROOT.kGreen+1,
+    fill_alpha=0.7,
+    marker_size=0,
+    legend_description="QCD pt = 600to800 GeV",
+  ),
+  Sample(
+    name="qcd_800to1000",
+    file_path=f"{base_path}/backgrounds2018/QCD_Pt_800to1000/{skim}/histograms/histograms.root",
+    type=SampleType.background,
+    cross_section=26.32,
+    line_alpha=0,
+    fill_color=ROOT.kGreen+1,
+    fill_alpha=0.7,
+    marker_size=0,
+    legend_description="QCD pt = 800to1000 GeV",
+  ),
+  Sample(
+    name="qcd_1000to1400",
+    file_path=f"{base_path}/backgrounds2018/QCD_Pt_1000to1400/{skim}/histograms/histograms.root",
+    type=SampleType.background,
+    cross_section=7.5,
+    line_alpha=0,
+    fill_color=ROOT.kGreen+1,
+    fill_alpha=0.7,
+    marker_size=0,
+    legend_description="QCD pt = 1000to1400 GeV",
+  ),
+  Sample(
+    name="qcd_1400to1800",
+    file_path=f"{base_path}/backgrounds2018/QCD_Pt_1400to1800/{skim}/histograms/histograms.root",
+    type=SampleType.background,
+    cross_section=0.6479,
+    line_alpha=0,
+    fill_color=ROOT.kGreen+1,
+    fill_alpha=0.7,
+    marker_size=0,
+    legend_description="QCD pt = 1400to1800 GeV",
+  ),
+  
+  
+  
+  
   # Sample(
   #   name="DYJetsToMuMu_M-50",
   #   file_path=f"{base_path}/backgrounds2018/DYJetsToMuMu_M-50/{skim}/histograms/histograms.root",

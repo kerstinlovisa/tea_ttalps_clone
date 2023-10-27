@@ -150,20 +150,22 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariables(const std::shared_ptr<Even
   } catch (...) {
   }
 
-  auto almostGoodMuons = event->GetCollection("AlmostGoodMuons");
+  auto looseMuons = event->GetCollection("LooseMuons");
 
   double zMass = 91.1876; // GeV
   double smallestDifferenceToZmass = 999999;
   double massClosestToZ = -1;
   double deltaRclosestToZ = -1;
+  double deltaEtaclosestToZ = -1;
+  double deltaPhiclosestToZ = -1;
 
-  for(int iMuon1=0; iMuon1 < almostGoodMuons->size(); iMuon1++){
-    auto muon1 = asMuon(almostGoodMuons->at(iMuon1));
+  for(int iMuon1=0; iMuon1 < looseMuons->size(); iMuon1++){
+    auto muon1 = asMuon(looseMuons->at(iMuon1));
     auto muon1fourVector = TLorentzVector();
     muon1fourVector.SetPtEtaPhiM(muon1->GetPt(), muon1->GetEta(), muon1->GetPhi(), 0.105);
     
-    for(int iMuon2=iMuon1+1; iMuon2 < almostGoodMuons->size(); iMuon2++){
-      auto muon2 = asMuon(almostGoodMuons->at(iMuon2));
+    for(int iMuon2=iMuon1+1; iMuon2 < looseMuons->size(); iMuon2++){
+      auto muon2 = asMuon(looseMuons->at(iMuon2));
       auto muon2fourVector = TLorentzVector();
       muon2fourVector.SetPtEtaPhiM(muon2->GetPt(), muon2->GetEta(), muon2->GetPhi(), 0.105);
       double diMuonMass = (muon1fourVector + muon2fourVector).M();
@@ -172,44 +174,46 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariables(const std::shared_ptr<Even
         smallestDifferenceToZmass = fabs(diMuonMass-zMass);
         massClosestToZ = diMuonMass;
         deltaRclosestToZ = muon1fourVector.DeltaR(muon2fourVector);
+        deltaEtaclosestToZ = fabs(muon1fourVector.Eta() - muon2fourVector.Eta());
+        deltaPhiclosestToZ = muon1fourVector.DeltaPhi(muon2fourVector);
       }
 
-      histogramsHandler->Fill("AlmostGoodMuons_dimuonMinv", diMuonMass, weight);    
+      histogramsHandler->Fill("LooseMuons_dimuonMinv", diMuonMass, weight);    
     }
   }
 
-  histogramsHandler->Fill("AlmostGoodMuons_dimuonMinvClosestToZ", massClosestToZ, weight);
-  histogramsHandler->Fill("AlmostGoodMuons_dimuonDeltaRclosestToZ", deltaRclosestToZ, weight);
+  histogramsHandler->Fill("LooseMuons_dimuonMinvClosestToZ", massClosestToZ, weight);
+  histogramsHandler->Fill("LooseMuons_dimuonDeltaRclosestToZ", deltaRclosestToZ, weight);
+  histogramsHandler->Fill("LooseMuons_dimuonDeltaEtaclosestToZ", deltaEtaclosestToZ, weight);
+  histogramsHandler->Fill("LooseMuons_dimuonDeltaPhiclosestToZ", deltaPhiclosestToZ, weight);
 
   float metPhi = event->Get("MET_phi");
   float metPt = event->Get("MET_pt");
 
   histogramsHandler->Fill("Event_METpt", metPt, weight);
 
-  float leadingLeptonPhi = -1;
-  float leadingLeptonPt = -1;
-  float leadingLeptonEta = -1;
-  float leadingLeptonMass = -1;
+  float leadingMuonPhi = -1;
+  float leadingMuonPt = -1;
+  float leadingMuonEta = -1;
+  float leadingMuonMass = -1;
 
-  for(auto lepton : *event->GetCollection("GoodLeptons")){
-    float leptonPt = lepton->Get("pt");
-    if(leptonPt > leadingLeptonPt){
-      leadingLeptonPt = leptonPt;
-      leadingLeptonPhi = lepton->Get("phi");
-      leadingLeptonEta = lepton->Get("eta");
-      leadingLeptonMass = lepton->GetOriginalCollection()=="Muon" ? 0.105 : 0.000511;
+  for(auto muon : *event->GetCollection("TightMuons")){
+    float muonPt = muon->Get("pt");
+    if(muonPt > leadingMuonPt){
+      leadingMuonPt = muonPt;
+      leadingMuonPhi = muon->Get("phi");
+      leadingMuonEta = muon->Get("eta");
+      leadingMuonMass = muon->GetOriginalCollection()=="Muon" ? 0.105 : 0.000511;
     }
   }
 
-  
-
-  TLorentzVector leadingLepton, metVector, leptonPlusMet;
-  leadingLepton.SetPtEtaPhiM(leadingLeptonPt, leadingLeptonEta, leadingLeptonPhi, leadingLeptonMass);
+  TLorentzVector leadingMuon, metVector, muonPlusMet;
+  leadingMuon.SetPtEtaPhiM(leadingMuonPt, leadingMuonEta, leadingMuonPhi, leadingMuonMass);
   metVector.SetPtEtaPhiM(metPt, 0, metPhi, 0);
-  leptonPlusMet = leadingLepton + metVector;
+  muonPlusMet = leadingMuon + metVector;
 
-  histogramsHandler->Fill("GoodLeptons_deltaPhiLeptonMET", metVector.DeltaPhi(leadingLepton), weight);
-  histogramsHandler->Fill("GoodLeptons_minvLeptonMET", leptonPlusMet.M(), weight);
+  histogramsHandler->Fill("TightMuons_deltaPhiMuonMET", metVector.DeltaPhi(leadingMuon), weight);
+  histogramsHandler->Fill("TightMuons_minvMuonMET",muonPlusMet.M(), weight);
 
   auto bJets = event->GetCollection("GoodBtaggedJets");
   auto jets = event->GetCollection("GoodNonBtaggedJets");

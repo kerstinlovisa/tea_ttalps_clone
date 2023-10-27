@@ -41,19 +41,23 @@ int main(int argc, char **argv) {
   config.GetValue("applySignalLikeSkimming", applySignalLikeSkimming);
   config.GetValue("applyTTZLikeSkimming", applyTTZLikeSkimming);
 
+  cutFlowManager->RegisterCut("initial");
+  
+  if(applyLooseSkimming) cutFlowManager->RegisterCut("trigger");
+  eventProcessor->RegisterCuts(cutFlowManager);
+  if(applyTTbarLikeSkimming) ttAlpsSelections->RegisterSingleLeptonSelections(cutFlowManager);
+
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
 
     cutFlowManager->UpdateCutFlow("initial");
 
-    if (!eventProcessor->PassesTriggerSelections(event)) continue;
-    cutFlowManager->UpdateCutFlow("trigger");
+    if(applyLooseSkimming){
+      if (!eventProcessor->PassesTriggerSelections(event)) continue;
+      cutFlowManager->UpdateCutFlow("trigger");
+    }
 
     if(!eventProcessor->PassesEventSelections(event, cutFlowManager)) continue;
-
-    // if (applyLooseSkimming) {
-    //   if (!ttAlpsSelections->PassesLooseSemileptonicSelections(event, cutFlowManager)) continue;
-    // }
 
     if(applyTTbarLikeSkimming){
       if(!ttAlpsSelections->PassesSingleLeptonSelections(event, cutFlowManager)) continue;
