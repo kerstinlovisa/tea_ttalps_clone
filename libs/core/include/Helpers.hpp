@@ -87,7 +87,7 @@ struct ExtraCollection {
   std::vector<std::string> inputCollections;
   std::map<std::string, std::pair<float, float>> selections;
   std::map<std::string, bool> flags;
-  std::map<std::string, UChar_t> options;
+  std::map<std::string, int> options;
 
   void Print() {
     info() << "Input collections: \n";

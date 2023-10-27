@@ -75,11 +75,18 @@ void Event::AddExtraCollections() {
         }
 
         for (auto &[branchName, option] : extraCollection.options) {
-          UChar_t value = physicsObject->Get(branchName);
-
-          if (value != option) {
-            passes = false;
-            break;
+          try{
+            UChar_t value = physicsObject->Get(branchName);
+            if (value != option) { passes = false; break;}
+          }
+          catch(BadTypeException &e){
+            try{
+              Int_t value = physicsObject->Get(branchName);
+              if (value != option) { passes = false; break; }
+            }
+            catch(BadTypeException &e){
+              fatal() << e.what() << endl;
+            }
           }
         }
 
