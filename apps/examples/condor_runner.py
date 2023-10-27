@@ -1,4 +1,4 @@
-#!/afs/desy.de/user/j/jniedzie/miniconda3/envs/tta/bin/python
+from Logger import *
 
 import argparse
 import os
@@ -46,7 +46,7 @@ def main():
   output_file_path = f"{args.output_dir}/{input_file_name}"
   command_for_file = f"{command} {input_file_path} {output_file_path}"
 
-  print(f"\n\nExecuting {command_for_file=}")
+  info(f"\n\nExecuting {command_for_file=}")
   os.system(command_for_file)
 
 

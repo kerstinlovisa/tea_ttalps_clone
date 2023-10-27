@@ -1,6 +1,7 @@
 from enum import Enum
 from ROOT import TFile
 from Sample import SampleType
+from Logger import *
 
 class NormalizationType(Enum):
   to_one = 0 # normalize all histograms to 1
@@ -62,10 +63,10 @@ class HistogramNormalizer:
   
   def __normalizeToData(self, hist, sample, data_integral):
     if hist.hist.Integral() == 0:
-      print(f"Couldn't normalize to data: {hist.name}, {sample.name}")
+      error(f"Couldn't normalize to data: {hist.name}, {sample.name}")
       return  
     if data_integral is None:
-      print(f"Couldn't normalize to data: {hist.name}, {sample.name}")
+      error(f"Couldn't normalize to data: {hist.name}, {sample.name}")
       return
     scale = data_integral/hist.hist.Integral()
     

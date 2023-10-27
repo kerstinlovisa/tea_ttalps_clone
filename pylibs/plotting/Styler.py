@@ -1,3 +1,5 @@
+from Logger import *
+
 from ROOT import TObject, gStyle
 import ROOT
 
@@ -150,7 +152,7 @@ class Styler:
       plot.GetYaxis().SetNdivisions(505)
       
     except:
-      print("Couldn't set axes limits")
+      warn("Couldn't set axes limits")
       return
   
   def setupFigure2D(self, plot, hist):
@@ -191,7 +193,7 @@ class Styler:
       plot.GetZaxis().SetNdivisions(505)
 
     except:
-      print("Couldn't set axes limits")
+      warn("Couldn't set axes limits")
       return
     
   def setupUncertaintyHistogram(self, hist):

@@ -1,6 +1,7 @@
 import argparse
-import os
 from SubmissionManager import SubmissionManager, SubmissionSystem
+
+from Logger import *
 
 def get_args():
   parser = argparse.ArgumentParser(description="Submitter")
@@ -42,7 +43,7 @@ def main():
     submission_system = SubmissionSystem.condor
   
   if submission_system == SubmissionSystem.unknown:
-    print("Please select either --local or --condor")
+    fatal("Please select either --local or --condor")
     exit()
     
   submission_manager = SubmissionManager(submission_system, args.app, args.config, args.files_config)

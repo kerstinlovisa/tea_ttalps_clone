@@ -8,6 +8,7 @@ from Sample import SampleType
 from Styler import Styler
 from HistogramNormalizer import HistogramNormalizer
 from CmsLabelsManager import CmsLabelsManager
+from Logger import *
 
 
 class HistogramPlotter:
@@ -155,7 +156,7 @@ class HistogramPlotter:
     canvas.cd(1)
     
     if hist.getName() not in self.legends:
-      print(f"Couldn't find legends for histogram: {hist.getName()}")
+      warn(f"Couldn't find legends for histogram: {hist.getName()}")
       return
     
     for legend in self.legends[hist.getName()].values():
