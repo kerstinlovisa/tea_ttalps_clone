@@ -63,16 +63,12 @@ bool TTAlpsSelections::PassesSignalLikeSelections(const shared_ptr<Event> event,
   return true;
 }
 
+void TTAlpsSelections::RegisterSingleLeptonSelections(shared_ptr<CutFlowManager> cutFlowManager) {
+  cutFlowManager->RegisterCut("metFilters");
+  cutFlowManager->RegisterCut("nLooseMuons");
+}
+
 bool TTAlpsSelections::PassesSingleLeptonSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  float metPt = event->Get("MET_pt");
-  if (!inRange(metPt, eventSelections["MET_pt"])) return false;
-
-  if (!inRange(event->GetCollectionSize("TightMuons"), eventSelections["nTightMuons"])) return false;
-  if(cutFlowManager) cutFlowManager->UpdateCutFlow("nTightMuons");
-  if (!inRange(event->GetCollectionSize("GoodBtaggedJets"), eventSelections["nGoodBtaggedJets"])) return false;
-  if (!inRange(event->GetCollectionSize("GoodJets"), eventSelections["nGoodJets"])) return false;
-
-
   for(string flag : requiredFlags){
     bool flagValue = event->Get(flag);
     if(!flagValue) return false;
