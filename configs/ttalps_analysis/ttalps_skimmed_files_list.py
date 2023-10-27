@@ -75,8 +75,8 @@ output_skim = "skimmed_ttbarSemimuonicCR_tightMuon"
 # input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_2400to3200/{input_skim}/"
 # output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_2400to3200/{output_skim}/"
 
-# dataset = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_3200toInf/{input_skim}/"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_3200toInf/{output_skim}/"
+input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_3200toInf/{input_skim}/"
+output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_3200toInf/{output_skim}/"
 
 
 # Data
