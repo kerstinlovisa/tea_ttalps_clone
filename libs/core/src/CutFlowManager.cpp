@@ -53,13 +53,29 @@ void CutFlowManager::RegisterCut(string cutName) {
 }
 
 string CutFlowManager::GetFullCutName(string cutName) {
-  
+
+  // Find full names in the cut flow matching the given cut name
+  vector<string> matchingFullCutNames;
   for (auto &[existingCutName, sumOfWeights] : weightsAfterCuts) {
     if (existingCutName.find(cutName) != string::npos) {
-      return existingCutName;
+      matchingFullCutNames.push_back(existingCutName);
     }
   }
-  
+
+  // Find the full name with the highest index
+  int maxIndex = -1;
+  string maxCutName = "";
+  for (auto fullCutName : matchingFullCutNames) {
+    string number = fullCutName.substr(0, fullCutName.find("_"));
+    int index = stoi(number);
+    if (index > maxIndex) {
+      maxIndex = index;
+      maxCutName = fullCutName;
+    }
+  }
+  if(maxCutName != "") return maxCutName;
+
+  // If no matching full name was found, we cannot continue
   fatal() << "CutFlowManager does not contain cut " << cutName << endl;
   fatal() << "Did you forget to register it?" << endl;
   exit(1);
