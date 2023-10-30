@@ -3,8 +3,8 @@ import os
 import sys
 
 # sub_path = "skimmed_ttbarLike/histograms/"
-sub_path = "skimmed_looseSemimuonic_tightMuon/"
-# sub_path = "skimmed_ttbarSemimuonicCR_tightMuon/"
+# sub_path = "skimmed_looseSemimuonic_tightMuon/"
+sub_path = "skimmed_ttbarSemimuonicCR_tightMuon/"
 
 def count_events_in_files(files):
     n_events = 0
@@ -32,6 +32,10 @@ def count_files(base_path):
     for path in paths:
         try:
             files = os.listdir(os.path.join(base_path, path, sub_path))
+            
+            # remove from files entries which are not files but directories
+            files = [file for file in files if os.path.isfile(os.path.join(base_path, path, sub_path, file))]
+            
             n_events = count_events_in_files([os.path.join(base_path, path, sub_path, file) for file in files])
             total_size = get_total_size_of_files([os.path.join(base_path, path, sub_path, file) for file in files])
             print(f"{path}: N files: {len(files)}, N events: {n_events}, size: {total_size/1024/1024/1024:.3f} GB".replace(".", ","))
