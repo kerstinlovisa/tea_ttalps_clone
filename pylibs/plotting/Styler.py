@@ -124,8 +124,8 @@ class Styler:
       return
 
     if is_ratio:
-      plot.SetMinimum(0.7)
-      plot.SetMaximum(1.3)
+      plot.SetMinimum(self.config.ratio_limits[0])
+      plot.SetMaximum(self.config.ratio_limits[1])
     else:
       if (hist.y_min > 0):
         plot.SetMinimum(hist.y_min)
