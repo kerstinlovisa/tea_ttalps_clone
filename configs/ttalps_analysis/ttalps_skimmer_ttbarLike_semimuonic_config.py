@@ -47,6 +47,7 @@ extraEventCollections = {
         "inputCollections": ("Electron",),
         "pt": (15., 9999999.),
         "eta": (-2.5, 2.5),
+        "mvaFall17V2Iso_WPL": True,
     },
 }
 
