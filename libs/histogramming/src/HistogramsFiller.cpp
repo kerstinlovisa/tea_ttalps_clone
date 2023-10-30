@@ -138,9 +138,18 @@ void HistogramsFiller::FillCutFlow(const std::shared_ptr<CutFlowManager> cutFlow
   int bin = 1;
   int cutFlowLength = cutFlowManager->GetCutFlow().size();
   TH1D* cutFlowHist = new TH1D("cutFlow", "cutFlow", cutFlowLength, 0, cutFlowLength + 1);
-  for (auto& [name, weight] : cutFlowManager->GetCutFlow()) {
-    cutFlowHist->SetBinContent(bin, weight);
-    cutFlowHist->GetXaxis()->SetBinLabel(bin, name.c_str());
+
+
+  map<int, pair<string, float>> sortedWeightsAfterCuts;
+  for (auto &[cutName, sumOfWeights] : cutFlowManager->GetCutFlow()) {
+    string number = cutName.substr(0, cutName.find("_"));
+    int index = stoi(number);
+    sortedWeightsAfterCuts[index]  = {cutName, sumOfWeights};
+  }
+
+  for (auto& [index, values] : sortedWeightsAfterCuts) {
+    cutFlowHist->SetBinContent(bin, get<1>(values));
+    cutFlowHist->GetXaxis()->SetBinLabel(bin, get<0>(values).c_str());
     bin++;
   }
   histogramsHandler->SetHistogram1D("cutFlow", cutFlowHist);
