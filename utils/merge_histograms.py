@@ -33,6 +33,11 @@ def main():
     f"backgrounds2018/QCD_Pt_1800to2400/{skim}/histograms/histograms.root",
     f"backgrounds2018/QCD_Pt_2400to3200/{skim}/histograms/histograms.root",
     f"backgrounds2018/QCD_Pt_3200toInf/{skim}/histograms/histograms.root",
+    f"backgrounds2018/ST_t-channel_antitop/{skim}/histograms/histograms.root",
+    f"backgrounds2018/ST_t-channel_top/{skim}/histograms/histograms.root",
+    f"backgrounds2018/TTZToLLNuNu/{skim}/histograms/histograms.root",
+    f"backgrounds2018/TTWJetsToLNu/{skim}/histograms/histograms.root",
+    f"backgrounds2018/WJetsToLNu/{skim}/histograms/histograms.root",
   )
   
   input_hists_patterns = (
@@ -60,6 +65,11 @@ def main():
     f"backgrounds2018/QCD_Pt_1800to2400/{skim}/histograms/*.root",
     f"backgrounds2018/QCD_Pt_2400to3200/{skim}/histograms/*.root",
     f"backgrounds2018/QCD_Pt_3200toInf/{skim}/histograms/*.root",
+    f"backgrounds2018/ST_t-channel_antitop/{skim}/histograms/*.root",
+    f"backgrounds2018/ST_t-channel_top/{skim}/histograms/*.root",
+    f"backgrounds2018/TTZToLLNuNu/{skim}/histograms/*.root",
+    f"backgrounds2018/TTWJetsToLNu/{skim}/histograms/*.root",
+    f"backgrounds2018/WJetsToLNu/{skim}/histograms/*.root",
   )
   
   for output_path, input_hists_pattern in zip(output_paths, input_hists_patterns):

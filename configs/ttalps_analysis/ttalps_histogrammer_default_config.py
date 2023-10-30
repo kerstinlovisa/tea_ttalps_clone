@@ -55,19 +55,19 @@ defaultHistParams = (
   ("Jet"                , "btagDeepB"           , 200   , -1    , 1     , ""  ),
   
   ("Event"              , "nGoodJets"           , 50    , 0     , 50    , ""  ),
-  ("GoodJets"           , "pt"                  , 2000  , 0     , 1000  , ""  ),
+  ("GoodJets"           , "pt"                  , 2000  , 0     , 2000  , ""  ),
   ("GoodJets"           , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
   ("GoodJets"           , "phi"                 , 100   , -2.5  , 2.5   , ""  ),
   ("GoodJets"           , "btagDeepB"           , 200   , -1    , 1     , ""  ),
   
   ("Event"              , "nGoodBtaggedJets"    , 50    , 0     , 50    , ""  ),
-  ("GoodBtaggedJets"    , "pt"                  , 2000  , 0     , 1000  , ""  ),
+  ("GoodBtaggedJets"    , "pt"                  , 2000  , 0     , 2000  , ""  ),
   ("GoodBtaggedJets"    , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
   ("GoodBtaggedJets"    , "phi"                 , 100   , -2.5  , 2.5   , ""  ),
   ("GoodBtaggedJets"    , "btagDeepB"           , 200   , -1    , 1     , ""  ),
   
   ("Event"              , "nGoodNonBtaggedJets" , 50    , 0     , 50    , ""  ),
-  ("GoodNonBtaggedJets" , "pt"                  , 2000  , 0     , 1000  , ""  ),
+  ("GoodNonBtaggedJets" , "pt"                  , 2000  , 0     , 2000  , ""  ),
   ("GoodNonBtaggedJets" , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
   ("GoodNonBtaggedJets" , "phi"                 , 100   , -2.5  , 2.5   , ""  ),
   ("GoodNonBtaggedJets" , "btagDeepB"           , 200   , -1    , 1     , ""  ),
