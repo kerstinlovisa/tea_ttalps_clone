@@ -1,4 +1,4 @@
-nEvents = 10000
+nEvents = -1
 printEveryNevents = 1000
 
 applyLooseSkimming = False

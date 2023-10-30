@@ -6,88 +6,44 @@ input_skim = "skimmed_looseSemimuonic_tightMuon"
 # output_skim = "skimmed_ttbarLike"
 output_skim = "skimmed_ttbarSemimuonicCR_tightMuon"
 
+
+# input_file_list = ("./skimmed_loose/test_TTToSemileptonic.root",)
+# output_dir = f"./skimmed_ttbar/"
+
+base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
+
 # Backgrounds
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttZJets/{input_skim}"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttZJets/{output_skim}/"
-
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttWJets/{input_skim}"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttWJets/{output_skim}/"
-
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/TTToSemiLeptonic/{input_skim}"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/TTToSemiLeptonic/{output_skim}/"
-
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ST_tW_antitop/{input_skim}"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ST_tW_antitop/{output_skim}/"
-
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ST_tW_top/{input_skim}"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ST_tW_top/{output_skim}/"
-
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttHToMuMu/{input_skim}"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttHToMuMu/{output_skim}/"
-
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttHTobb/{input_skim}/"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttHTobb/{output_skim}/"
-
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/DYJetsToMuMu_M-50/{input_skim}/"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/DYJetsToMuMu_M-50/{output_skim}/"
+# sample_path = f"{base_path}/backgrounds2018/ttZJets"
+# sample_path = f"{base_path}/backgrounds2018/ttWJets"
+# sample_path = f"{base_path}/backgrounds2018/TTToSemiLeptonic"
+# sample_path = f"{base_path}/backgrounds2018/ST_tW_antitop"
+# sample_path = f"{base_path}/backgrounds2018/ST_tW_top"
+# sample_path = f"{base_path}/backgrounds2018/ttHToMuMu"
+# sample_path = f"{base_path}/backgrounds2018/ttHTobb"
+# sample_path = f"{base_path}/backgrounds2018/DYJetsToMuMu_M-50"
 
 # QCD
-
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_15to30/{input_skim}/"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_15to30/{output_skim}/"
-
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_30to50/{input_skim}/"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_30to50/{output_skim}/"
-
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_50to80/{input_skim}/"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_50to80/{output_skim}/"
-
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_80to120/{input_skim}/"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_80to120/{output_skim}/"
-
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_120to170/{input_skim}/"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_120to170/{output_skim}/"
-
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_170to300/{input_skim}/"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_170to300/{output_skim}/"
-
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_300to470/{input_skim}/"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_300to470/{output_skim}/"
-
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_470to600/{input_skim}/"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_470to600/{output_skim}/"
-
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_600to800/{input_skim}/"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_600to800/{output_skim}/"
-
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_800to1000/{input_skim}/"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_800to1000/{output_skim}/"
-
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_1000to1400/{input_skim}/"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_1000to1400/{output_skim}/"
-
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_1400to1800/{input_skim}/"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_1400to1800/{output_skim}/"
-
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_1800to2400/{input_skim}/"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_1800to2400/{output_skim}/"
-
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_2400to3200/{input_skim}/"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_2400to3200/{output_skim}/"
-
-input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_3200toInf/{input_skim}/"
-output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/QCD_Pt_3200toInf/{output_skim}/"
-
+# sample_path = f"{base_path}/backgrounds2018/QCD_Pt_15to30"
+# sample_path = f"{base_path}/backgrounds2018/QCD_Pt_30to50"
+# sample_path = f"{base_path}/backgrounds2018/QCD_Pt_50to80"
+# sample_path = f"{base_path}/backgrounds2018/QCD_Pt_80to120"
+# sample_path = f"{base_path}/backgrounds2018/QCD_Pt_120to170"
+# sample_path = f"{base_path}/backgrounds2018/QCD_Pt_170to300"
+# sample_path = f"{base_path}/backgrounds2018/QCD_Pt_300to470"
+# sample_path = f"{base_path}/backgrounds2018/QCD_Pt_470to600"
+# sample_path = f"{base_path}/backgrounds2018/QCD_Pt_600to800"
+# sample_path = f"{base_path}/backgrounds2018/QCD_Pt_800to1000"
+# sample_path = f"{base_path}/backgrounds2018/QCD_Pt_1000to1400"
+# sample_path = f"{base_path}/backgrounds2018/QCD_Pt_1400to1800"
+# sample_path = f"{base_path}/backgrounds2018/QCD_Pt_1800to2400"
+# sample_path = f"{base_path}/backgrounds2018/QCD_Pt_2400to3200"
+# sample_path = f"{base_path}/backgrounds2018/QCD_Pt_3200toInf"
 
 # Data
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018A/{input_skim}"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018A/{output_skim}/"
+# sample_path = f"{base_path}/collision_data2018/SingleMuon2018A"
+# sample_path = f"{base_path}/collision_data2018/SingleMuon2018B"
+# sample_path = f"{base_path}/collision_data2018/SingleMuon2018C"
+sample_path = f"{base_path}/collision_data2018/SingleMuon2018D"
 
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018B/{input_skim}"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018B/{output_skim}/"
-
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018C/{input_skim}"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018C/{output_skim}/"
-
-# input_directory = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018D/{input_skim}"
-# output_dir = f"/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018D/{output_skim}/"
+input_directory = f"{sample_path}/{input_skim}"
+output_dir = f"{sample_path}/{output_skim}/"
