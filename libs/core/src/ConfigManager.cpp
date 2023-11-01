@@ -10,9 +10,8 @@
 
 using namespace std;
 
-ConfigManager::ConfigManager(std::string* const _configPath) : configPath(move(*_configPath))
-{
-  if (nullptr == _configPath) throw std::runtime_error{ "ConfigManager not initialized" };
+ConfigManager::ConfigManager(std::string *const _configPath) : configPath(move(*_configPath)) {
+  if (nullptr == _configPath) throw std::runtime_error{"ConfigManager not initialized"};
 
   Py_Initialize();
 
@@ -94,11 +93,11 @@ PyObject *ConfigManager::GetPythonDict(string name) {
 
 template <>
 void ConfigManager::GetValue<string>(std::string name, string &outputValue) {
-  if(name=="inputFilePath" && inputPath!="") {
+  if (name == "inputFilePath" && inputPath != "") {
     outputValue = inputPath;
     return;
   }
-  if((name=="treeOutputFilePath" || name=="histogramsOutputFilePath") && outputPath!="") {
+  if ((name == "treeOutputFilePath" || name == "histogramsOutputFilePath") && outputPath != "") {
     outputValue = outputPath;
     return;
   }
@@ -261,18 +260,49 @@ void ConfigManager::GetExtraEventCollections(map<string, ExtraCollection> &extra
           PyObject *item = GetItem(pyValue, i);
           extraCollection.inputCollections.push_back(PyUnicode_AsUTF8(item));
         }
-      } else if(PyTuple_Check(pyValue)){
+      } else if (PyTuple_Check(pyValue)) {
         PyObject *min = GetItem(pyValue, 0);
         PyObject *max = GetItem(pyValue, 1);
         extraCollection.selections[keyStr] = {PyFloat_AsDouble(min), PyFloat_AsDouble(max)};
-      } else if(PyBool_Check(pyValue)){
+      } else if (PyBool_Check(pyValue)) {
         extraCollection.flags[keyStr] = PyLong_AsLong(pyValue);
-      } else if(PyLong_Check(pyValue)){
+      } else if (PyLong_Check(pyValue)) {
         extraCollection.options[keyStr] = PyLong_AsLong(pyValue);
       }
     }
 
     extraEventCollections[PyUnicode_AsUTF8(collectionName)] = extraCollection;
+  }
+}
+
+void ConfigManager::GetScaleFactors(string name, ScaleFactorsMap &scaleFactors) {
+  PyObject *pythonDict = GetPythonDict(name.c_str());
+
+  PyObject *etaBin, *valuesForEta;
+  Py_ssize_t pos = 0;
+
+  while (PyDict_Next(pythonDict, &pos, &etaBin, &valuesForEta)) {
+    if (!PyTuple_Check(etaBin)) {
+      error() << "Failed retriving python eta bin" << endl;
+      continue;
+    }
+    PyObject *ptBin = nullptr;
+    PyObject *values = nullptr;
+    Py_ssize_t pos2 = 0;
+
+    tuple<float, float> etaBinValues = {PyFloat_AsDouble(GetItem(etaBin, 0)), PyFloat_AsDouble(GetItem(etaBin, 1))};
+
+    while (PyDict_Next(valuesForEta, &pos2, &ptBin, &values)) {
+      tuple<float, float> ptBinValues = {PyFloat_AsDouble(GetItem(ptBin, 0)), PyFloat_AsDouble(GetItem(ptBin, 1))};
+
+      PyObject *fieldName = nullptr;
+      PyObject *fieldValue = nullptr;
+      Py_ssize_t pos3 = 0;
+
+      while (PyDict_Next(values, &pos3, &fieldName, &fieldValue)) {
+        scaleFactors[etaBinValues][ptBinValues][PyUnicode_AsUTF8(fieldName)] = PyFloat_AsDouble(fieldValue);
+      }
+    }
   }
 }
 
@@ -285,16 +315,15 @@ void ConfigManager::GetHistogramsParams(map<std::string, HistogramParams> &histo
     HistogramParams histParams;
     string title;
 
-    if(GetCollectionSize(params) == 6) {
+    if (GetCollectionSize(params) == 6) {
       histParams.collection = PyUnicode_AsUTF8(GetItem(params, 0));
       histParams.variable = PyUnicode_AsUTF8(GetItem(params, 1));
       histParams.nBins = PyLong_AsLong(GetItem(params, 2));
       histParams.min = PyFloat_AsDouble(GetItem(params, 3));
       histParams.max = PyFloat_AsDouble(GetItem(params, 4));
       histParams.directory = PyUnicode_AsUTF8(GetItem(params, 5));
-      title =  histParams.collection + "_" + histParams.variable;
-    }
-    else{
+      title = histParams.collection + "_" + histParams.variable;
+    } else {
       histParams.variable = PyUnicode_AsUTF8(GetItem(params, 0));
       histParams.nBins = PyLong_AsLong(GetItem(params, 1));
       histParams.min = PyFloat_AsDouble(GetItem(params, 2));
@@ -311,7 +340,7 @@ void ConfigManager::GetHistogramsParams(std::map<std::string, HistogramParams2D>
 
   for (Py_ssize_t i = 0; i < GetCollectionSize(pythonList); ++i) {
     PyObject *params = GetItem(pythonList, i);
-    
+
     HistogramParams2D histParams;
 
     histParams.variable = PyUnicode_AsUTF8(GetItem(params, 0));
@@ -322,7 +351,7 @@ void ConfigManager::GetHistogramsParams(std::map<std::string, HistogramParams2D>
     histParams.minY = PyFloat_AsDouble(GetItem(params, 5));
     histParams.maxY = PyFloat_AsDouble(GetItem(params, 6));
     histParams.directory = PyUnicode_AsUTF8(GetItem(params, 7));
-    
+
     histogramsParams[histParams.variable] = histParams;
   }
 }

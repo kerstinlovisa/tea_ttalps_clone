@@ -7,13 +7,14 @@
 
 #include "Helpers.hpp"
 #include "PhysicsObject.hpp"
+#include "ScaleFactorsManager.hpp"
 
 class Muon;
 typedef Collection<std::shared_ptr<Muon>> Muons;
 
 class Muon {
  public:
-  Muon(std::shared_ptr<PhysicsObject> physicsObject_) : physicsObject(physicsObject_) {}
+  Muon(std::shared_ptr<PhysicsObject> physicsObject_);
 
   auto Get(std::string branchName) { return physicsObject->Get(branchName); }
   std::string GetOriginalCollection() { return physicsObject->GetOriginalCollection(); }
@@ -24,6 +25,8 @@ class Muon {
   inline float GetPhi() { return physicsObject->Get("phi"); }
 
   TLorentzVector GetFourVector();
+
+  float GetRecoScaleFactor();
 
  private:
   std::shared_ptr<PhysicsObject> physicsObject;

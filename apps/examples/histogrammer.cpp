@@ -3,6 +3,7 @@
 #include "EventReader.hpp"
 #include "HistogramsHandler.hpp"
 #include "HistogramsFiller.hpp"
+#include "ExtensionsHelpers.hpp"
 
 using namespace std;
 
@@ -30,11 +31,19 @@ int main(int argc, char **argv) {
   auto cutFlowManager = make_shared<CutFlowManager>(eventReader);
   auto histogramsFiller = make_unique<HistogramsFiller>(histogramsHandler);
 
+  cutFlowManager->RegisterCut("initial");
+
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
 
     cutFlowManager->UpdateCutFlow("initial");
     histogramsFiller->FillDefaultVariables(event);
+
+    auto muons = event->GetCollection("Muon");
+    for(auto physObj : *muons){
+      auto muon = asMuon(physObj);
+      histogramsHandler->Fill("Muon_scaledPt", muon->Get("pt"), muon->GetRecoScaleFactor());
+    }
   }
   
   cutFlowManager->Print();

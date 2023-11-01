@@ -30,6 +30,8 @@ class ConfigManager {
   void GetHistogramsParams(std::map<std::string, HistogramParams> &histogramsParams, std::string collectionName);
   void GetHistogramsParams(std::map<std::string, HistogramParams2D> &histogramsParams, std::string collectionName);
 
+  void GetScaleFactors(std::string name, ScaleFactorsMap &scaleFactors);
+
   void GetSelections(std::map<std::string, std::pair<float, float>> &selections);
 
   void SetInputPath(std::string path) { inputPath = path; }

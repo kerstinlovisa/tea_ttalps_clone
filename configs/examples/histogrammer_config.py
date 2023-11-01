@@ -22,4 +22,15 @@ defaultHistParams = (
   ("GoodLeptons" , "eta"           , 100,    -2.5,    2.5,     ""  ),
 )
 
+histParams = (
+  ("Muon", "scaledPt", 400, 0, 200, ""),
+)
+
 weightsBranchName = "genWeight"
+
+
+from ScaleFactorsReader import ScaleFactorsReader
+scaleFactorsReader = ScaleFactorsReader()
+muonSFs = scaleFactorsReader.getMuonScaleFactors()
+
+print(f"{muonSFs=}")

@@ -36,6 +36,8 @@
 #include <regex>
 #include <sstream>
 #include <string>
+#include <fstream>
+#include <set>
 
 #include "Logger.hpp"
 
@@ -83,6 +85,11 @@ inline void makeParentDirectories(std::string filePath) {
   }
 }
 
+inline bool FileExists(const std::string& name) {
+  std::ifstream f(name.c_str());
+  return f.good();
+}
+
 struct ExtraCollection {
   std::vector<std::string> inputCollections;
   std::map<std::string, std::pair<float, float>> selections;
@@ -105,6 +112,8 @@ struct ExtraCollection {
     }
   }
 };
+
+typedef std::map<std::tuple<float, float>, std::map<std::tuple<float, float>, std::map<std::string, float>>> ScaleFactorsMap;
 
 struct HistogramParams {
   std::string collection, variable, directory;
