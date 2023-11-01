@@ -47,8 +47,11 @@ skim = "skimmed_looseSemimuonic_tightMuon"
 # dataset = "/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM"
 # output_dir = f"{base_path}/backgrounds2018/TTWJetsToLNu/{skim}/"
 
-dataset = "/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM"
-output_dir = f"{base_path}/backgrounds2018/WJetsToLNu/{skim}/"
+# dataset = "/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM"
+# output_dir = f"{base_path}/backgrounds2018/WJetsToLNu/{skim}/"
+
+dataset = "/DYJetsToMuMu_M-10to50_H2ErratumFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM"
+output_dir = f"{base_path}/backgrounds2018/DYJetsToMuMu_M-10to50/{skim}/"
 
 # QCD
 # dataset = "/QCD_Pt_15to30_TuneCP5_13TeV_pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM"
