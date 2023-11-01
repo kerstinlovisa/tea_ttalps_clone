@@ -1,3 +1,5 @@
+from scale_factors_config import *
+
 nEvents = -1
 printEveryNevents = 1000
 
@@ -27,14 +29,3 @@ histParams = (
 )
 
 weightsBranchName = "genWeight"
-
-
-from ScaleFactorsReader import ScaleFactorsReader
-scaleFactorsReader = ScaleFactorsReader()
-
-muonMidPtRecoSFsPath = "../data/NUM_TrackerMuons_DEN_genTracks_Z_abseta_pt.json"
-muonLowPtRecoSFsPath = "../data/Efficiency_muon_generalTracks_Run2018_UL_trackerMuon.json"
-
-muonMidPtRecoSFs = scaleFactorsReader.getMuonScaleFactors(muonMidPtRecoSFsPath)
-muonLowPtRecoSFs = scaleFactorsReader.getMuonScaleFactors(muonLowPtRecoSFsPath)
-

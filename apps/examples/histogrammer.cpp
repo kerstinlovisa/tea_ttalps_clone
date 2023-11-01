@@ -53,7 +53,7 @@ int main(int argc, char **argv) {
 
     for (auto physObj : *muons) {
       auto muon = asMuon(physObj);
-      histogramsHandler->Fill("Muon_scaledPt", muon->Get("pt"), eventWeight * muon->GetRecoScaleFactor());
+      histogramsHandler->Fill("Muon_scaledPt", muon->Get("pt"), eventWeight * muon->GetScaleFactor());
     }
   }
 

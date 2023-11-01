@@ -1,16 +1,20 @@
 import json
+from Logger import *
 
 class ScaleFactorsReader:
   def __init__(self):
-    self.jsonTopLevelKey = "NUM_TrackerMuons_DEN_genTracks"
     self.jsonSubLevelKey = "abseta_pt"
   
-  def getMuonScaleFactors(self, filePath):
+  def getMuonScaleFactors(self, filePath, jsonTopLevelKey):
     with open(filePath) as jsonFile:
       json_content = json.load(jsonFile)
       
     muonSFs = {}
-    abseta_pt_data = json_content[self.jsonTopLevelKey][self.jsonSubLevelKey]
+    abseta_pt_data = json_content[jsonTopLevelKey][self.jsonSubLevelKey]
+    
+    if abseta_pt_data is None:
+      fatal("Couldn't find the top level key in the JSON file: " + filePath)
+      exit(1)
     
     for abseta_key, values_for_eta in abseta_pt_data.items():
       if "abseta" not in abseta_key:

@@ -26,7 +26,7 @@ class Muon {
 
   TLorentzVector GetFourVector();
 
-  float GetRecoScaleFactor();
+  float GetScaleFactor();
 
  private:
   std::shared_ptr<PhysicsObject> physicsObject;

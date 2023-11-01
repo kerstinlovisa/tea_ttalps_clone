@@ -275,32 +275,44 @@ void ConfigManager::GetExtraEventCollections(map<string, ExtraCollection> &extra
   }
 }
 
-void ConfigManager::GetScaleFactors(string name, ScaleFactorsMap &scaleFactors) {
+void ConfigManager::GetScaleFactors(string name, map<string, ScaleFactorsMap> &scaleFactors) {
   PyObject *pythonDict = GetPythonDict(name.c_str());
 
-  PyObject *etaBin, *valuesForEta;
-  Py_ssize_t pos = 0;
+  PyObject *SFname, *SFvalues;
+  Py_ssize_t pos0 = 0;
 
-  while (PyDict_Next(pythonDict, &pos, &etaBin, &valuesForEta)) {
-    if (!PyTuple_Check(etaBin)) {
-      error() << "Failed retriving python eta bin" << endl;
+  while (PyDict_Next(pythonDict, &pos0, &SFname, &SFvalues)) {
+    if (!PyUnicode_Check(SFname)) {
+      error() << "Failed retriving python scale factor name (string)\n";
       continue;
     }
-    PyObject *ptBin = nullptr;
-    PyObject *values = nullptr;
-    Py_ssize_t pos2 = 0;
+    string SFnameStr = PyUnicode_AsUTF8(SFname);
+    scaleFactors[SFnameStr] = ScaleFactorsMap();
 
-    tuple<float, float> etaBinValues = {PyFloat_AsDouble(GetItem(etaBin, 0)), PyFloat_AsDouble(GetItem(etaBin, 1))};
+    PyObject *etaBin, *valuesForEta;
+    Py_ssize_t pos = 0;
 
-    while (PyDict_Next(valuesForEta, &pos2, &ptBin, &values)) {
-      tuple<float, float> ptBinValues = {PyFloat_AsDouble(GetItem(ptBin, 0)), PyFloat_AsDouble(GetItem(ptBin, 1))};
+    while (PyDict_Next(SFvalues, &pos, &etaBin, &valuesForEta)) {
+      if (!PyTuple_Check(etaBin)) {
+        error() << "Failed retriving python eta bin" << endl;
+        continue;
+      }
+      PyObject *ptBin = nullptr;
+      PyObject *values = nullptr;
+      Py_ssize_t pos2 = 0;
 
-      PyObject *fieldName = nullptr;
-      PyObject *fieldValue = nullptr;
-      Py_ssize_t pos3 = 0;
+      tuple<float, float> etaBinValues = {PyFloat_AsDouble(GetItem(etaBin, 0)), PyFloat_AsDouble(GetItem(etaBin, 1))};
 
-      while (PyDict_Next(values, &pos3, &fieldName, &fieldValue)) {
-        scaleFactors[etaBinValues][ptBinValues][PyUnicode_AsUTF8(fieldName)] = PyFloat_AsDouble(fieldValue);
+      while (PyDict_Next(valuesForEta, &pos2, &ptBin, &values)) {
+        tuple<float, float> ptBinValues = {PyFloat_AsDouble(GetItem(ptBin, 0)), PyFloat_AsDouble(GetItem(ptBin, 1))};
+
+        PyObject *fieldName = nullptr;
+        PyObject *fieldValue = nullptr;
+        Py_ssize_t pos3 = 0;
+
+        while (PyDict_Next(values, &pos3, &fieldName, &fieldValue)) {
+          scaleFactors[SFnameStr][etaBinValues][ptBinValues][PyUnicode_AsUTF8(fieldName)] = PyFloat_AsDouble(fieldValue);
+        }
       }
     }
   }
