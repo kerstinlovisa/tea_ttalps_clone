@@ -34,27 +34,11 @@ int main(int argc, char **argv) {
 
   cutFlowManager->RegisterCut("initial");
 
-  string weightsBranchName;
-  config.GetValue("weightsBranchName", weightsBranchName);
-
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
 
     cutFlowManager->UpdateCutFlow("initial");
     histogramsFiller->FillDefaultVariables(event);
-
-    auto muons = event->GetCollection("Muon");
-
-    float eventWeight = 1.0;
-    try {
-      eventWeight = event->Get(weightsBranchName);
-    } catch (...) {
-    }
-
-    for (auto physObj : *muons) {
-      auto muon = asMuon(physObj);
-      histogramsHandler->Fill("Muon_scaledPt", muon->Get("pt"), eventWeight * muon->GetScaleFactor());
-    }
   }
 
   cutFlowManager->Print();

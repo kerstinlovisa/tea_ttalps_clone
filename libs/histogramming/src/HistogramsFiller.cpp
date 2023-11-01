@@ -128,7 +128,14 @@ void HistogramsFiller::FillDefaultVariables(const std::shared_ptr<Event> event) 
     } else {
       auto collection = event->GetCollection(collectionName);
       for (auto object : *collection) {
-        histogramsHandler->Fill(title, GetValue(object, branchName), weight);
+        if(collectionName == "Muon" || object->GetOriginalCollection() == "Muon") {
+          auto muon = asMuon(object);
+          float muonSF = muon->GetScaleFactor();
+          histogramsHandler->Fill(title, GetValue(object, branchName), weight*muonSF);
+        }
+        else{
+          histogramsHandler->Fill(title, GetValue(object, branchName), weight);
+        }
       }
     }
   }
