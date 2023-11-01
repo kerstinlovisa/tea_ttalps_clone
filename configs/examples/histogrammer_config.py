@@ -31,6 +31,10 @@ weightsBranchName = "genWeight"
 
 from ScaleFactorsReader import ScaleFactorsReader
 scaleFactorsReader = ScaleFactorsReader()
-muonSFs = scaleFactorsReader.getMuonScaleFactors()
 
-print(f"{muonSFs=}")
+muonMidPtRecoSFsPath = "../data/NUM_TrackerMuons_DEN_genTracks_Z_abseta_pt.json"
+muonLowPtRecoSFsPath = "../data/Efficiency_muon_generalTracks_Run2018_UL_trackerMuon.json"
+
+muonMidPtRecoSFs = scaleFactorsReader.getMuonScaleFactors(muonMidPtRecoSFsPath)
+muonLowPtRecoSFs = scaleFactorsReader.getMuonScaleFactors(muonLowPtRecoSFsPath)
+

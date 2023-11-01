@@ -1,17 +1,17 @@
 #include "ConfigManager.hpp"
 #include "CutFlowManager.hpp"
 #include "EventReader.hpp"
-#include "HistogramsHandler.hpp"
-#include "HistogramsFiller.hpp"
 #include "ExtensionsHelpers.hpp"
+#include "HistogramsFiller.hpp"
+#include "HistogramsHandler.hpp"
 
 using namespace std;
 
 void CheckArgs(int argc, char **argv) {
   if (argc != 2 && argc != 4) {
-    fatal() << "Usage: " << argv[0] << " config_path"<<endl;
-    fatal() << "or"<<endl;
-    fatal() << argv[0] << " config_path input_path output_path"<<endl;
+    fatal() << "Usage: " << argv[0] << " config_path" << endl;
+    fatal() << "or" << endl;
+    fatal() << argv[0] << " config_path input_path output_path" << endl;
     exit(1);
   }
 }
@@ -19,9 +19,10 @@ void CheckArgs(int argc, char **argv) {
 int main(int argc, char **argv) {
   CheckArgs(argc, argv);
   ConfigManager::Initialize(argv[1]);
-  
-  if(argc == 4){
-    auto &config = ConfigManager::GetInstance();
+
+  auto &config = ConfigManager::GetInstance();
+
+  if (argc == 4) {
     config.SetInputPath(argv[2]);
     config.SetOutputPath(argv[3]);
   }
@@ -33,6 +34,9 @@ int main(int argc, char **argv) {
 
   cutFlowManager->RegisterCut("initial");
 
+  string weightsBranchName;
+  config.GetValue("weightsBranchName", weightsBranchName);
+
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
 
@@ -40,12 +44,19 @@ int main(int argc, char **argv) {
     histogramsFiller->FillDefaultVariables(event);
 
     auto muons = event->GetCollection("Muon");
-    for(auto physObj : *muons){
+
+    float eventWeight = 1.0;
+    try {
+      eventWeight = event->Get(weightsBranchName);
+    } catch (...) {
+    }
+
+    for (auto physObj : *muons) {
       auto muon = asMuon(physObj);
-      histogramsHandler->Fill("Muon_scaledPt", muon->Get("pt"), muon->GetRecoScaleFactor());
+      histogramsHandler->Fill("Muon_scaledPt", muon->Get("pt"), eventWeight * muon->GetRecoScaleFactor());
     }
   }
-  
+
   cutFlowManager->Print();
   histogramsFiller->FillCutFlow(cutFlowManager);
   histogramsHandler->SaveHistograms();
