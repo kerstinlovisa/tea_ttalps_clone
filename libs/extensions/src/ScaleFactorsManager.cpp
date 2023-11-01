@@ -60,8 +60,7 @@ float ScaleFactorsManager::GetMuonRecoScaleFactor(float eta, float pt) {
   } else if (pt > 10 && pt < 200) {
     hist = muonSFvalues["muonMidPtRecoSFs"];
   } else {
-    warn() << "Muon pt is out of range for reco SFs: " << pt << endl;
-    return 1;
+    hist = muonSFvalues["muonHighPtRecoSFs"];
   }
 
   BringEtaPtToHistRange(hist, eta, pt);
@@ -79,11 +78,8 @@ float ScaleFactorsManager::GetMuonIDScaleFactor(float eta, float pt, MuonID id) 
 
   if (pt < 15) {
     name += "LowPt";
-  } else if (pt > 15 && pt < 120) {
+  } else if (pt > 15) {
     name += "MidPt";
-  } else {
-    warn() << "Muon pt is out of range for reco SFs: " << pt << endl;
-    return 1;
   }
 
   if (id.soft)
