@@ -26,7 +26,8 @@ base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
 # sample_path = f"backgrounds2018/ST_t-channel_top"
 # sample_path = f"backgrounds2018/TTZToLLNuNu"
 # sample_path = f"backgrounds2018/TTWJetsToLNu"
-sample_path = f"backgrounds2018/WJetsToLNu"
+# sample_path = f"backgrounds2018/WJetsToLNu"
+sample_path = f"backgrounds2018/DYJetsToMuMu_M-10to50"
 
 
 # QCD
