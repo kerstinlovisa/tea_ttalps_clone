@@ -27,7 +27,7 @@ legends = {
 
 canvas_size = (800, 600)
 show_ratio_plots = True
-ratio_limits = (0.5, 1.5)
+ratio_limits = (0.0, 2.0)
 
 background_uncertainty_style = 3244 # available styles: https://root.cern.ch/doc/master/classTAttFill.html
 background_uncertainty_color = ROOT.kBlack
