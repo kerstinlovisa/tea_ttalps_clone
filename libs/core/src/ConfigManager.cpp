@@ -122,6 +122,11 @@ void ConfigManager::GetValue<int>(std::string name, int &outputValue) {
 
 template <>
 void ConfigManager::GetValue<bool>(std::string name, bool &outputValue) {
+  if (name == "applyMuonScaleFactors" && applyMuonScaleFactors.has_value()) {
+    outputValue = applyMuonScaleFactors.value();
+    return;
+  }
+
   PyObject *pythonValue = GetPythonValue(name);
   if (!pythonValue || (!PyUnicode_Check(pythonValue) && !PyBool_Check(pythonValue))) {
     error() << "Failed retriving python value (int)\n";

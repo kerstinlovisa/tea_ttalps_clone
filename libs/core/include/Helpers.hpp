@@ -38,6 +38,7 @@
 #include <string>
 #include <fstream>
 #include <set>
+#include <optional>
 
 #include "Logger.hpp"
 
