@@ -21,6 +21,9 @@ ScaleFactorsManager::ScaleFactorsManager() {
     }
     muonSFvalues[name] = (TH2D *)TFile::Open(path.c_str())->Get(name.c_str());
   }
+
+  config.GetValue("applyMuonScaleFactors", applyMuonScaleFactors);
+  config.GetValue("applyMuonTriggerScaleFactors", applyMuonTriggerScaleFactors);
 }
 
 void ScaleFactorsManager::CreateMuonSFsHistogram(const ScaleFactorsMap &muonSFs, string outputPath, string histName) {
@@ -53,6 +56,8 @@ void ScaleFactorsManager::CreateMuonSFsHistogram(const ScaleFactorsMap &muonSFs,
 }
 
 float ScaleFactorsManager::GetMuonRecoScaleFactor(float eta, float pt) {
+  if (!applyMuonScaleFactors) return 1.0;
+
   string name = "";
 
   if (pt < 10) {
@@ -66,6 +71,7 @@ float ScaleFactorsManager::GetMuonRecoScaleFactor(float eta, float pt) {
 }
 
 float ScaleFactorsManager::GetMuonIDScaleFactor(float eta, float pt, MuonID id) {
+  if (!applyMuonScaleFactors) return 1.0;
   if (!id.PassesAnyId()) return 1.0;
 
   string name = "";
@@ -105,6 +111,7 @@ float ScaleFactorsManager::GetMuonIDScaleFactor(float eta, float pt, MuonID id) 
 }
 
 float ScaleFactorsManager::GetMuonIsoScaleFactor(float eta, float pt, MuonID id, MuonIso iso) {
+  if (!applyMuonScaleFactors) return 1.0;
   if (pt < 15) return 1;                // no SFs for low pt muons
   if (!id.PassesAnyId()) return 1.0;    // not considered an actual muon
   if (!iso.PassesAnyIso()) return 1.0;  // it's not isolated at all
@@ -181,12 +188,13 @@ float ScaleFactorsManager::GetMuonIsoScaleFactor(float eta, float pt, MuonID id,
 
 float ScaleFactorsManager::GetMuonTriggerScaleFactor(float eta, float pt, MuonID id, MuonIso iso, bool IsoMu24included,
                                                      bool IsoMu50included) {
-  if (pt < 15) return 1;                // no SFs for low pt muons
-  if (!id.PassesAnyId()) return 1.0;    // not considered an actual muon
-  if (!iso.PassesAnyIso()) return 1.0;  // it's not isolated at all
-  if (iso.pFIsoVeryLoose) return 1.0;   // no SFs for very loosely isolated muons
+  if (!applyMuonTriggerScaleFactors) return 1.0;
+  if (pt < 15) return 1;                                 // no SFs for low pt muons
+  if (!id.PassesAnyId()) return 1.0;                     // not considered an actual muon
+  if (!iso.PassesAnyIso()) return 1.0;                   // it's not isolated at all
+  if (iso.pFIsoVeryLoose) return 1.0;                    // no SFs for very loosely isolated muons
   if (!IsoMu24included && !IsoMu50included) return 1.0;  // no SFs if none of the muon triggers were present
-  
+
   vector<tuple<string, int, int>> names;  // name, id tightness, iso tightness
 
   if (IsoMu24included && !IsoMu50included) {
@@ -234,7 +242,8 @@ float ScaleFactorsManager::GetMuonTriggerScaleFactor(float eta, float pt, MuonID
   }
 
   if (!muonSFvalues.count(name)) {
-    warn() << "Muon Trigger SFs not defined for combination of ID & Iso: " << id.ToString() << " -- " << iso.ToString() << " with Iso24: " << IsoMu24included <<", Iso50: " << IsoMu50included << endl;
+    warn() << "Muon Trigger SFs not defined for combination of ID & Iso: " << id.ToString() << " -- " << iso.ToString()
+           << " with Iso24: " << IsoMu24included << ", Iso50: " << IsoMu50included << endl;
     return 1;
   }
   return GetScaleFactor(name, eta, pt);

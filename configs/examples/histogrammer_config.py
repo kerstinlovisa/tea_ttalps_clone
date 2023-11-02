@@ -30,3 +30,4 @@ histParams = (
 
 weightsBranchName = "genWeight"
 applyMuonScaleFactors = True
+applyMuonTriggerScaleFactors = True

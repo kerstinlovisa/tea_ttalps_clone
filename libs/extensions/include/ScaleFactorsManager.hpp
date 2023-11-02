@@ -35,6 +35,8 @@ class ScaleFactorsManager {
   }
 
   std::map<std::string, TH2D *> muonSFvalues;
+  bool applyMuonScaleFactors;
+  bool applyMuonTriggerScaleFactors;
 
   void CreateMuonSFsHistogram(const ScaleFactorsMap &muonSFs, std::string outputPath, std::string histName);
   void BringEtaPtToHistRange(TH2D *hist, float &eta, float &pt);

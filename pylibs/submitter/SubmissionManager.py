@@ -24,6 +24,10 @@ class SubmissionManager:
     self.applyMuonScaleFactors = None
     if hasattr(self.files_config, "applyMuonScaleFactors"):
       self.applyMuonScaleFactors = self.files_config.applyMuonScaleFactors
+      
+    self.applyMuonTriggerScaleFactors = None
+    if hasattr(self.files_config, "applyMuonTriggerScaleFactors"):
+      self.applyMuonTriggerScaleFactors = self.files_config.applyMuonTriggerScaleFactors
 
     if submission_system == SubmissionSystem.condor:
       self.__create_condor_directories()
@@ -127,6 +131,9 @@ class SubmissionManager:
       command_for_file = f"{self.command} {input_file_path} {output_file_path}"
       if self.applyMuonScaleFactors is not None:
         command_for_file += f" {int(self.applyMuonScaleFactors)}"
+      if self.applyMuonTriggerScaleFactors is not None:
+        command_for_file += f" {int(self.applyMuonTriggerScaleFactors)}"
+      
       self.__run_command(command_for_file)
   
   # option 2
@@ -136,6 +143,9 @@ class SubmissionManager:
       command_for_file = f"{self.command} {input_file_path} {output_file_path}"
       if self.applyMuonScaleFactors is not None:
         command_for_file += f" {int(self.applyMuonScaleFactors)}"
+      if self.applyMuonTriggerScaleFactors is not None:
+        command_for_file += f" {int(self.applyMuonTriggerScaleFactors)}"
+        
       self.__run_command(command_for_file)
         
   def __setup_temp_file_paths(self):
@@ -179,6 +189,11 @@ class SubmissionManager:
       os.system(f"sed -i 's/<muon_SFs>//g' {self.condor_run_script_name}")
     else:
       os.system(f"sed -i 's/<muon_SFs>/--apply_muon_SFs {int(self.applyMuonScaleFactors)}/g' {self.condor_run_script_name}")
+    
+    if self.applyMuonTriggerScaleFactors is None:
+      os.system(f"sed -i 's/<muonTrigger_SFs>//g' {self.condor_run_script_name}")
+    else:
+      os.system(f"sed -i 's/<muonTrigger_SFs>/--apply_muon_SFs {int(self.applyMuonTriggerScaleFactors)}/g' {self.condor_run_script_name}")
     
     self.__set_python_executable()
     
