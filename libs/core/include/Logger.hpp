@@ -9,6 +9,74 @@
 
 #include "Helpers.hpp"
 
+class Logger {
+public:
+  static Logger& GetInstance(){
+    static Logger instance;
+    return instance;
+  }
+
+  bool addWarning(){
+    std::string warning = currentWarningStream.str();
+    if(warnings.find(warning) == warnings.end()){
+      warnings[warning] = 1;
+      return false;
+    }
+    else{
+      warnings[warning]++;
+      return true;
+    }
+    return false;
+  }
+
+  bool addError(){
+    std::string error = currentErrorStream.str();
+    if(errors.find(error) == errors.end()){
+      errors[error] = 1;
+      return false;
+    }
+    else{
+      errors[error]++;
+      return true;
+    }
+    return false;
+  }
+
+  bool addFatal(){
+    std::string fatal = currentFatalStream.str();
+    if(fatals.find(fatal) == fatals.end()){
+      fatals[fatal] = 1;
+      return false;
+    }
+    else{
+      fatals[fatal]++;
+      return true;
+    }
+    return false;
+  }
+
+  void Print(){
+    for(auto &[warning, count] : warnings){
+      std::cout << "[occured " << count << " times] \033[1;33m" << warning << "\033[0m";
+    }
+    for(auto &[error, count] : errors){
+      std::cout << "[occured " << count << " times] \033[1;31m" << error << "\033[0m";
+    }
+    for(auto &[fatal, count] : fatals){
+      std::cout << "[occured " << count << " times] \033[1;35m" << fatal << "\033[0m";
+    }
+  }
+
+  std::ostringstream currentWarningStream, currentErrorStream, currentFatalStream;
+
+  Logger(Logger const&) = delete;
+  Logger& operator=(Logger const&) = delete;
+private:
+  Logger(){};
+  std::map<std::string, int> warnings, errors, fatals;
+};
+
+
 struct info {
   template <class T>
   info &operator<<(const T &v) {
@@ -24,11 +92,17 @@ struct info {
 struct warn {
   template <class T>
   warn &operator<<(const T &v) {
-    std::cout << "\033[1;33m" << v << "\033[0m";
+    auto &logger = Logger::GetInstance();
+    logger.currentWarningStream << v;
     return *this;
   }
   warn &operator<<(std::ostream &(*os)(std::ostream &)) {
-    std::cout << os;
+    auto &logger = Logger::GetInstance();
+    logger.currentWarningStream << os;
+    if(!logger.addWarning()){
+      std::cout << "[first occurence] \033[1;33m" << logger.currentWarningStream.str() << "\033[0m";
+    }
+    logger.currentWarningStream.str("");
     return *this;
   }
 };
@@ -36,11 +110,17 @@ struct warn {
 struct error {
   template <class T>
   error &operator<<(const T &v) {
-    std::cout << "\033[1;31m" << v << "\033[0m";
+    auto &logger = Logger::GetInstance();
+    logger.currentErrorStream << v;
     return *this;
   }
   error &operator<<(std::ostream &(*os)(std::ostream &)) {
-    std::cout << os;
+    auto &logger = Logger::GetInstance();
+    logger.currentErrorStream << os;
+    if(!logger.addError()){
+      std::cout << "[first occurence] \033[1;31m" << logger.currentErrorStream.str() << "\033[0m";
+    }
+    logger.currentErrorStream.str("");
     return *this;
   }
 };
@@ -48,11 +128,17 @@ struct error {
 struct fatal {
   template <class T>
   fatal &operator<<(const T &v) {
-    std::cout << "\033[1;35m" << v << "\033[0m";
+    auto &logger = Logger::GetInstance();
+    logger.currentFatalStream << v;
     return *this;
   }
   fatal &operator<<(std::ostream &(*os)(std::ostream &)) {
-    std::cout << os;
+    auto &logger = Logger::GetInstance();
+    logger.currentFatalStream << os;
+    if(!logger.addFatal()){
+      std::cout << "[first occurence] \033[1;35m" << logger.currentFatalStream.str() << "\033[0m";
+    }
+    logger.currentFatalStream.str("");
     return *this;
   }
 };
