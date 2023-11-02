@@ -1,4 +1,4 @@
-max_files = -1
+max_files = 1
 
 # skim = "skimmed_ttbarLike"
 # skim = "skimmed_ttZLike"
@@ -49,3 +49,4 @@ sample_path = f"backgrounds2018/WJetsToLNu"
 input_directory = f"{base_path}/{sample_path}/{skim}/"
 output_dir = f"{input_directory}/histograms"
 applyMuonScaleFactors = "collision_data" not in sample_path
+applyMuonTriggerScaleFactors = "collision_data" not in sample_path
