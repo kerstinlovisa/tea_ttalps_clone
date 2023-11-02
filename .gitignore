@@ -25,6 +25,8 @@ plots/*
 samples/*/*_hists.root
 samples/*/*/*
 
+data/*root
+
 update_tea.sh
 .gitignore_tea
 .gitignore_user
