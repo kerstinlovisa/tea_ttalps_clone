@@ -10,10 +10,12 @@
 using namespace std;
 
 void CheckArgs(int argc, char **argv) {
-  if (argc != 2 && argc != 4) {
+  if (argc != 2 && argc != 4 && argc != 5) {
     fatal() << "Usage: " << argv[0] << " config_path"<<endl;
     fatal() << "or"<<endl;
     fatal() << argv[0] << " config_path input_path output_path"<<endl;
+    fatal() << "or"<<endl;
+    fatal() << argv[0] << " config_path input_path output_path apply_muon_scale_factors"<<endl;
     exit(1);
   }
 }
@@ -23,9 +25,15 @@ int main(int argc, char **argv) {
   ConfigManager::Initialize(argv[1]);
   auto &config = ConfigManager::GetInstance();
 
-  if(argc == 4){
+  if(argc == 4 || argc == 5){
     config.SetInputPath(argv[2]);
     config.SetOutputPath(argv[3]);
+  }
+  if(argc == 5){
+    bool applyMounScaleFactors = atoi(argv[4]);
+    if (applyMounScaleFactors) info() << "Muon Scale Factors will be applied" << endl;
+    else info() << "Muon Scale Factors were explicitely turned off" << endl;
+    config.SetApplyMuonScaleFactors(applyMounScaleFactors);
   }
 
   auto eventReader = make_shared<EventReader>();
@@ -64,6 +72,9 @@ int main(int argc, char **argv) {
   
   cutFlowManager->Print();
   histogramsHandler->SaveHistograms();
+
+  auto &logger = Logger::GetInstance();
+  logger.Print();
 
   return 0;
 }

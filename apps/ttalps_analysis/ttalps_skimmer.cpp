@@ -77,5 +77,8 @@ int main(int argc, char **argv) {
   cutFlowManager->SaveCutFlow();
   eventWriter->Save();
 
+  auto &logger = Logger::GetInstance();
+  logger.Print();
+
   return 0;
 }

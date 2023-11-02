@@ -7,6 +7,7 @@ runDefaultHistograms = True
 runTriggerHistograms = False
 
 weightsBranchName = "genWeight"
+applyMuonScaleFactors = False
 
 from ttalps_skimmer_ttbarLike_semimuonic_config import extraEventCollections
 
