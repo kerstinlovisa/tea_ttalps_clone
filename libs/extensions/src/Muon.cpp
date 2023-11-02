@@ -24,5 +24,11 @@ float Muon::GetScaleFactor() {
   auto id = MuonID(Get("softId"), highPtID == 2, highPtID == 1, Get("tightId"), Get("mediumPromptId"), Get("mediumId"), Get("looseId"));
   float idSF = scaleFactorsManager.GetMuonIDScaleFactor(GetEta(), GetPt(), id);
 
-  return recoSF * idSF;
+  UChar_t pfIso = Get("pfIsoId");
+  UChar_t tkIso = Get("tkIsoId");
+
+  auto iso = MuonIso(tkIso == 1, tkIso == 2, pfIso == 1, pfIso == 2, pfIso == 3, pfIso == 4, pfIso == 5, pfIso == 6);
+  float isoSF = scaleFactorsManager.GetMuonIsoScaleFactor(GetEta(), GetPt(), id, iso);
+
+  return recoSF * idSF * isoSF;
 }

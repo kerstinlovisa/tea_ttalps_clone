@@ -53,15 +53,17 @@ void ScaleFactorsManager::CreateMuonSFsHistogram(const ScaleFactorsMap &muonSFs,
 }
 
 float ScaleFactorsManager::GetMuonRecoScaleFactor(float eta, float pt) {
-  TH2D *hist = nullptr;
+  string name = "";
 
   if (pt < 10) {
-    hist = muonSFvalues["muonLowPtRecoSFs"];
-  } else if (pt > 10 && pt < 200) {
-    hist = muonSFvalues["muonMidPtRecoSFs"];
+    name = "NUM_TrackerMuons_DEN_genTracks";
+  } else if (pt >= 10 && pt < 200) {
+    name = "NUM_TrackerMuons_DEN_genTracks";
   } else {
-    hist = muonSFvalues["muonHighPtRecoSFs"];
+    name = "NUM_GlobalMuons_DEN_TrackerMuons";
   }
+
+  TH2D *hist = muonSFvalues[name];
 
   BringEtaPtToHistRange(hist, eta, pt);
 
@@ -72,40 +74,122 @@ float ScaleFactorsManager::GetMuonRecoScaleFactor(float eta, float pt) {
 }
 
 float ScaleFactorsManager::GetMuonIDScaleFactor(float eta, float pt, MuonID id) {
-  if(!id.PassesAnyId()) return 1.0;
-  
-  string name = "muon";
+  if (!id.PassesAnyId()) return 1.0;
+
+  string name = "";
 
   if (pt < 15) {
-    name += "LowPt";
-  } else if (pt > 15) {
-    name += "MidPt";
+    if (id.soft)
+      name = "NUM_SoftID_DEN_TrackerMuons";
+    else if (id.tight)
+      name = "NUM_TightID_DEN_TrackerMuons";
+    else if (id.medium)
+      name = "NUM_MediumID_DEN_TrackerMuons";
+    else if (id.loose)
+      name = "NUM_LooseID_DEN_TrackerMuons";
+  } else if (pt >= 15) {
+    if (id.soft)
+      name = "NUM_SoftID_DEN_TrackerMuons";
+    else if (id.highPt)
+      name = "NUM_HighPtID_DEN_TrackerMuons";
+    else if (id.trkHighPt)
+      name = "NUM_TrkHighPtID_DEN_TrackerMuons";
+    else if (id.tight)
+      name = "NUM_TightID_DEN_TrackerMuons";
+    else if (id.mediumPrompt)
+      name = "NUM_MediumPromptID_DEN_TrackerMuons";
+    else if (id.medium)
+      name = "NUM_MediumID_DEN_TrackerMuons";
+    else if (id.loose)
+      name = "NUM_LooseID_DEN_TrackerMuons";
   }
 
-  if (id.soft)
-    name += "Soft";
-  else if (id.highPt)
-    name += "HighPt";
-  else if (id.trkHighPt)
-    name += "TrkHighPt";
-  else if (id.tight)
-    name += "Tight";
-  else if (id.mediumPrompt)
-    name += "MediumPrompt";
-  else if (id.medium)
-    name += "Medium";
-  else if (id.loose)
-    name += "Loose";
-  else {
-    warn() << "Muon ID is not defined: ";
-    id.Print();
+  if (!muonSFvalues.count(name)) {
+    warn() << "Muon ID SFs not defined for combination of pt and ID: " << (pt < 15 ? "low pt -- " : "mid-high pt -- ") << id.ToString()
+           << endl;
     return 1;
   }
 
-  name += "IDSFs";
+  TH2D *hist = muonSFvalues[name];
+
+  BringEtaPtToHistRange(hist, eta, pt);
+
+  int etaBin = hist->GetXaxis()->FindBin(eta);
+  int ptBin = hist->GetYaxis()->FindBin(pt);
+
+  return hist->GetBinContent(etaBin, ptBin);
+}
+
+float ScaleFactorsManager::GetMuonIsoScaleFactor(float eta, float pt, MuonID id, MuonIso iso) {
+  if (pt < 15) return 1; // no SFs for low pt muons
+  if (!id.PassesAnyId()) return 1.0; // not considered an actual muon
+  if (!iso.PassesAnyIso()) return 1.0; // it's not isolated at all
+  if (iso.pFIsoVeryLoose) return 1.0; // no SFs for very loosely isolated muons
+
+  vector<tuple<string, int, int>> names; // name, id tightness, iso tightness
+
+  if (id.trkHighPt) {
+    if (iso.tkIsoTight) {
+      names.push_back({"NUM_TightRelTkIso_DEN_TrkHighPtIDandIPCut", 6, 2});
+    }
+    if (iso.tkIsoLoose) {
+      names.push_back({"NUM_LooseRelTkIso_DEN_TrkHighPtIDandIPCut", 6, 1});
+    }
+  }
+  if (id.highPt) {
+    if (iso.tkIsoTight) {
+      names.push_back({"NUM_TightRelTkIso_DEN_HighPtIDandIPCut", 5, 2});
+    }
+    if (iso.tkIsoLoose) {
+      names.push_back({"NUM_LooseRelTkIso_DEN_HighPtIDandIPCut", 5, 1});
+    }
+  }
+  if (id.tight) {
+    if (iso.pFIsoTight || iso.pFIsoVeryTight || iso.pFIsoVeryVeryTight) {
+      names.push_back({"NUM_TightRelIso_DEN_TightIDandIPCut", 4, 2});
+    }
+    if (iso.pFIsoLoose || iso.pFIsoMedium) {
+      names.push_back({"NUM_LooseRelIso_DEN_TightIDandIPCut", 4, 1});
+    }
+  }
+  if (id.mediumPrompt) {
+    if (iso.pFIsoTight || iso.pFIsoVeryTight || iso.pFIsoVeryVeryTight) {
+      names.push_back({"NUM_TightRelIso_DEN_MediumPromptID", 3, 2});
+    }
+    if (iso.pFIsoLoose || iso.pFIsoMedium) {
+      names.push_back({"NUM_LooseRelIso_DEN_MediumPromptID", 3, 1});
+    }
+  }
+  if (id.medium || id.tight) {
+    if (iso.pFIsoTight || iso.pFIsoVeryTight || iso.pFIsoVeryVeryTight) {
+      names.push_back({"NUM_TightRelIso_DEN_MediumID", 2, 2});
+    }
+    if (iso.pFIsoLoose || iso.pFIsoMedium) {
+      names.push_back({"NUM_LooseRelIso_DEN_MediumID", 2, 1});
+    }
+  }
+  if (id.loose || id.medium || id.tight) {
+    if (iso.pFIsoLoose || iso.pFIsoMedium || iso.pFIsoTight || iso.pFIsoVeryTight || iso.pFIsoVeryVeryTight) {
+      names.push_back({"NUM_LooseRelIso_DEN_LooseID", 1, 1});
+    }
+  }
+
+  // order names first by id tightness, then by iso tightness
+  sort(names.begin(), names.end(), [](const tuple<string, int, int> &a, const tuple<string, int, int> &b) {
+    if (get<1>(a) == get<1>(b)) {
+      return get<2>(a) < get<2>(b);
+    }
+    return get<1>(a) < get<1>(b);
+  });
+
+  // get the element from names with the highest id tightness and iso tightness
+  string name = "";
+  if(names.size() != 0){
+    name = get<0>(names.back());
+  }
 
   if (!muonSFvalues.count(name)) {
-    warn() << "Muon SFs for " << name << " are not defined" << endl;
+    warn() << "Muon Iso SFs not defined for combination of ID & Iso: " << id.ToString() << " -- " << iso.ToString() << endl;
     return 1;
   }
 
