@@ -13,6 +13,9 @@ muonSFs = {
   
   # Iso SFs
   **scaleFactorsReader.getMuonScaleFactors("../data/Efficiencies_muon_generalTracks_Z_Run2018_UL_ISO.json"),
+  
+  # Trigger SFs
+  **scaleFactorsReader.getMuonTriggerScaleFactors("../data/Efficiencies_muon_generalTracks_Z_Run2018_UL_SingleMuonTriggers_schemaV2.json"),
 }
 
 print("Loaded SFs:")

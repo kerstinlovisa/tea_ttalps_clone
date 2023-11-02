@@ -10,7 +10,7 @@
 using namespace std;
 
 HistogramsFiller::HistogramsFiller(shared_ptr<HistogramsHandler> histogramsHandler_) : histogramsHandler(histogramsHandler_) {
-  auto &config = ConfigManager::GetInstance();
+  auto& config = ConfigManager::GetInstance();
 
   try {
     config.GetHistogramsParams(defaultHistVariables, "defaultHistParams");
@@ -113,6 +113,20 @@ void HistogramsFiller::FillDefaultVariables(const std::shared_ptr<Event> event) 
   } catch (...) {
   }
 
+  auto& scaleFactorsManager = ScaleFactorsManager::GetInstance();
+  bool IsoMu24included = false;
+  bool IsoMu50included = false;
+  
+  try {
+    IsoMu24included = event->Get("HLT_IsoMu24");
+  } catch (...) {
+  }
+
+  try {
+    IsoMu50included = event->Get("HLT_IsoMu50");
+  } catch (...) {
+  }
+
   for (auto& [title, params] : defaultHistVariables) {
     string collectionName = params.collection;
     string branchName = params.variable;
@@ -128,12 +142,14 @@ void HistogramsFiller::FillDefaultVariables(const std::shared_ptr<Event> event) 
     } else {
       auto collection = event->GetCollection(collectionName);
       for (auto object : *collection) {
-        if(collectionName == "Muon" || object->GetOriginalCollection() == "Muon") {
+        if (collectionName == "Muon" || object->GetOriginalCollection() == "Muon") {
           auto muon = asMuon(object);
           float muonSF = muon->GetScaleFactor();
-          histogramsHandler->Fill(title, GetValue(object, branchName), weight*muonSF);
-        }
-        else{
+          float triggerSF = scaleFactorsManager.GetMuonTriggerScaleFactor(muon->GetEta(), muon->GetPt(), muon->GetID(), muon->GetIso(),
+                                                                          IsoMu24included, IsoMu50included);
+
+          histogramsHandler->Fill(title, GetValue(object, branchName), weight * muonSF * triggerSF);
+        } else {
           histogramsHandler->Fill(title, GetValue(object, branchName), weight);
         }
       }
@@ -146,12 +162,11 @@ void HistogramsFiller::FillCutFlow(const std::shared_ptr<CutFlowManager> cutFlow
   int cutFlowLength = cutFlowManager->GetCutFlow().size();
   TH1D* cutFlowHist = new TH1D("cutFlow", "cutFlow", cutFlowLength, 0, cutFlowLength + 1);
 
-
   map<int, pair<string, float>> sortedWeightsAfterCuts;
-  for (auto &[cutName, sumOfWeights] : cutFlowManager->GetCutFlow()) {
+  for (auto& [cutName, sumOfWeights] : cutFlowManager->GetCutFlow()) {
     string number = cutName.substr(0, cutName.find("_"));
     int index = stoi(number);
-    sortedWeightsAfterCuts[index]  = {cutName, sumOfWeights};
+    sortedWeightsAfterCuts[index] = {cutName, sumOfWeights};
   }
 
   for (auto& [index, values] : sortedWeightsAfterCuts) {

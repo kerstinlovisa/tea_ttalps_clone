@@ -28,6 +28,9 @@ class Muon {
 
   float GetScaleFactor();
 
+  MuonID GetID();
+  MuonIso GetIso();
+
  private:
   std::shared_ptr<PhysicsObject> physicsObject;
 };

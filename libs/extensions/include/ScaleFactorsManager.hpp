@@ -23,6 +23,7 @@ class ScaleFactorsManager {
   float GetMuonRecoScaleFactor(float eta, float pt);
   float GetMuonIDScaleFactor(float eta, float pt, MuonID id);
   float GetMuonIsoScaleFactor(float eta, float pt, MuonID id, MuonIso iso);
+  float GetMuonTriggerScaleFactor(float eta, float pt, MuonID id, MuonIso iso, bool IsoMu24included, bool IsoMu50included);
 
  private:
   ScaleFactorsManager();
@@ -37,6 +38,7 @@ class ScaleFactorsManager {
 
   void CreateMuonSFsHistogram(const ScaleFactorsMap &muonSFs, std::string outputPath, std::string histName);
   void BringEtaPtToHistRange(TH2D *hist, float &eta, float &pt);
+  float GetScaleFactor(std::string name, float eta, float pt);
 };
 
 struct MuonID {
@@ -65,9 +67,7 @@ struct MuonID {
     return name;
   }
 
-  void Print(){
-    info() << ToString() << std::endl;
-  }
+  void Print() { info() << ToString() << std::endl; }
 };
 
 struct MuonIso {
@@ -97,27 +97,25 @@ struct MuonIso {
 
   std::string ToString() {
     std::string name = "";
-    if(tkIsoLoose) name += "tkIsoLoose ";
-    if(tkIsoTight) name += "tkIsoTight ";
-    if(pFIsoVeryLoose) name += "pFIsoVeryLoose ";
-    if(pFIsoLoose) name += "pFIsoLoose ";
-    if(pFIsoMedium) name += "pFIsoMedium ";
-    if(pFIsoTight) name += "pFIsoTight ";
-    if(pFIsoVeryTight) name += "pFIsoVeryTight ";
-    if(pFIsoVeryVeryTight) name += "pFIsoVeryVeryTight ";
+    if (tkIsoLoose) name += "tkIsoLoose ";
+    if (tkIsoTight) name += "tkIsoTight ";
+    if (pFIsoVeryLoose) name += "pFIsoVeryLoose ";
+    if (pFIsoLoose) name += "pFIsoLoose ";
+    if (pFIsoMedium) name += "pFIsoMedium ";
+    if (pFIsoTight) name += "pFIsoTight ";
+    if (pFIsoVeryTight) name += "pFIsoVeryTight ";
+    if (pFIsoVeryVeryTight) name += "pFIsoVeryVeryTight ";
     return name;
   }
 
-  void Print(){
-    info() << ToString() << std::endl;
-  }
-// Muon_pfIsoId : UChar_t PFIso ID from miniAOD selector (1=PFIsoVeryLoose, 2=PFIsoLoose, 3=PFIsoMedium, 4=PFIsoTight, 5=PFIsoVeryTight,
-// 6=PFIsoVeryVeryTight) 
-// Muon_tkIsoId : UChar_t TkIso ID (1=TkIsoLoose, 2=TkIsoTight)
+  void Print() { info() << ToString() << std::endl; }
+  // Muon_pfIsoId : UChar_t PFIso ID from miniAOD selector (1=PFIsoVeryLoose, 2=PFIsoLoose, 3=PFIsoMedium, 4=PFIsoTight, 5=PFIsoVeryTight,
+  // 6=PFIsoVeryVeryTight)
+  // Muon_tkIsoId : UChar_t TkIso ID (1=TkIsoLoose, 2=TkIsoTight)
 
-// Muon_miniIsoId : UChar_t MiniIso ID from miniAOD selector (1=MiniIsoLoose, 2=MiniIsoMedium, 3=MiniIsoTight, 4=MiniIsoVeryTight)
-// Muon_multiIsoId : UChar_t MultiIsoId from miniAOD selector (1=MultiIsoLoose, 2=MultiIsoMedium)
-// Muon_puppiIsoId : UChar_t PuppiIsoId from miniAOD selector (1=Loose, 2=Medium, 3=Tight)
+  // Muon_miniIsoId : UChar_t MiniIso ID from miniAOD selector (1=MiniIsoLoose, 2=MiniIsoMedium, 3=MiniIsoTight, 4=MiniIsoVeryTight)
+  // Muon_multiIsoId : UChar_t MultiIsoId from miniAOD selector (1=MultiIsoLoose, 2=MultiIsoMedium)
+  // Muon_puppiIsoId : UChar_t PuppiIsoId from miniAOD selector (1=Loose, 2=Medium, 3=Tight)
 };
 
 #endif /* ScaleFactorsManager_hpp */

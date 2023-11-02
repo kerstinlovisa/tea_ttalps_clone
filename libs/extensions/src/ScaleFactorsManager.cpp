@@ -62,15 +62,7 @@ float ScaleFactorsManager::GetMuonRecoScaleFactor(float eta, float pt) {
   } else {
     name = "NUM_GlobalMuons_DEN_TrackerMuons";
   }
-
-  TH2D *hist = muonSFvalues[name];
-
-  BringEtaPtToHistRange(hist, eta, pt);
-
-  int etaBin = hist->GetXaxis()->FindBin(eta);
-  int ptBin = hist->GetYaxis()->FindBin(pt);
-
-  return hist->GetBinContent(etaBin, ptBin);
+  return GetScaleFactor(name, eta, pt);
 }
 
 float ScaleFactorsManager::GetMuonIDScaleFactor(float eta, float pt, MuonID id) {
@@ -109,24 +101,16 @@ float ScaleFactorsManager::GetMuonIDScaleFactor(float eta, float pt, MuonID id) 
            << endl;
     return 1;
   }
-
-  TH2D *hist = muonSFvalues[name];
-
-  BringEtaPtToHistRange(hist, eta, pt);
-
-  int etaBin = hist->GetXaxis()->FindBin(eta);
-  int ptBin = hist->GetYaxis()->FindBin(pt);
-
-  return hist->GetBinContent(etaBin, ptBin);
+  return GetScaleFactor(name, eta, pt);
 }
 
 float ScaleFactorsManager::GetMuonIsoScaleFactor(float eta, float pt, MuonID id, MuonIso iso) {
-  if (pt < 15) return 1; // no SFs for low pt muons
-  if (!id.PassesAnyId()) return 1.0; // not considered an actual muon
-  if (!iso.PassesAnyIso()) return 1.0; // it's not isolated at all
-  if (iso.pFIsoVeryLoose) return 1.0; // no SFs for very loosely isolated muons
+  if (pt < 15) return 1;                // no SFs for low pt muons
+  if (!id.PassesAnyId()) return 1.0;    // not considered an actual muon
+  if (!iso.PassesAnyIso()) return 1.0;  // it's not isolated at all
+  if (iso.pFIsoVeryLoose) return 1.0;   // no SFs for very loosely isolated muons
 
-  vector<tuple<string, int, int>> names; // name, id tightness, iso tightness
+  vector<tuple<string, int, int>> names;  // name, id tightness, iso tightness
 
   if (id.trkHighPt) {
     if (iso.tkIsoTight) {
@@ -184,7 +168,7 @@ float ScaleFactorsManager::GetMuonIsoScaleFactor(float eta, float pt, MuonID id,
 
   // get the element from names with the highest id tightness and iso tightness
   string name = "";
-  if(names.size() != 0){
+  if (names.size() != 0) {
     name = get<0>(names.back());
   }
 
@@ -192,7 +176,71 @@ float ScaleFactorsManager::GetMuonIsoScaleFactor(float eta, float pt, MuonID id,
     warn() << "Muon Iso SFs not defined for combination of ID & Iso: " << id.ToString() << " -- " << iso.ToString() << endl;
     return 1;
   }
+  return GetScaleFactor(name, eta, pt);
+}
 
+float ScaleFactorsManager::GetMuonTriggerScaleFactor(float eta, float pt, MuonID id, MuonIso iso, bool IsoMu24included,
+                                                     bool IsoMu50included) {
+  if (pt < 15) return 1;                // no SFs for low pt muons
+  if (!id.PassesAnyId()) return 1.0;    // not considered an actual muon
+  if (!iso.PassesAnyIso()) return 1.0;  // it's not isolated at all
+  if (iso.pFIsoVeryLoose) return 1.0;   // no SFs for very loosely isolated muons
+  if (!IsoMu24included && !IsoMu50included) return 1.0;  // no SFs if none of the muon triggers were present
+  
+  vector<tuple<string, int, int>> names;  // name, id tightness, iso tightness
+
+  if (IsoMu24included && !IsoMu50included) {
+    if (id.tight) {
+      if (iso.pFIsoTight || iso.pFIsoVeryTight || iso.pFIsoVeryVeryTight) {
+        names.push_back({"NUM_IsoMu24_DEN_CutBasedIdTight_and_PFIsoTight", 2, 2});
+      }
+    }
+    if (id.medium) {
+      if (iso.pFIsoMedium || iso.pFIsoTight || iso.pFIsoVeryTight || iso.pFIsoVeryVeryTight) {
+        names.push_back({"NUM_IsoMu24_DEN_CutBasedIdMedium_and_PFIsoMedium", 1, 1});
+      }
+    }
+  } else if (IsoMu24included && IsoMu50included) {
+    if (id.tight) {
+      if (iso.pFIsoTight || iso.pFIsoVeryTight || iso.pFIsoVeryVeryTight) {
+        names.push_back({"NUM_IsoMu24_or_Mu50_DEN_CutBasedIdTight_and_PFIsoTight", 2, 2});
+      }
+    }
+    if (id.medium) {
+      if (iso.pFIsoMedium || iso.pFIsoTight || iso.pFIsoVeryTight || iso.pFIsoVeryVeryTight) {
+        names.push_back({"NUM_IsoMu24_or_Mu50_DEN_CutBasedIdMedium_and_PFIsoMedium", 1, 1});
+      }
+    }
+  } else if (!IsoMu24included && IsoMu50included) {
+    if (id.highPt) {
+      if (iso.tkIsoLoose || iso.tkIsoTight) {
+        names.push_back({"NUM_Mu50_or_OldMu100_or_TkMu100_DEN_CutBasedIdGlobalHighPt_and_TkIsoLoose", 1, 1});
+      }
+    }
+  }
+
+  // order names first by id tightness, then by iso tightness
+  sort(names.begin(), names.end(), [](const tuple<string, int, int> &a, const tuple<string, int, int> &b) {
+    if (get<1>(a) == get<1>(b)) {
+      return get<2>(a) < get<2>(b);
+    }
+    return get<1>(a) < get<1>(b);
+  });
+
+  // get the element from names with the highest id tightness and iso tightness
+  string name = "";
+  if (names.size() != 0) {
+    name = get<0>(names.back());
+  }
+
+  if (!muonSFvalues.count(name)) {
+    warn() << "Muon Trigger SFs not defined for combination of ID & Iso: " << id.ToString() << " -- " << iso.ToString() << " with Iso24: " << IsoMu24included <<", Iso50: " << IsoMu50included << endl;
+    return 1;
+  }
+  return GetScaleFactor(name, eta, pt);
+}
+
+float ScaleFactorsManager::GetScaleFactor(string name, float eta, float pt) {
   TH2D *hist = muonSFvalues[name];
 
   BringEtaPtToHistRange(hist, eta, pt);
