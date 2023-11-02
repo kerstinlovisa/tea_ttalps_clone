@@ -33,6 +33,7 @@ int main(int argc, char **argv) {
     if (applyMounScaleFactors) info() << "Muon Scale Factors will be applied" << endl;
     else info() << "Muon Scale Factors were explicitely turned off" << endl;
 
+    bool applyMounTriggerScaleFactors = atoi(argv[5]);
     if (applyMounTriggerScaleFactors) info() << "Muon Trigger Scale Factors will be applied" << endl;
     else info() << "Muon Trigger Scale Factors were explicitely turned off" << endl;
     config.SetApplyMuonScaleFactors(applyMounScaleFactors);
