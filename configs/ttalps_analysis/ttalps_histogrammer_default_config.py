@@ -1,3 +1,5 @@
+from scale_factors_config import *
+
 nEvents = -1
 printEveryNevents = 10000
 
