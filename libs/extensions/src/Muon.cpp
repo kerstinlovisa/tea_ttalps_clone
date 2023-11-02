@@ -1,4 +1,5 @@
 #include "Muon.hpp"
+#include "ConfigManager.hpp"
 
 using namespace std;
 
@@ -11,6 +12,11 @@ TLorentzVector Muon::GetFourVector() {
 }
 
 float Muon::GetScaleFactor() {
+  auto &config = ConfigManager::GetInstance();
+  bool applyMuonScaleFactors;
+  config.GetValue("applyMuonScaleFactors", applyMuonScaleFactors);
+  if(!applyMuonScaleFactors) return 1;
+
   auto &scaleFactorsManager = ScaleFactorsManager::GetInstance();
   float recoSF = scaleFactorsManager.GetMuonRecoScaleFactor(GetEta(), GetPt());
 
