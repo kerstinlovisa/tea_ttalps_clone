@@ -193,7 +193,7 @@ class SubmissionManager:
     if self.applyMuonTriggerScaleFactors is None:
       os.system(f"sed -i 's/<muonTrigger_SFs>//g' {self.condor_run_script_name}")
     else:
-      os.system(f"sed -i 's/<muonTrigger_SFs>/--apply_muon_SFs {int(self.applyMuonTriggerScaleFactors)}/g' {self.condor_run_script_name}")
+      os.system(f"sed -i 's/<muonTrigger_SFs>/--apply_muon_trigger_SFs {int(self.applyMuonTriggerScaleFactors)}/g' {self.condor_run_script_name}")
     
     self.__set_python_executable()
     
