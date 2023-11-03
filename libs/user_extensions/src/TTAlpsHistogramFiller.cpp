@@ -111,11 +111,19 @@ void TTAlpsHistogramFiller::FillLeadingPt(const std::shared_ptr<Event> event, st
     weight = event->Get(weightsBranchName);
   } catch (...) {
   }
+  auto maxPtObject = eventProcessor->GetMaxPtObject(event, params.collection);
+  if(!maxPtObject) return;
 
-  // TODO: apply muon SFs if applicable
-  float maxPt = eventProcessor->GetMaxPt(event, params.collection);
-  if (maxPt < 0) return;
-  histogramsHandler->Fill(histName, maxPt, weight);
+  float pt = maxPtObject->Get("pt");
+  if (params.collection == "Muon" || maxPtObject->GetOriginalCollection() == "Muon") {
+    
+    auto muon = asMuon(maxPtObject);
+    float muonSF = muon->GetScaleFactor();
+
+    histogramsHandler->Fill(histName, pt, weight * muonSF);
+  } else {
+    histogramsHandler->Fill(histName, pt, weight);
+  }
 }
 
 void TTAlpsHistogramFiller::FillAllSubLeadingPt(const std::shared_ptr<Event> event, std::string histName, const HistogramParams &params) {
