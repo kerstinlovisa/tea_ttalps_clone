@@ -63,14 +63,25 @@ bool EventProcessor::PassesEventSelections(const shared_ptr<Event> event, shared
 }
 
 float EventProcessor::GetMaxPt(shared_ptr<Event> event, string collectionName) {
-  auto collection = event->GetCollection(collectionName);
+  auto maxPtObject = GetMaxPtObject(event, collectionName);
+  if(!maxPtObject) return -1;
+  float maxPt = maxPtObject->Get("pt");
+  return maxPt;
+}
 
+shared_ptr<PhysicsObject> EventProcessor::GetMaxPtObject(shared_ptr<Event> event, string collectionName) {
+  auto collection = event->GetCollection(collectionName);
   float maxPt = -1;
+
+  shared_ptr<PhysicsObject> maxPtObject = nullptr;
   for (auto element : *collection) {
     float pt = element->Get("pt");
-    if (pt > maxPt) maxPt = pt;
+    if (pt > maxPt) {
+      maxPt = pt;
+      maxPtObject = element;
+    }
   }
-  return maxPt;
+  return maxPtObject;
 }
 
 float EventProcessor::GetHt(shared_ptr<Event> event, string collectionName) {

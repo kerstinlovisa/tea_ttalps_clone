@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 from Legend import Legend
+from Logger import *
 
 # enum class with signal, background, data
 class SampleType(Enum):
@@ -30,5 +31,5 @@ class Sample:
   custom_legend: Legend = None
   
   def __post_init__(self):
-    if self.cross_sections is None and self.cross_section < 0:
+    if self.cross_sections is not None and self.cross_section < 0:
       self.cross_section = self.cross_sections[self.name]
