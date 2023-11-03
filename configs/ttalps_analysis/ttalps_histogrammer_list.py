@@ -1,4 +1,4 @@
-max_files = 1
+max_files = -1
 
 # skim = "skimmed_ttbarLike"
 # skim = "skimmed_ttZLike"
@@ -20,7 +20,7 @@ base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
 # sample_path = f"backgrounds2018/ST_t-channel_top"
 # sample_path = f"backgrounds2018/TTZToLLNuNu"
 # sample_path = f"backgrounds2018/TTWJetsToLNu"
-sample_path = f"backgrounds2018/WJetsToLNu"
+# sample_path = f"backgrounds2018/WJetsToLNu"
 
 # QCD
 # sample_path = f"backgrounds2018/QCD_Pt_15to30"
@@ -43,10 +43,14 @@ sample_path = f"backgrounds2018/WJetsToLNu"
 # sample_path = f"collision_data2018/SingleMuon2018A"
 # sample_path = f"collision_data2018/SingleMuon2018B"
 # sample_path = f"collision_data2018/SingleMuon2018C"
-# sample_path = f"collision_data2018/SingleMuon2018D"
+sample_path = f"collision_data2018/SingleMuon2018D"
 
 
 input_directory = f"{base_path}/{sample_path}/{skim}/"
-output_dir = f"{input_directory}/histograms"
-applyMuonScaleFactors = "collision_data" not in sample_path
-applyMuonTriggerScaleFactors = "collision_data" not in sample_path
+output_dir = f"{input_directory}/histograms_noSFs/"
+
+# applyMuonScaleFactors = "collision_data" not in sample_path
+# applyMuonTriggerScaleFactors = "collision_data" not in sample_path
+
+applyMuonScaleFactors = False
+applyMuonTriggerScaleFactors = False

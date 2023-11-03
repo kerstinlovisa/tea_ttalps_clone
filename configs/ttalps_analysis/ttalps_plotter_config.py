@@ -7,7 +7,12 @@ from HistogramNormalizer import NormalizationType
 
 base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms/"
 # base_path = "/Users/jeremi/Documents/Physics/DESY/ttalps_cms.nosync/data/"
+
 output_path = "../plots"
+# output_path = "../plots_noSFs"
+
+hist_path = "histograms"
+# hist_path = "histograms_noSFs"
 
 # skim = ""
 # skim = "skimmed_looseSemileptonic"
@@ -41,7 +46,7 @@ plotting_options = {
 
 histograms = (
 #           name                                title logy    norm_type                 rebin xmin  xmax    ymin    ymax,   xlabel                                        ylabel
-  Histogram("Event_nTightMuons"                 , "", True  , NormalizationType.to_lumi, 1  , 0     , 10    , 1e1   , 1e9   , "Number of loose #mu"                       , "# events (2018)"   ),
+  Histogram("Event_nTightMuons"                 , "", True  , NormalizationType.to_lumi, 1  , 0     , 10    , 1e1   , 1e9   , "Number of tight #mu"                       , "# events (2018)"   ),
   Histogram("TightMuons_pt"                     , "", True  , NormalizationType.to_lumi, 50 , 0     , 1000  , 1e-5  , 1e4   , "tight #mu p_{T} [GeV]"                     , "# events (2018)"   ),
   Histogram("TightMuons_leadingPt"              , "", True  , NormalizationType.to_lumi, 50 , 0     , 1000  , 1e-5  , 1e4   , "leading tight #mu p_{T} [GeV]"             , "# events (2018)"   ),
   Histogram("TightMuons_subleadingPt"           , "", True  , NormalizationType.to_lumi, 50 , 0     , 1000  , 1e-5  , 1e4   , "all subleading tight #mu p_{T} [GeV]"      , "# events (2018)"   ),
@@ -97,7 +102,7 @@ weightsBranchName = "genWeight"
 samples = (
   Sample(
     name="SingleMuon2018",
-    file_path=f"{base_path}/collision_data2018/SingleMuon2018_{skim}_histograms.root",
+    file_path=f"{base_path}/collision_data2018/SingleMuon2018_{skim}_{hist_path}.root",
     type=SampleType.data,
     cross_section=1,
     line_alpha=1,
@@ -109,7 +114,7 @@ samples = (
   ),
   Sample(
     name="ttZJets",
-    file_path=f"{base_path}/backgrounds2018/ttZJets/{skim}/histograms/histograms.root",
+    file_path=f"{base_path}/backgrounds2018/ttZJets/{skim}/{hist_path}/histograms.root",
     type=SampleType.background,
     cross_section=0.5407,
     line_alpha=0,
@@ -120,7 +125,7 @@ samples = (
   ),
   Sample(
     name="ttHToMuMu",
-    file_path=f"{base_path}/backgrounds2018/ttHToMuMu/{skim}/histograms/histograms.root",
+    file_path=f"{base_path}/backgrounds2018/ttHToMuMu/{skim}/{hist_path}/histograms.root",
     type=SampleType.background,
     cross_section=0.5269,
     line_alpha=0,
@@ -131,7 +136,7 @@ samples = (
   ),
   Sample(
     name="ttHTobb",
-    file_path=f"{base_path}/backgrounds2018/ttHTobb/{skim}/histograms/histograms.root",
+    file_path=f"{base_path}/backgrounds2018/ttHTobb/{skim}/{hist_path}/histograms.root",
     type=SampleType.background,
     cross_section=0.5418,
     line_alpha=0,
@@ -142,7 +147,7 @@ samples = (
   ),
   Sample(
     name="ttWJets",
-    file_path=f"{base_path}/backgrounds2018/ttWJets/{skim}/histograms/histograms.root",
+    file_path=f"{base_path}/backgrounds2018/ttWJets/{skim}/{hist_path}/histograms.root",
     type=SampleType.background,
     cross_section=0.4611,
     line_alpha=0,
@@ -153,7 +158,7 @@ samples = (
   ),
   Sample(
     name="ST_tW_top",
-    file_path=f"{base_path}/backgrounds2018/ST_tW_top/{skim}/histograms/histograms.root",
+    file_path=f"{base_path}/backgrounds2018/ST_tW_top/{skim}/{hist_path}/histograms.root",
     type=SampleType.background,
     cross_section=32.45,
     line_alpha=0,
@@ -164,7 +169,7 @@ samples = (
   ),
   Sample(
     name="ST_tW_antitop",
-    file_path=f"{base_path}/backgrounds2018/ST_tW_antitop/{skim}/histograms/histograms.root",
+    file_path=f"{base_path}/backgrounds2018/ST_tW_antitop/{skim}/{hist_path}/histograms.root",
     type=SampleType.background,
     cross_section=32.51,
     line_alpha=0,
@@ -175,7 +180,7 @@ samples = (
   ),
   Sample(
     name="TTToSemiLeptonic",
-    file_path=f"{base_path}/backgrounds2018/TTToSemiLeptonic/{skim}/histograms/histograms.root",
+    file_path=f"{base_path}/backgrounds2018/TTToSemiLeptonic/{skim}/{hist_path}/histograms.root",
     type=SampleType.background,
     cross_section=365.34,
     line_alpha=0,
@@ -186,7 +191,7 @@ samples = (
   ),
   Sample(
     name="qcd_120to170",
-    file_path=f"{base_path}/backgrounds2018/QCD_Pt_120to170/{skim}/histograms/histograms.root",
+    file_path=f"{base_path}/backgrounds2018/QCD_Pt_120to170/{skim}/{hist_path}/histograms.root",
     type=SampleType.background,
     cross_section=406800.0,
     line_alpha=0,
@@ -197,7 +202,7 @@ samples = (
   ),
   Sample(
     name="qcd_170to300",
-    file_path=f"{base_path}/backgrounds2018/QCD_Pt_170to300/{skim}/histograms/histograms.root",
+    file_path=f"{base_path}/backgrounds2018/QCD_Pt_170to300/{skim}/{hist_path}/histograms.root",
     type=SampleType.background,
     cross_section=103300.0,
     line_alpha=0,
@@ -208,7 +213,7 @@ samples = (
   ),
   Sample(
     name="qcd_300to470",
-    file_path=f"{base_path}/backgrounds2018/QCD_Pt_300to470/{skim}/histograms/histograms.root",
+    file_path=f"{base_path}/backgrounds2018/QCD_Pt_300to470/{skim}/{hist_path}/histograms.root",
     type=SampleType.background,
     cross_section=6826.0,
     line_alpha=0,
@@ -219,7 +224,7 @@ samples = (
   ),
   Sample(
     name="qcd_470to600",
-    file_path=f"{base_path}/backgrounds2018/QCD_Pt_470to600/{skim}/histograms/histograms.root",
+    file_path=f"{base_path}/backgrounds2018/QCD_Pt_470to600/{skim}/{hist_path}/histograms.root",
     type=SampleType.background,
     cross_section=552.6,
     line_alpha=0,
@@ -230,7 +235,7 @@ samples = (
   ),
   Sample(
     name="qcd_600to800",
-    file_path=f"{base_path}/backgrounds2018/QCD_Pt_600to800/{skim}/histograms/histograms.root",
+    file_path=f"{base_path}/backgrounds2018/QCD_Pt_600to800/{skim}/{hist_path}/histograms.root",
     type=SampleType.background,
     cross_section=156.6,
     line_alpha=0,
@@ -241,7 +246,7 @@ samples = (
   ),
   Sample(
     name="qcd_800to1000",
-    file_path=f"{base_path}/backgrounds2018/QCD_Pt_800to1000/{skim}/histograms/histograms.root",
+    file_path=f"{base_path}/backgrounds2018/QCD_Pt_800to1000/{skim}/{hist_path}/histograms.root",
     type=SampleType.background,
     cross_section=26.32,
     line_alpha=0,
@@ -252,7 +257,7 @@ samples = (
   ),
   Sample(
     name="qcd_1000to1400",
-    file_path=f"{base_path}/backgrounds2018/QCD_Pt_1000to1400/{skim}/histograms/histograms.root",
+    file_path=f"{base_path}/backgrounds2018/QCD_Pt_1000to1400/{skim}/{hist_path}/histograms.root",
     type=SampleType.background,
     cross_section=7.5,
     line_alpha=0,
@@ -263,7 +268,7 @@ samples = (
   ),
   Sample(
     name="qcd_1400to1800",
-    file_path=f"{base_path}/backgrounds2018/QCD_Pt_1400to1800/{skim}/histograms/histograms.root",
+    file_path=f"{base_path}/backgrounds2018/QCD_Pt_1400to1800/{skim}/{hist_path}/histograms.root",
     type=SampleType.background,
     cross_section=0.6479,
     line_alpha=0,
@@ -274,7 +279,7 @@ samples = (
   ),
   Sample(
     name="top_t_channel",
-    file_path=f"{base_path}/backgrounds2018/ST_t-channel_top/{skim}/histograms/histograms.root",
+    file_path=f"{base_path}/backgrounds2018/ST_t-channel_top/{skim}/{hist_path}/histograms.root",
     type=SampleType.background,
     cross_section=115.3,
     line_alpha=0,
@@ -285,7 +290,7 @@ samples = (
   ),
   Sample(
     name="antitop_t_channel",
-    file_path=f"{base_path}/backgrounds2018/ST_t-channel_antitop/{skim}/histograms/histograms.root",
+    file_path=f"{base_path}/backgrounds2018/ST_t-channel_antitop/{skim}/{hist_path}/histograms.root",
     type=SampleType.background,
     cross_section=69.09,
     line_alpha=0,
@@ -296,7 +301,7 @@ samples = (
   ),
   Sample(
     name="ttz_llnunu",
-    file_path=f"{base_path}/backgrounds2018/TTZToLLNuNu/{skim}/histograms/histograms.root",
+    file_path=f"{base_path}/backgrounds2018/TTZToLLNuNu/{skim}/{hist_path}/histograms.root",
     type=SampleType.background,
     cross_section=0.2439,
     line_alpha=0,
