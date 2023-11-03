@@ -50,8 +50,8 @@ skim = "skimmed_looseSemimuonic_tightMuon"
 # dataset = "/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM"
 # output_dir = f"{base_path}/backgrounds2018/WJetsToLNu/{skim}/"
 
-dataset = "/DYJetsToMuMu_M-10to50_H2ErratumFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM"
-output_dir = f"{base_path}/backgrounds2018/DYJetsToMuMu_M-10to50/{skim}/"
+# dataset = "/DYJetsToMuMu_M-10to50_H2ErratumFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM"
+# output_dir = f"{base_path}/backgrounds2018/DYJetsToMuMu_M-10to50/{skim}/"
 
 # QCD
 # dataset = "/QCD_Pt_15to30_TuneCP5_13TeV_pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM"
@@ -98,6 +98,43 @@ output_dir = f"{base_path}/backgrounds2018/DYJetsToMuMu_M-10to50/{skim}/"
 
 # dataset = "/QCD_Pt_3200toInf_TuneCP5_13TeV_pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM"
 # output_dir = f"{base_path}/backgrounds2018/QCD_Pt_3200toInf/{skim}/"
+
+# QCD mu enhanced
+# dataset = "/QCD_Pt-15To20_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
+# output_dir = f"{base_path}/backgrounds2018/QCD_Pt_15to20_MuEnriched/{skim}/"
+
+# dataset = "/QCD_Pt-20To30_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
+# output_dir = f"{base_path}/backgrounds2018/QCD_Pt_20to30_MuEnriched/{skim}/"
+
+# dataset = "/QCD_Pt-30To50_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
+# output_dir = f"{base_path}/backgrounds2018/QCD_Pt_30to50_MuEnriched/{skim}/"
+
+# dataset = "/QCD_Pt-50To80_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
+# output_dir = f"{base_path}/backgrounds2018/QCD_Pt_50to80_MuEnriched/{skim}/"
+
+# dataset = "/QCD_Pt-80To120_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
+# output_dir = f"{base_path}/backgrounds2018/QCD_Pt_80to120_MuEnriched/{skim}/"
+
+# dataset = "/QCD_Pt-120To170_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
+# output_dir = f"{base_path}/backgrounds2018/QCD_Pt_120to170_MuEnriched/{skim}/"
+
+# dataset = "/QCD_Pt-170To300_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
+# output_dir = f"{base_path}/backgrounds2018/QCD_Pt_170to300_MuEnriched/{skim}/"
+
+# dataset = "/QCD_Pt-300To470_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
+# output_dir = f"{base_path}/backgrounds2018/QCD_Pt_300to470_MuEnriched/{skim}/"
+
+# dataset = "/QCD_Pt-470To600_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
+# output_dir = f"{base_path}/backgrounds2018/QCD_Pt_470to600_MuEnriched/{skim}/"
+
+# dataset = "/QCD_Pt-600To800_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
+# output_dir = f"{base_path}/backgrounds2018/QCD_Pt_600to800_MuEnriched/{skim}/"
+
+# dataset = "/QCD_Pt-800To1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
+# output_dir = f"{base_path}/backgrounds2018/QCD_Pt_800to1000_MuEnriched/{skim}/"
+
+dataset = "/QCD_Pt-1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
+output_dir = f"{base_path}/backgrounds2018/QCD_Pt_1000_MuEnriched/{skim}/"
 
 
 # Data
