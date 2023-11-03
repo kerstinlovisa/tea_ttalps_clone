@@ -7,9 +7,10 @@ skim = "skimmed_ttbarSemimuonicCR_tightMuon"
 base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
 
 doScaleFactors = True
+excludeTriggerSFs = True
 
 # Backgrounds
-# sample_path = f"backgrounds2018/ttZJets"
+sample_path = f"backgrounds2018/ttZJets"
 # sample_path = f"backgrounds2018/ttWJets"
 # sample_path = f"backgrounds2018/TTToSemiLeptonic"
 # sample_path = f"backgrounds2018/ST_tW_antitop"
@@ -53,7 +54,7 @@ doScaleFactors = True
 # sample_path = f"backgrounds2018/QCD_Pt_470to600_MuEnriched"
 # sample_path = f"backgrounds2018/QCD_Pt_600to800_MuEnriched"
 # sample_path = f"backgrounds2018/QCD_Pt_800to1000_MuEnriched"
-sample_path = f"backgrounds2018/QCD_Pt_1000_MuEnriched"
+# sample_path = f"backgrounds2018/QCD_Pt_1000_MuEnriched"
 
 # Data
 # sample_path = f"collision_data2018/SingleMuon2018A"
@@ -68,9 +69,13 @@ if doScaleFactors:
   output_dir = f"{input_directory}/histograms/"
   applyMuonScaleFactors = "collision_data" not in sample_path
   applyMuonTriggerScaleFactors = "collision_data" not in sample_path
-else:
+elif not excludeTriggerSFs:
   output_dir = f"{input_directory}/histograms_noSFs/"
   applyMuonScaleFactors = False
+  applyMuonTriggerScaleFactors = False
+else:
+  output_dir = f"{input_directory}/histograms_noTriggerSFs/"
+  applyMuonScaleFactors = True
   applyMuonTriggerScaleFactors = False
 
 

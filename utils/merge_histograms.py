@@ -8,29 +8,30 @@ def main():
   #skim="ttZLike"
   skim="skimmed_ttbarSemimuonicCR_tightMuon"
   
-  hist_path = "histograms"
+  # hist_path = "histograms"
   # hist_path = "histograms_noSFs"
+  hist_path = "histograms_noTriggerSFs"
   
   sample_paths = (
-    # "collision_data2018/SingleMuon2018*",
+    "collision_data2018/SingleMuon2018*",
     
-    # "backgrounds2018/TTToSemiLeptonic",
+    "backgrounds2018/TTToSemiLeptonic",
     
-    # "backgrounds2018/ttZJets",
-    # "backgrounds2018/TTZToLLNuNu",
+    "backgrounds2018/ttZJets",
+    "backgrounds2018/TTZToLLNuNu",
     
-    # "backgrounds2018/ttWJets",
-    # "backgrounds2018/TTWJetsToLNu",
+    "backgrounds2018/ttWJets",
+    "backgrounds2018/TTWJetsToLNu",
     
-    # "backgrounds2018/ttHToMuMu",
-    # "backgrounds2018/ttHTobb",
+    "backgrounds2018/ttHToMuMu",
+    "backgrounds2018/ttHTobb",
     
-    # "backgrounds2018/ST_tW_top",
-    # "backgrounds2018/ST_tW_antitop",
-    # "backgrounds2018/ST_t-channel_antitop",
-    # "backgrounds2018/ST_t-channel_top",
+    "backgrounds2018/ST_tW_top",
+    "backgrounds2018/ST_tW_antitop",
+    "backgrounds2018/ST_t-channel_antitop",
+    "backgrounds2018/ST_t-channel_top",
     
-    # "backgrounds2018/WJetsToLNu",
+    "backgrounds2018/WJetsToLNu",
     
     # "backgrounds2018/DYJetsToMuMu_M-50",
     # "backgrounds2018/DYJetsToMuMu_M-10to50",
