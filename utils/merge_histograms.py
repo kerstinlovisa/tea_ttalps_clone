@@ -11,51 +11,74 @@ def main():
   hist_path = "histograms"
   # hist_path = "histograms_noSFs"
   
-  input_hists_patterns = (
-    f"collision_data2018/SingleMuon2018*/{skim}/{hist_path}/*root",
-    f"backgrounds2018/ttZJets/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/ttWJets/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/TTToSemiLeptonic/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/ST_tW_top/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/ST_tW_antitop/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/ttHToMuMu/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/ttHTobb/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/ttHTobb/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/DYJetsToMuMu_M-50/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/QCD_Pt_15to30/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/QCD_Pt_30to50/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/QCD_Pt_50to80/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/QCD_Pt_80to120/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/QCD_Pt_120to170/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/QCD_Pt_170to300/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/QCD_Pt_300to470/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/QCD_Pt_470to600/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/QCD_Pt_600to800/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/QCD_Pt_800to1000/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/QCD_Pt_1000to1400/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/QCD_Pt_1400to1800/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/QCD_Pt_1800to2400/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/QCD_Pt_2400to3200/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/QCD_Pt_3200toInf/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/ST_t-channel_antitop/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/ST_t-channel_top/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/TTZToLLNuNu/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/TTWJetsToLNu/{skim}/{hist_path}/*.root",
-    f"backgrounds2018/WJetsToLNu/{skim}/{hist_path}/*.root",
+  sample_paths = (
+    # "collision_data2018/SingleMuon2018*",
+    
+    # "backgrounds2018/TTToSemiLeptonic",
+    
+    # "backgrounds2018/ttZJets",
+    # "backgrounds2018/TTZToLLNuNu",
+    
+    # "backgrounds2018/ttWJets",
+    # "backgrounds2018/TTWJetsToLNu",
+    
+    # "backgrounds2018/ttHToMuMu",
+    # "backgrounds2018/ttHTobb",
+    
+    # "backgrounds2018/ST_tW_top",
+    # "backgrounds2018/ST_tW_antitop",
+    # "backgrounds2018/ST_t-channel_antitop",
+    # "backgrounds2018/ST_t-channel_top",
+    
+    # "backgrounds2018/WJetsToLNu",
+    
+    # "backgrounds2018/DYJetsToMuMu_M-50",
+    # "backgrounds2018/DYJetsToMuMu_M-10to50",
+    
+    # "backgrounds2018/QCD_Pt_15to30",
+    # "backgrounds2018/QCD_Pt_30to50",
+    # "backgrounds2018/QCD_Pt_50to80",
+    # "backgrounds2018/QCD_Pt_80to120",
+    # "backgrounds2018/QCD_Pt_120to170",
+    # "backgrounds2018/QCD_Pt_170to300",
+    # "backgrounds2018/QCD_Pt_300to470",
+    # "backgrounds2018/QCD_Pt_470to600",
+    # "backgrounds2018/QCD_Pt_600to800",
+    # "backgrounds2018/QCD_Pt_800to1000",
+    # "backgrounds2018/QCD_Pt_1000to1400",
+    # "backgrounds2018/QCD_Pt_1400to1800",
+    # "backgrounds2018/QCD_Pt_1800to2400",
+    # "backgrounds2018/QCD_Pt_2400to3200",
+    # "backgrounds2018/QCD_Pt_3200toInf",
+    
+    "backgrounds2018/QCD_Pt_15to20_MuEnriched",
+    "backgrounds2018/QCD_Pt_20to30_MuEnriched",
+    "backgrounds2018/QCD_Pt_30to50_MuEnriched",
+    "backgrounds2018/QCD_Pt_50to80_MuEnriched",
+    "backgrounds2018/QCD_Pt_80to120_MuEnriched",
+    "backgrounds2018/QCD_Pt_120to170_MuEnriched",
+    "backgrounds2018/QCD_Pt_170to300_MuEnriched",
+    "backgrounds2018/QCD_Pt_300to470_MuEnriched",
+    "backgrounds2018/QCD_Pt_470to600_MuEnriched",
+    "backgrounds2018/QCD_Pt_600to800_MuEnriched",
+    "backgrounds2018/QCD_Pt_800to1000_MuEnriched",
+    "backgrounds2018/QCD_Pt_1000_MuEnriched",
   )
   
-  for input_hists_pattern in input_hists_patterns:
-    print(f"{input_hists_pattern=}")
+  for sample_path in sample_paths:
+    print(f"{sample_path=}")
     
-    if "collision_data" in input_hists_pattern:
+    input_path = f"{sample_path}/{skim}/{hist_path}/*.root"
+    
+    if "collision_data" in input_path:
       output_path = f"collision_data2018/SingleMuon2018_{skim}_{hist_path}.root"
     else:
-      output_path = input_hists_pattern.replace("*.root", "histograms.root")
+      output_path = input_path.replace("*.root", "histograms.root")
     
     print(f"{output_path=}")
     
     os.system(f"rm {base_path}/{output_path}")
-    os.system(f"hadd -f -j -k {base_path}/{output_path} {base_path}/{input_hists_pattern}")
+    os.system(f"hadd -f -j -k {base_path}/{output_path} {base_path}/{input_path}")
 
 if __name__ == "__main__":
   main()
