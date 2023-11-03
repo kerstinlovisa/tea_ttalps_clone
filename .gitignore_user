@@ -19,6 +19,7 @@ templates/*
 bin/*
 build/*
 plots/*
+plots_noSFs/*
 
 .vscode/*
 
