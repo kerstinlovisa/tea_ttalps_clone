@@ -43,6 +43,7 @@ class HistogramPlotter:
     hist.load(input_file)
     
     if not hist.isGood():
+      warn(f"No good histogram {hist.getName()} for sample {sample.name}")
       return
     
     self.histosamples.append((copy.deepcopy(hist), sample))
@@ -74,7 +75,16 @@ class HistogramPlotter:
   
   def __sortHistosamples(self):
     if hasattr(self.config, "custom_stacks_order"):
-      self.histosamples.sort(key=lambda x: self.config.custom_stacks_order.index(x[1].name))
+      try:
+        self.histosamples.sort(key=lambda x: self.config.custom_stacks_order.index(x[1].name))
+      except ValueError:
+        error("Couldn't sort histograms by custom order. Falling back to default order.")
+        
+        for _, sample in self.histosamples:
+          if sample.name not in self.config.custom_stacks_order:
+            error(f"Couldn't find sample {sample.name} in custom order list.")
+        
+        self.histosamples.sort(key=lambda x: x[1].cross_section, reverse=False)
     else:
       self.histosamples.sort(key=lambda x: x[1].cross_section, reverse=False)
     
@@ -83,13 +93,13 @@ class HistogramPlotter:
     
     for hist, sample in self.histosamples:
       if not hist.isGood():
+        warn(f"No good histogram {hist.getName()} for sample {sample.name}")
         continue
       
       self.normalizer.normalize(hist, sample, self.__getDataIntegral(hist))
       hist.setup(sample)
       
       self.stacks[sample.type][hist.getName()].Add(hist.hist)
-      
       
       key = sample.type if sample.custom_legend is None else sample.name
       
@@ -103,6 +113,7 @@ class HistogramPlotter:
       hist.load(input_file)
       
       if not hist.isGood():
+        warn(f"No good histogram {hist.getName()} for sample {sample.name}")
         continue
       
       hist.setup()
@@ -199,10 +210,16 @@ class HistogramPlotter:
       self.__drawUncertainties(canvas, hist)
       self.__drawLegends(canvas, hist)
       self.cmsLabelsManager.drawLabels(canvas)
-      
+            
       canvas.Update()
-      canvas.SaveAs(self.config.output_path+"/"+hist.getName()+".pdf")
-  
+      
+      originalErrorLevel = ROOT.gErrorIgnoreLevel
+      ROOT.gErrorIgnoreLevel = ROOT.kError
+      path = self.config.output_path+"/"+hist.getName()+".pdf"
+      info(f"Saving file: {path}")
+      canvas.SaveAs(path)
+      ROOT.gErrorIgnoreLevel = originalErrorLevel
+
   def drawHists2D(self):
     if not hasattr(self.config, "histograms2D"):
       return
@@ -217,44 +234,36 @@ class HistogramPlotter:
       canvas.Update()
       canvas.SaveAs(self.config.output_path+"/"+title+".pdf")
   
-  def __getRatioStack(self, hist):
+  def __get_hists_sum(self, hist, doRatio = False):
+    base_sample_type = SampleType.data if doRatio else SampleType.background
+    
     try:
-      data_hist = self.stacks[SampleType.data][hist.getName()].GetHists()[0]
+      base_hist = self.stacks[base_sample_type][hist.getName()].GetHists()[0]
     except:
       return None
-    ratio_hist = data_hist.Clone("ratio_"+hist.getName())
     
-    backgrounds_sum = ROOT.TH1D("backgrounds_sum_"+hist.getName(), "backgrounds_sum_"+hist.getName(),
-                                data_hist.GetNbinsX(),
-                                data_hist.GetXaxis().GetBinLowEdge(1), 
-                                data_hist.GetXaxis().GetBinUpEdge(data_hist.GetNbinsX()))
+    title = "backgrounds_" + ("sum" if doRatio else "unc" ) + "_" + hist.getName()
+    backgrounds_sum = base_hist.Clone(title) 
+    backgrounds_sum.Reset()
     
-    for background_hist in self.stacks[SampleType.background][hist.getName()].GetHists():  
+    for background_hist in self.stacks[SampleType.background][hist.getName()].GetHists():
       backgrounds_sum.Add(background_hist)
     
+    if not doRatio:
+      return backgrounds_sum
+
+    ratio_hist = base_hist.Clone("ratio_"+hist.getName())
     ratio_hist.Divide(backgrounds_sum)
-    
     ratio_stack = THStack("ratio_stack_"+hist.getName(), "ratio_stack_"+hist.getName())
     ratio_stack.Add(ratio_hist)
     
     return ratio_stack
   
+  def __getRatioStack(self, hist):
+    return self.__get_hists_sum(hist, doRatio = True)
+  
   def __getBackgroundUncertaintyHist(self, hist):
-    try:
-      base_hist = self.stacks[SampleType.background][hist.getName()].GetHists()[0]
-    except:
-      return None
-    
-    uncertainty_hist = ROOT.TH1D("backgrounds_unc_"+hist.getName(), "backgrounds_unc_"+hist.getName(),
-                                  base_hist.GetNbinsX(),
-                                  base_hist.GetXaxis().GetBinLowEdge(1), 
-                                  base_hist.GetXaxis().GetBinUpEdge(base_hist.GetNbinsX()))
-    
-      
-    for background_hist in self.stacks[SampleType.background][hist.getName()].GetHists():
-      uncertainty_hist.Add(background_hist)
-    
-    return uncertainty_hist
+    return self.__get_hists_sum(hist, doRatio = False)
   
   def __getStackDict(self, sample_type):
     hists_dict = {}

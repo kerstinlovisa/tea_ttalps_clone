@@ -68,11 +68,12 @@ class HistogramNormalizer:
     if data_integral is None:
       error(f"Couldn't normalize to data: {hist.name}, {sample.name}")
       return
+    
     scale = data_integral/hist.hist.Integral()
     
     if sample.type == SampleType.background:
       scale *= sample.cross_section/self.total_background_cross_section
-    elif sample.type == SampleType.data:
+    elif sample.type == SampleType.data:  
       scale = 1
     
     hist.hist.Scale(scale)
@@ -101,9 +102,13 @@ class HistogramNormalizer:
       if sample.type == SampleType.background:
         self.total_background += sample.cross_section * self.config.luminosity * efficiency
         self.background_initial_sum_weights[sample.name] = initial_weight_sum
-        self.total_background_cross_section += sample.cross_section
-        
         self.background_final_sum_weights[sample.name] = final_weight_sum
+        
+        if final_weight_sum != 0:
+          self.total_background_cross_section += sample.cross_section
+        else:
+          warn(f"Sample {sample.name} has no events after cuts, consider removing it from the config")
+        
         
       elif sample.type == SampleType.signal:
         self.signal_final_sum_weights[sample.name] = final_weight_sum

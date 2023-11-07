@@ -33,13 +33,9 @@ def main():
     for hist in config.histograms2D:
       plotter.addHistosample2D(hist, sample, input_files[sample.name])
   
-  info("Setting up legends")
   plotter.setupLegends()
-  
-  info("Building stacks")
   plotter.buildStacks()
   plotter.addHists2D(input_files[sample.name], sample)
-
   plotter.drawStacks()
   plotter.drawHists2D()
 

@@ -35,7 +35,6 @@ class Histogram:
       warn(f"Could not find histogram: {self.name}")
       return False
     if self.hist.GetEntries() == 0:
-      warn(f"Histogram is empty: {self.name}")
       return False
     
     return True
