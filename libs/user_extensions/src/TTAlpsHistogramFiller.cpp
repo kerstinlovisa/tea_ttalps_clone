@@ -237,3 +237,182 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariables(const std::shared_ptr<Even
   }
 
 }
+
+void TTAlpsHistogramFiller::FillGenParticleVariables(const std::shared_ptr<Event> event, std::string histName, std::string variable, int pdgid_) {
+  
+  float weight = 1.0;
+  try {
+    weight = event->Get(weightsBranchName);
+  } catch (...) {
+  }
+
+  auto genParticles = event->GetCollection("GenPart");
+  for(auto genpart : *genParticles)
+  {
+    auto genParticle = asGenParticle(genpart);
+    int pdgid = genParticle->GetPdgId();
+    if(abs(pdgid) == pdgid_ && genParticle->IsLastCopy()){
+      float var = genpart->Get(variable);
+      histogramsHandler->Fill(histName, var, weight);
+    }
+  }
+}
+
+void TTAlpsHistogramFiller::FillGenParticleBoost(const std::shared_ptr<Event> event, std::string histName, int pdgid_) {
+  float weight = 1.0;
+  try {
+    weight = event->Get(weightsBranchName);
+  } catch (...) {
+  }
+
+  auto genparticles = event->GetCollection("GenPart");
+  for(auto genpart : *genparticles)
+  {
+    auto genParticle = asGenParticle(genpart);
+    int pdgid = genParticle->GetPdgId();
+    if(abs(pdgid) == pdgid_ && genParticle->IsLastCopy()){
+      float px = genpart->Get("px");
+      float py = genpart->Get("py");
+      float pz = genpart->Get("pz");
+      float mass = genpart->Get("mass");
+      float boost = sqrt(px*px + py*py + pz*pz)/mass;
+      histogramsHandler->Fill(histName, boost, weight);
+    }
+  }
+}
+
+void TTAlpsHistogramFiller::FillGenParticleVxyz(const std::shared_ptr<Event> event, std::string histName, int pdgid_) {
+  float weight = 1.0;
+  try {
+    weight = event->Get(weightsBranchName);
+  } catch (...) {
+  }
+
+  auto genparticles = event->GetCollection("GenPart");
+  for(auto genpart : *genparticles)
+  {
+    auto genParticle = asGenParticle(genpart);
+    int pdgid = genParticle->GetPdgId();
+    if(abs(pdgid) == pdgid_ && genParticle->IsLastCopy()){
+      float vx = genpart->Get("vx");
+      float vy = genpart->Get("vy");
+      float vz = genpart->Get("vz");
+      float vxyz = sqrt(vx*vx + vy*vy + vz*vz);
+      histogramsHandler->Fill(histName, vxyz, weight);
+    }
+  }
+}
+
+void TTAlpsHistogramFiller::FillGenParticleProperVxyz(const std::shared_ptr<Event> event, std::string histName, int pdgid_) {
+  float weight = 1.0;
+  try {
+    weight = event->Get(weightsBranchName);
+  } catch (...) {
+  }
+
+  auto genparticles = event->GetCollection("GenPart");
+  for(auto genpart : *genparticles)
+  {
+    auto genParticle = asGenParticle(genpart);
+    int pdgid = genParticle->GetPdgId();
+    if(abs(pdgid) == pdgid_ && genParticle->IsLastCopy()){
+      float vx = genpart->Get("vx");
+      float vy = genpart->Get("vy");
+      float vz = genpart->Get("vz");
+      float vxyz = sqrt(vx*vx + vy*vy + vz*vz);
+      float px = genpart->Get("px");
+      float py = genpart->Get("py");
+      float pz = genpart->Get("pz");
+      float mass = genpart->Get("mass");
+      float boost = sqrt(px*px + py*py + pz*pz)/mass;
+      float proper_vxyz = vxyz/boost;
+      histogramsHandler->Fill(histName, proper_vxyz, weight);
+    }
+  }
+}
+
+void TTAlpsHistogramFiller::FillGenMuonsFromALPs(const std::shared_ptr<Event> event, std::string histName, std::string variable) {
+  float weight = 1.0;
+  try {
+    weight = event->Get(weightsBranchName);
+  } catch (...) {
+  }
+
+  auto genParticles = event->GetCollection("GenPart");
+  for(auto genpart : *genParticles)
+  {
+    auto genParticle = asGenParticle(genpart);
+    int pdgid = genParticle->GetPdgId();
+    if(abs(pdgid) != 13) continue;
+
+    int motherIndex = genParticle->GetMotherIndex();
+    if (motherIndex < 0) continue;
+    auto mother = asGenParticle(genParticles->at(motherIndex));
+    int mother_pdgid = mother->GetPdgId();
+    if(mother_pdgid != 54) continue;
+
+    float var;
+    if(variable!="vxyz") var = genpart->Get(variable);
+    else{
+      float vx = genpart->Get("vx");
+      float vy = genpart->Get("vy");
+      float vz = genpart->Get("vz");
+      var = sqrt(vx*vx + vy*vy + vz*vz);
+    }
+    
+    histogramsHandler->Fill(histName, var, weight);
+  }
+}
+
+void TTAlpsHistogramFiller::FillCustomLLPNanoAODVariables(const std::shared_ptr<Event> event) {
+
+  float weight = 1.0;
+  try {
+    weight = event->Get(weightsBranchName);
+  } catch (...) {
+  }
+
+  for(auto &[histName, params] : ttalpsHistVariables) {
+    if(histName == "GenALP_pdgId") {
+      auto genparticles = event->GetCollection("GenPart");
+      for(auto genpart : *genparticles)
+      {
+        int pdgid = genpart->Get("pdgId");
+        if(pdgid == 54){
+          histogramsHandler->Fill(histName, pdgid, weight);
+        }
+      }
+    }
+    else if(histName == "GenALP_mass") FillGenParticleVariables(event, histName, "mass", 54);
+    else if(histName == "GenALP_vx") FillGenParticleVariables(event, histName, "vx", 54);
+    else if(histName == "GenALP_vy") FillGenParticleVariables(event, histName, "vy", 54);
+    else if(histName == "GenALP_vz") FillGenParticleVariables(event, histName, "vz", 54);
+    else if(histName == "GenALP_pt") FillGenParticleVariables(event, histName, "pt", 54);
+    else if(histName == "GenALP_boost") FillGenParticleBoost(event, histName, 54);
+    else if(histName == "GenALP_vxyz") FillGenParticleVxyz(event, histName, 54);
+    else if(histName == "GenALP_proper_vxyz") FillGenParticleProperVxyz(event, histName, 54);
+    if(histName == "GenMuon_pdgId") {
+      auto genparticles = event->GetCollection("GenPart");
+      for(auto genpart : *genparticles)
+      {
+        int pdgid = genpart->Get("pdgId");
+        if(pdgid == 13){
+          histogramsHandler->Fill(histName, pdgid, weight);
+        }
+      }
+    }
+    else if(histName == "GenMuon_mass") FillGenParticleVariables(event, histName, "mass", 13);
+    else if(histName == "GenMuon_vx") FillGenParticleVariables(event, histName, "vx", 13);
+    else if(histName == "GenMuon_vy") FillGenParticleVariables(event, histName, "vy", 13);
+    else if(histName == "GenMuon_vz") FillGenParticleVariables(event, histName, "vz", 13);
+    else if(histName == "GenMuon_pt") FillGenParticleVariables(event, histName, "pt", 13);
+    else if(histName == "GenMuon_boost") FillGenParticleBoost(event, histName, 13);
+    else if(histName == "GenMuon_vxyz") FillGenParticleVxyz(event, histName, 13);
+    else if(histName == "GenMuon_proper_vxyz") FillGenParticleProperVxyz(event, histName, 13);
+
+    else if(histName == "GenMuonFromALP_vx") FillGenMuonsFromALPs(event, histName, "vx");
+    else if(histName == "GenMuonFromALP_vy") FillGenMuonsFromALPs(event, histName, "vy");
+    else if(histName == "GenMuonFromALP_vz") FillGenMuonsFromALPs(event, histName, "vz");
+    else if(histName == "GenMuonFromALP_vxyz") FillGenMuonsFromALPs(event, histName, "vxyz");
+  }
+}

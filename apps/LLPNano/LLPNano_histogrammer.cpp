@@ -34,9 +34,9 @@ int main(int argc, char **argv) {
   auto histogramFiller = make_unique<HistogramsFiller>(histogramsHandler);
   auto ttalpsHistogramsFiller = make_unique<TTAlpsHistogramFiller>(histogramsHandler);
 
-  bool runDefaultHistograms, runLLPNanoHistograms;
+  bool runDefaultHistograms, runLLPNanoAODHistograms;
   config.GetValue("runDefaultHistograms", runDefaultHistograms);
-  config.GetValue("runLLPNanoHistograms", runLLPNanoHistograms);
+  config.GetValue("runLLPNanoAODHistograms", runLLPNanoAODHistograms);
 
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
@@ -48,9 +48,9 @@ int main(int argc, char **argv) {
       histogramFiller->FillDefaultVariables(event);
     }
 
-    // if (runLLPNanoHistograms) {
-    //   ttalpsHistogramsFiller->FillCustomLLPVariables(event);
-    // }
+    if (runLLPNanoAODHistograms) {
+      ttalpsHistogramsFiller->FillCustomLLPNanoAODVariables(event);
+    }
   }
 
   if(runDefaultHistograms) histogramFiller->FillCutFlow(cutFlowManager);
