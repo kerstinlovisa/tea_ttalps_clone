@@ -45,7 +45,9 @@ int main(int argc, char **argv) {
   
   if(applyLooseSkimming) cutFlowManager->RegisterCut("trigger");
   eventProcessor->RegisterCuts(cutFlowManager);
+  
   if(applyTTbarLikeSkimming) ttAlpsSelections->RegisterSingleLeptonSelections(cutFlowManager);
+  if(applyTTZLikeSkimming) ttAlpsSelections->RegisterTTZLikeSelections(cutFlowManager);
 
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);

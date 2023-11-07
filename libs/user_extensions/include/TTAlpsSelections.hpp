@@ -47,6 +47,7 @@ class TTAlpsSelections {
   // - at least 1 good b-tagged jet
   // - some amount of MET
   bool PassesTTZLikeSelections(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager = nullptr);
+  void RegisterTTZLikeSelections(std::shared_ptr<CutFlowManager> cutFlowManager);
 
   bool PassesDileptonSelections(const std::shared_ptr<Event> event);
   bool PassesHadronSelections(const std::shared_ptr<Event> event);
@@ -54,6 +55,9 @@ class TTAlpsSelections {
  private:
   std::map<std::string, std::pair<float, float>> eventSelections;
   std::vector<std::string> requiredFlags;
+
+  bool PassesMetFilters(const std::shared_ptr<Event> event);
+
 };
 
 #endif /* TTAlpsSelections_hpp */
