@@ -364,6 +364,45 @@ void TTAlpsHistogramFiller::FillGenMuonsFromALPs(const std::shared_ptr<Event> ev
   }
 }
 
+void TTAlpsHistogramFiller::FillMuonVariables(const std::shared_ptr<Event> event, std::string histName, std::string collection, std::string variable) {
+  
+  float weight = 1.0;
+  try {
+    weight = event->Get(weightsBranchName);
+  } catch (...) {
+  }
+
+  auto muons = event->GetCollection(collection);
+  for(auto muon : *muons)
+  {
+    float var;
+    if(variable == "chi2overndof"){
+      float chi2 = muon->Get("chi2");
+      float ndof = muon->Get("ndof");
+      var = chi2/ndof;
+    }
+    else if(variable == "ptErroverpt"){
+      float ptErr = muon->Get("ptErr");
+      float pt = muon->Get("pt");
+      var = ptErr/pt;
+    }
+    else if(variable == "DThitsCheck"){
+      float trkNumDTHits = muon->Get("trkNumDTHits");
+      float trkNumCSCHits = muon->Get("trkNumCSCHits");
+      if(trkNumCSCHits > 0){
+        var = 1;
+      }
+      else if(trkNumDTHits > 18) {
+        var = 1;
+      }
+      else{
+        var = 0;
+      }
+    }
+    histogramsHandler->Fill(histName, var, weight);
+  }
+}
+
 void TTAlpsHistogramFiller::FillCustomLLPNanoAODVariables(const std::shared_ptr<Event> event) {
 
   float weight = 1.0;
@@ -414,5 +453,9 @@ void TTAlpsHistogramFiller::FillCustomLLPNanoAODVariables(const std::shared_ptr<
     else if(histName == "GenMuonFromALP_vy") FillGenMuonsFromALPs(event, histName, "vy");
     else if(histName == "GenMuonFromALP_vz") FillGenMuonsFromALPs(event, histName, "vz");
     else if(histName == "GenMuonFromALP_vxyz") FillGenMuonsFromALPs(event, histName, "vxyz");
+
+    else if(histName == "DSAMuon_chi2overndof") FillMuonVariables(event, histName, "DSAMuon", "chi2overndof");
+    else if(histName == "DSAMuon_ptErroverpt") FillMuonVariables(event, histName, "DSAMuon", "ptErroverpt");
+    else if(histName == "DSAMuon_DThitsCheck") FillMuonVariables(event, histName, "DSAMuon", "DThitsCheck");
   }
 }

@@ -68,18 +68,7 @@ extraEventCollections = {
     "eta": (-2.5, 2.5),
     "looseId": True,
     "pfIsoId": 1, # 1=PFIsoVeryLoose, 2=PFIsoLoose, 3=PFIsoMedium, 4=PFIsoTight, 5=PFIsoVeryTight, 6=PFIsoVeryVeryTight
-  },
-  "LooseDSAMuons": {
-    "inputCollections": ("DSAMuon",),
-    "pt": (5., 9999999.),
-    "eta": (-2.4, 2.4),
-    "trkNumPlanes": (1, 9999999.),
-    "trkNumHits": (12, 9999999.),
-    "trkNumDTHits": (18, 9999999.),
-    "trkNumCSCHits": (0, 0),
-    "chi2/ndof": (-9999999., 2.5),
-    "ptErr/pt": (-9999999., 1),
-  },
+  }
 }
 
 eventSelections = {

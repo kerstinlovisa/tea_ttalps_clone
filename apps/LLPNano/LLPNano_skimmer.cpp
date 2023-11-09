@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
   auto eventProcessor = make_unique<EventProcessor>();
   auto ttAlpsSelections = make_unique<TTAlpsSelections>();
 
-  bool applyLooseSkimming, applyTTbarLikeSkimming, applySignalLikeSkimming, applyTTZLikeSkimming, applyDSAMuonSkimming;
+  bool applyLooseSkimming, applyTTbarLikeSkimming, applySignalLikeSkimming, applyTTZLikeSkimming;
   config.GetValue("applyLooseSkimming", applyLooseSkimming);
   config.GetValue("applyTTbarLikeSkimming", applyTTbarLikeSkimming);
   config.GetValue("applySignalLikeSkimming", applySignalLikeSkimming);
