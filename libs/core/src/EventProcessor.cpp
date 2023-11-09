@@ -40,30 +40,48 @@ bool EventProcessor::PassesTriggerSelections(const shared_ptr<Event> event) {
   return passes;
 }
 
+void EventProcessor::RegisterCuts(shared_ptr<CutFlowManager> cutFlowManager) {
+  for (auto &[cutName, cutValues] : eventSelections) {
+    cutFlowManager->RegisterCut(cutName);
+  }
+}
+
 bool EventProcessor::PassesEventSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   for (auto &[cutName, cutValues] : eventSelections) {
+
+    // TODO: this should be more generic, not only for MET_pt
     if (cutName == "MET_pt") {
       float metPt = event->Get("MET_pt");
       if (!inRange(metPt, cutValues)) return false;
-      cutFlowManager->UpdateCutFlow("MetPt");
     } else {
       if (!inRange(event->GetCollectionSize(cutName.substr(1)), cutValues)) return false;
-      cutFlowManager->UpdateCutFlow(cutName);
     }
+    cutFlowManager->UpdateCutFlow(cutName);
   }
 
   return true;
 }
 
 float EventProcessor::GetMaxPt(shared_ptr<Event> event, string collectionName) {
-  auto collection = event->GetCollection(collectionName);
+  auto maxPtObject = GetMaxPtObject(event, collectionName);
+  if(!maxPtObject) return -1;
+  float maxPt = maxPtObject->Get("pt");
+  return maxPt;
+}
 
+shared_ptr<PhysicsObject> EventProcessor::GetMaxPtObject(shared_ptr<Event> event, string collectionName) {
+  auto collection = event->GetCollection(collectionName);
   float maxPt = -1;
+
+  shared_ptr<PhysicsObject> maxPtObject = nullptr;
   for (auto element : *collection) {
     float pt = element->Get("pt");
-    if (pt > maxPt) maxPt = pt;
+    if (pt > maxPt) {
+      maxPt = pt;
+      maxPtObject = element;
+    }
   }
-  return maxPt;
+  return maxPtObject;
 }
 
 float EventProcessor::GetHt(shared_ptr<Event> event, string collectionName) {

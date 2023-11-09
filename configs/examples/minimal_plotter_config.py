@@ -32,3 +32,4 @@ legends = {
 
 canvas_size = (800, 600)
 show_ratio_plots = False
+ratio_limits = (0.7, 1.3)

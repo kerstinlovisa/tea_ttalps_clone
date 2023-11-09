@@ -19,11 +19,14 @@ templates/*
 bin/*
 build/*
 plots/*
+plots_noSFs/*
 
 .vscode/*
 
 samples/*/*_hists.root
 samples/*/*/*
+
+data/*root
 
 update_tea.sh
 .gitignore_tea

@@ -1,6 +1,7 @@
 from enum import Enum
 from ROOT import TFile
 from Sample import SampleType
+from Logger import *
 
 class NormalizationType(Enum):
   to_one = 0 # normalize all histograms to 1
@@ -62,16 +63,17 @@ class HistogramNormalizer:
   
   def __normalizeToData(self, hist, sample, data_integral):
     if hist.hist.Integral() == 0:
-      print(f"Couldn't normalize to data: {hist.name}, {sample.name}")
+      error(f"Couldn't normalize to data: {hist.name}, {sample.name}")
       return  
     if data_integral is None:
-      print(f"Couldn't normalize to data: {hist.name}, {sample.name}")
+      error(f"Couldn't normalize to data: {hist.name}, {sample.name}")
       return
+    
     scale = data_integral/hist.hist.Integral()
     
     if sample.type == SampleType.background:
       scale *= sample.cross_section/self.total_background_cross_section
-    elif sample.type == SampleType.data:
+    elif sample.type == SampleType.data:  
       scale = 1
     
     hist.hist.Scale(scale)
@@ -100,9 +102,13 @@ class HistogramNormalizer:
       if sample.type == SampleType.background:
         self.total_background += sample.cross_section * self.config.luminosity * efficiency
         self.background_initial_sum_weights[sample.name] = initial_weight_sum
-        self.total_background_cross_section += sample.cross_section
-        
         self.background_final_sum_weights[sample.name] = final_weight_sum
+        
+        if final_weight_sum != 0:
+          self.total_background_cross_section += sample.cross_section
+        else:
+          warn(f"Sample {sample.name} has no events after cuts, consider removing it from the config")
+        
         
       elif sample.type == SampleType.signal:
         self.signal_final_sum_weights[sample.name] = final_weight_sum

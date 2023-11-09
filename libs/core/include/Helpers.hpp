@@ -36,6 +36,9 @@
 #include <regex>
 #include <sstream>
 #include <string>
+#include <fstream>
+#include <set>
+#include <optional>
 
 #include "Logger.hpp"
 
@@ -83,20 +86,35 @@ inline void makeParentDirectories(std::string filePath) {
   }
 }
 
+inline bool FileExists(const std::string& name) {
+  std::ifstream f(name.c_str());
+  return f.good();
+}
+
 struct ExtraCollection {
   std::vector<std::string> inputCollections;
   std::map<std::string, std::pair<float, float>> selections;
+  std::map<std::string, bool> flags;
+  std::map<std::string, int> options;
 
   void Print() {
     info() << "Input collections: \n";
-    for (std::string name : inputCollections) info() << name << "\n";
+    for (std::string name : inputCollections) info() << name << std::endl;
 
     info() << "Selections: \n";
     for (auto &[name, cuts] : selections) {
-      info() << "\t" << name << ": " << cuts.first << ", " << cuts.second << "\n";
+      info() << "\t" << name << ": " << cuts.first << ", " << cuts.second << std::endl;
+    }
+    for (auto &[name, flag] : flags) {
+      info() << "\t" << name << ": " << flag << std::endl;
+    }
+    for (auto &[name, option] : options) {
+      info() << "\t" << name << ": " << option << std::endl;
     }
   }
 };
+
+typedef std::map<std::tuple<float, float>, std::map<std::tuple<float, float>, std::map<std::string, float>>> ScaleFactorsMap;
 
 struct HistogramParams {
   std::string collection, variable, directory;

@@ -65,6 +65,31 @@ void Event::AddExtraCollections() {
           }
         }
 
+        for (auto &[branchName, flag] : extraCollection.flags) {
+          bool value = physicsObject->Get(branchName);
+
+          if (value != flag) {
+            passes = false;
+            break;
+          }
+        }
+
+        for (auto &[branchName, option] : extraCollection.options) {
+          try{
+            UChar_t value = physicsObject->Get(branchName);
+            if (value != option) { passes = false; break;}
+          }
+          catch(BadTypeException &e){
+            try{
+              Int_t value = physicsObject->Get(branchName);
+              if (value != option) { passes = false; break; }
+            }
+            catch(BadTypeException &e){
+              fatal() << e.what() << endl;
+            }
+          }
+        }
+
         if (passes) newCollection->push_back(physicsObject);
       }
     }

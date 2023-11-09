@@ -10,7 +10,7 @@
 using namespace std;
 
 CutFlowManager::CutFlowManager(shared_ptr<EventReader> eventReader_, shared_ptr<EventWriter> eventWriter_)
-    : eventReader(eventReader_), eventWriter(eventWriter_), currentIndex(0) {
+    : eventReader(eventReader_), eventWriter(eventWriter_), currentIndex(0), inputContainsInitial(false) {
   
   auto &config = ConfigManager::GetInstance();
 
@@ -21,7 +21,7 @@ CutFlowManager::CutFlowManager(shared_ptr<EventReader> eventReader_, shared_ptr<
   }
   
   if (eventReader->inputFile->Get("CutFlow")) {
-    info() << "Input file contains CutFlow directory - will store existing cutflow for output.\n";
+    info() << "Input file contains CutFlow directory - will store existing cutflow in the output.\n";
     
     auto sourceDir = (TDirectory *)eventReader->inputFile->Get("CutFlow");
 
@@ -32,37 +32,56 @@ CutFlowManager::CutFlowManager(shared_ptr<EventReader> eventReader_, shared_ptr<
       TObject *obj = key->ReadObj();
       auto hist = (TH1D *)obj;
       weightsAfterCuts[key->GetName()] = hist->GetBinContent(1);
-      existingCuts.push_back(key->GetName());
+      string cutName = key->GetName();
+      if(cutName == "0_initial") inputContainsInitial=true;
+      existingCuts.push_back(cutName);
       delete obj;
       currentIndex++;
     }
   }
   if (!eventWriter_) info() << "No eventWriter given for CutFlowManager\n";
+  
 }
 
 CutFlowManager::~CutFlowManager() {}
 
-void CutFlowManager::UpdateCutFlow(string cutName) {
-  
-  string fullCutName;
+void CutFlowManager::RegisterCut(string cutName) {
+  if (cutName == "initial" && inputContainsInitial) return;
+  string fullCutName = (cutName == "initial") ? "0_initial" : (to_string(currentIndex) + "_" + cutName);
+  currentIndex++;
+  weightsAfterCuts[fullCutName] = 0;
+}
 
-  bool found = false;
-  for (const auto &[key, value] : weightsAfterCuts) {
-    if (key.find(cutName) != std::string::npos) {
-      fullCutName = key;
-      found = true;
-      break;
+string CutFlowManager::GetFullCutName(string cutName) {
+
+  // Find full names in the cut flow matching the given cut name
+  vector<string> matchingFullCutNames;
+  for (auto &[existingCutName, sumOfWeights] : weightsAfterCuts) {
+    if (existingCutName.find(cutName) != string::npos) {
+      matchingFullCutNames.push_back(existingCutName);
     }
   }
-  if (!found) {
-    fullCutName = to_string(currentIndex) + "_" + cutName;
-  }
 
-  // If cutflow already exists, we don't want to overwrite it
-  if (find(existingCuts.begin(), existingCuts.end(), fullCutName) != existingCuts.end()) {
-    return;
+  // Find the full name with the highest index
+  int maxIndex = -1;
+  string maxCutName = "";
+  for (auto fullCutName : matchingFullCutNames) {
+    string number = fullCutName.substr(0, fullCutName.find("_"));
+    int index = stoi(number);
+    if (index > maxIndex) {
+      maxIndex = index;
+      maxCutName = fullCutName;
+    }
   }
+  if(maxCutName != "") return maxCutName;
 
+  // If no matching full name was found, we cannot continue
+  fatal() << "CutFlowManager does not contain cut " << cutName << endl;
+  fatal() << "Did you forget to register it?" << endl;
+  exit(1);
+}
+
+float CutFlowManager::GetCurrentEventWeight() {
   float weight = 1.0;
   try {
     weight = eventReader->currentEvent->Get(weightsBranchName);
@@ -72,13 +91,13 @@ void CutFlowManager::UpdateCutFlow(string cutName) {
       weightsBranchWarningPrinted = true;
     }
   }
+  return weight;
+}
 
-  if (weightsAfterCuts.count(fullCutName)) {
-    weightsAfterCuts[fullCutName] += weight;
-  } else {
-    weightsAfterCuts[fullCutName] = weight;
-    currentIndex++;
-  }
+void CutFlowManager::UpdateCutFlow(string cutName) {
+  if(cutName == "initial" && inputContainsInitial) return;
+  string fullCutName = GetFullCutName(cutName);
+  weightsAfterCuts[fullCutName] += GetCurrentEventWeight();
 }
 
 void CutFlowManager::SaveCutFlow() {
@@ -99,8 +118,15 @@ void CutFlowManager::SaveCutFlow() {
 std::map<std::string, float> CutFlowManager::GetCutFlow() { return weightsAfterCuts; }
 
 void CutFlowManager::Print() {
-  info() << "CutFlow:\n";
+  map<int, pair<string, float>> sortedWeightsAfterCuts;
   for (auto &[cutName, sumOfWeights] : weightsAfterCuts) {
-    info() << cutName << " " << sumOfWeights << "\n";
+    string number = cutName.substr(0, cutName.find("_"));
+    int index = stoi(number);
+    sortedWeightsAfterCuts[index]  = {cutName, sumOfWeights};
+  }
+
+  info() << "CutFlow:\n";
+  for (auto &[index, values] : sortedWeightsAfterCuts) {
+    info() << get<0>(values) << " " << get<1>(values) << endl;
   }
 }

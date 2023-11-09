@@ -17,6 +17,12 @@ TTAlpsSelections::TTAlpsSelections(){
   } catch (const Exception &e) {
     warn() << "Couldn't read eventSelections from config file ";
   }
+
+  try {
+    config.GetVector("requiredFlags", requiredFlags);
+  } catch (const Exception &e) {
+    warn() << "Couldn't read requiredFlags from config file ";
+  }
 }
 
 bool TTAlpsSelections::PassesLooseSemileptonicSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
@@ -57,44 +63,54 @@ bool TTAlpsSelections::PassesSignalLikeSelections(const shared_ptr<Event> event,
   return true;
 }
 
-bool TTAlpsSelections::PassesSingleLeptonSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  float metPt = event->Get("MET_pt");
-  if (!inRange(metPt, eventSelections["MET_pt"])) return false;
+void TTAlpsSelections::RegisterSingleLeptonSelections(shared_ptr<CutFlowManager> cutFlowManager) {
+  cutFlowManager->RegisterCut("metFilters");
+  cutFlowManager->RegisterCut("nLooseMuons");
+}
 
-  if (!inRange(event->GetCollectionSize("GoodLeptons"), eventSelections["nGoodLeptons"])) return false;
-  if (!inRange(event->GetCollectionSize("GoodBtaggedJets"), eventSelections["nGoodBtaggedJets"])) return false;
-  if (!inRange(event->GetCollectionSize("GoodJets"), eventSelections["nGoodJets"])) return false;
-
-  int almostGoodLeptons = event->GetCollectionSize("AlmostGoodLeptons");
-  if (almostGoodLeptons > 1) return false;
-  if (almostGoodLeptons == 1) {
-    auto leadingLepton = event->GetCollection("GoodLeptons")->at(0);
-    auto survivingLepton = event->GetCollection("AlmostGoodLeptons")->at(0);
-    if (survivingLepton != leadingLepton) return false;
+bool TTAlpsSelections::PassesMetFilters(const shared_ptr<Event> event){
+  for(string flag : requiredFlags){
+    bool flagValue = event->Get(flag);
+    if(!flagValue) return false;
   }
-  if(cutFlowManager) cutFlowManager->UpdateCutFlow("noAdditionalMuons");
+  return true;
+}
+
+bool TTAlpsSelections::PassesSingleLeptonSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  if(!PassesMetFilters(event)) return false;
+  if(cutFlowManager) cutFlowManager->UpdateCutFlow("metFilters");
+
+  int looseMuons = event->GetCollectionSize("LooseMuons");
+  if (looseMuons > 1) return false;
+  if (looseMuons == 1) {
+    auto leadingMuon = event->GetCollection("TightMuons")->at(0);
+    auto survivingMuon = event->GetCollection("LooseMuons")->at(0);
+    if (survivingMuon != leadingMuon) return false;
+  }
+  if(cutFlowManager) cutFlowManager->UpdateCutFlow("nLooseMuons");
 
   return true;
 }
 
+void TTAlpsSelections::RegisterTTZLikeSelections(shared_ptr<CutFlowManager> cutFlowManager) {
+  cutFlowManager->RegisterCut("metFilters");
+  cutFlowManager->RegisterCut("inZpeak");
+}
+
 bool TTAlpsSelections::PassesTTZLikeSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  float metPt = event->Get("MET_pt");
-  if (!inRange(metPt, eventSelections["MET_pt"])) return false;
+  if(!PassesMetFilters(event)) return false;
+  if(cutFlowManager) cutFlowManager->UpdateCutFlow("metFilters");
 
-  if (!inRange(event->GetCollectionSize("GoodLeptons"), eventSelections["nGoodLeptons"])) return false;
-  if (!inRange(event->GetCollectionSize("GoodBtaggedJets"), eventSelections["nGoodBtaggedJets"])) return false;
-  if (!inRange(event->GetCollectionSize("GoodJets"), eventSelections["nGoodJets"])) return false;
-
-  auto almostGoodMuons = event->GetCollection("AlmostGoodMuons");
+  auto looseMuons = event->GetCollection("LooseMuons");
   double zMass = 91.1876; // GeV
   double smallestDifferenceToZmass = 999999;
   double maxDistanceFromZ = 30;
 
-  for(int iMuon1=0; iMuon1 < almostGoodMuons->size(); iMuon1++){
-    auto muon1 = asMuon(almostGoodMuons->at(iMuon1))->GetFourVector();
+  for(int iMuon1=0; iMuon1 < looseMuons->size(); iMuon1++){
+    auto muon1 = asMuon(looseMuons->at(iMuon1))->GetFourVector();
     
-    for(int iMuon2=iMuon1+1; iMuon2 < almostGoodMuons->size(); iMuon2++){
-      auto muon2 = asMuon(almostGoodMuons->at(iMuon2))->GetFourVector();
+    for(int iMuon2=iMuon1+1; iMuon2 < looseMuons->size(); iMuon2++){
+      auto muon2 = asMuon(looseMuons->at(iMuon2))->GetFourVector();
       double diMuonMass = (muon1 + muon2).M();
 
       if(fabs(diMuonMass-zMass) < smallestDifferenceToZmass){

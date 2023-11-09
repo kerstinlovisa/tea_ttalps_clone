@@ -1,3 +1,5 @@
+from Logger import *
+
 from ROOT import TObject, gStyle
 import ROOT
 
@@ -122,8 +124,8 @@ class Styler:
       return
 
     if is_ratio:
-      plot.SetMinimum(0.7)
-      plot.SetMaximum(1.3)
+      plot.SetMinimum(self.config.ratio_limits[0])
+      plot.SetMaximum(self.config.ratio_limits[1])
     else:
       if (hist.y_min > 0):
         plot.SetMinimum(hist.y_min)
@@ -150,7 +152,7 @@ class Styler:
       plot.GetYaxis().SetNdivisions(505)
       
     except:
-      print("Couldn't set axes limits")
+      warn("Couldn't set axes limits")
       return
   
   def setupFigure2D(self, plot, hist):
@@ -191,7 +193,7 @@ class Styler:
       plot.GetZaxis().SetNdivisions(505)
 
     except:
-      print("Couldn't set axes limits")
+      warn("Couldn't set axes limits")
       return
     
   def setupUncertaintyHistogram(self, hist):

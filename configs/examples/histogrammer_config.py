@@ -1,3 +1,5 @@
+from scale_factors_config import *
+
 nEvents = -1
 printEveryNevents = 1000
 
@@ -22,4 +24,10 @@ defaultHistParams = (
   ("GoodLeptons" , "eta"           , 100,    -2.5,    2.5,     ""  ),
 )
 
+histParams = (
+  ("Muon", "scaledPt", 400, 0, 200, ""),
+)
+
 weightsBranchName = "genWeight"
+applyMuonScaleFactors = True
+applyMuonTriggerScaleFactors = True

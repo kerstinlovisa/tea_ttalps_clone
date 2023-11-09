@@ -1,3 +1,5 @@
+from Logger import *
+
 from dataclasses import dataclass
 from ROOT import TObject
 
@@ -23,17 +25,16 @@ class Histogram:
     return self.name + self.suffix
   
   def print(self):
-    print(f"Histogram {self.name}, {self.hist}")
+    info(f"Histogram {self.name}, {self.hist}")
   
   def load(self, input_file):
     self.hist = input_file.Get(self.name)
   
   def isGood(self):
     if self.hist is None or type(self.hist) is TObject:
-      print(f"Could not find histogram: {self.name}")
+      warn(f"Could not find histogram: {self.name}")
       return False
     if self.hist.GetEntries() == 0:
-      print(f"Histogram is empty: {self.name}")
       return False
     
     return True
@@ -48,7 +49,6 @@ class Histogram:
     self.hist.SetFillColorAlpha(sample.fill_color, sample.fill_alpha)
     self.hist.Rebin(self.rebin)
     self.hist.Scale(1./self.rebin)
-    self.hist.Sumw2(False)
 
 @dataclass
 class Histogram2D:
@@ -72,10 +72,10 @@ class Histogram2D:
   
   def isGood(self):
     if self.hist is None or type(self.hist) is TObject:
-      print(f"Could not find histogram: {self.name}")
+      warn(f"Could not find histogram: {self.name}")
       return False
     if self.hist.GetEntries() == 0:
-      print(f"Histogram is empty: {self.name}")
+      warn(f"Histogram is empty: {self.name}")
       return False
     
     return True

@@ -49,7 +49,7 @@ class Event {
       }
     }
     if (extraCollections.count(name)) return extraCollections.at(name)->size();
-    fatal() << "Tried to get a collection that doesn't exist: " << name << "\n";
+    fatal() << "Tried to get size of a collection that doesn't exist: " << name << "\n";
     exit(1);
   }
 

@@ -16,7 +16,11 @@ class EventProcessor {
   EventProcessor();
   
   float GetMaxPt(std::shared_ptr<Event> event, std::string collectionName);
+  std::shared_ptr<PhysicsObject> GetMaxPtObject(std::shared_ptr<Event> event, std::string collectionName);
+
   float GetHt(std::shared_ptr<Event> event, std::string collectionName);
+
+  void RegisterCuts(std::shared_ptr<CutFlowManager> cutFlowManager);
 
   bool PassesTriggerSelections(const std::shared_ptr<Event> event);
   bool PassesEventSelections(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);

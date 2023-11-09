@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 from Legend import Legend
+from Logger import *
 
 # enum class with signal, background, data
 class SampleType(Enum):
@@ -15,7 +16,8 @@ class Sample:
   name: str = ""
   file_path: str = ""
   type: SampleType = SampleType.background
-  cross_section: float = 1.0
+  cross_section: float = -1
+  cross_sections: dict = None
   line_color: int = ROOT.kBlack
   line_style: int = ROOT.kSolid
   line_alpha: float = 1.0
@@ -27,3 +29,7 @@ class Sample:
   legend_description: str = ""
   plotting_options: str = ""
   custom_legend: Legend = None
+  
+  def __post_init__(self):
+    if self.cross_sections is not None and self.cross_section < 0:
+      self.cross_section = self.cross_sections[self.name]

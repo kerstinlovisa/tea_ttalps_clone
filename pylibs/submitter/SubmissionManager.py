@@ -3,6 +3,8 @@ import importlib.util
 import uuid
 from enum import Enum
 
+from Logger import *
+
 class SubmissionSystem(Enum):
   local = 1
   condor = 2
@@ -15,9 +17,17 @@ class SubmissionManager:
     self.files_config_path = files_config_path
     self.files_config = None
     
-    print(f"Submission system: {submission_system.name}")
+    info(f"Submission system: {submission_system.name}")
     
     self.__setup_files_config()
+
+    self.applyMuonScaleFactors = None
+    if hasattr(self.files_config, "applyMuonScaleFactors"):
+      self.applyMuonScaleFactors = self.files_config.applyMuonScaleFactors
+      
+    self.applyMuonTriggerScaleFactors = None
+    if hasattr(self.files_config, "applyMuonTriggerScaleFactors"):
+      self.applyMuonTriggerScaleFactors = self.files_config.applyMuonTriggerScaleFactors
 
     if submission_system == SubmissionSystem.condor:
       self.__create_condor_directories()
@@ -31,10 +41,10 @@ class SubmissionManager:
     elif hasattr(self.files_config, "input_output_file_list"): # option 2
       self.__run_local_input_output_list()
     else:
-      print("Unrecognized option")
+      error("Unrecognized option")
   
   def run_condor(self, job_flavour, resubmit_job, dry):
-    print("Running on condor")
+    info("Running on condor")
     
     self.job_flavour = job_flavour
     self.resubmit_job = resubmit_job
@@ -49,7 +59,7 @@ class SubmissionManager:
     self.__set_run_script_variables()
     
     command = f"condor_submit {self.condor_config_name}"
-    print(f"Submitting to condor: {command}")
+    info(f"Submitting to condor: {command}")
     
     if not dry:  
       os.system(command)
@@ -63,24 +73,31 @@ class SubmissionManager:
       self.__create_dir_if_not_exists(path)
     
   def __setup_files_config(self):
-    print(f"Reading files config from path: {self.files_config_path}")
+    if self.files_config_path is None:
+      fatal("Please provide a files config")
+      exit()
+    
+    info(f"Reading files config from path: {self.files_config_path}")
     spec = importlib.util.spec_from_file_location("files_module", self.files_config_path)
     self.files_config = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(self.files_config)
   
   def __run_command(self, command):
-    print(f"\n\nExecuting {command=}")
+    info(f"\n\nExecuting {command=}")
     os.system(command)
   
   def __get_das_files_list(self, dataset_name):
     das_command = f"dasgoclient -query='file dataset={dataset_name}'"
-    print(f"\n\nExecuting {das_command=}")
+    info(f"\n\nExecuting {das_command=}")
     return os.popen(das_command).read().splitlines()
   
   def __get_intput_file_list(self):
     if hasattr(self.files_config, "dataset"):
       max_files = getattr(self.files_config, "max_files", -1)
-      return self.__get_das_files_list(self.files_config.dataset)[:max_files]
+      files = self.__get_das_files_list(self.files_config.dataset)
+      if max_files > 0:
+        return files[:max_files]
+      return files
     
     if hasattr(self.files_config, "input_file_list"):
       return self.files_config.input_file_list
@@ -88,7 +105,7 @@ class SubmissionManager:
     if hasattr(self.files_config, "input_directory"):
       return os.popen(f"find {self.files_config.input_directory} -maxdepth 1 -name '*.root'").read().splitlines()
     
-    print("Unrecognized option")
+    fatal("Unrecognized option")
     exit()
   
   # option 1 & 3, 4, 5
@@ -101,21 +118,36 @@ class SubmissionManager:
       path = "/".join(input_file_list[0].strip().split("/")[:-1])
       input_file_list = [f"{path}/{file_name}"]
     
-    for input_file_path in input_file_list:
+    max_files = -1
+    if hasattr(self.files_config, "max_files"):
+      max_files = self.files_config.max_files
+    
+    for i, input_file_path in enumerate(input_file_list):
+      if max_files > 0 and i >= max_files:
+        return
+      
       input_file_name = input_file_path.strip().split("/")[-1]
       output_file_path = f"{self.files_config.output_dir}/{input_file_name}"
       command_for_file = f"{self.command} {input_file_path} {output_file_path}"
+      if self.applyMuonScaleFactors is not None:
+        command_for_file += f" {int(self.applyMuonScaleFactors)}"
+      if self.applyMuonTriggerScaleFactors is not None:
+        command_for_file += f" {int(self.applyMuonTriggerScaleFactors)}"
+      
       self.__run_command(command_for_file)
   
   # option 2
   def __run_local_input_output_list(self):
-    print("Running locally with input_output_file_list")
+    info("Running locally with input_output_file_list")
     for input_file_path, output_file_path in self.files_config.input_output_file_list:
       command_for_file = f"{self.command} {input_file_path} {output_file_path}"
+      if self.applyMuonScaleFactors is not None:
+        command_for_file += f" {int(self.applyMuonScaleFactors)}"
+      if self.applyMuonTriggerScaleFactors is not None:
+        command_for_file += f" {int(self.applyMuonTriggerScaleFactors)}"
+        
       self.__run_command(command_for_file)
-  
-
-      
+        
   def __setup_temp_file_paths(self):
     hash_string = str(uuid.uuid4().hex[:6])
     self.condor_config_name = f"tmp/condor_config_{hash_string}.sub"
@@ -126,8 +158,8 @@ class SubmissionManager:
     os.system(f"cp ../templates/condor_config.template.sub {self.condor_config_name}")
     os.system(f"cp ../templates/condor_run.template.sh {self.condor_run_script_name}")
     os.system(f"chmod 700 {self.condor_run_script_name}")
-    print(f"Stored condor config at: {self.condor_config_name}")
-    print(f"Stored run shell script at: {self.condor_run_script_name}")
+    info(f"Stored condor config at: {self.condor_config_name}")
+    info(f"Stored run shell script at: {self.condor_run_script_name}")
     
   def __save_file_list_to_file(self, input_files):
     with open(self.input_files_list_file_name, "w") as file:
@@ -152,6 +184,16 @@ class SubmissionManager:
       os.system(f"sed -i 's/<file_name>/--file_name {self.files_config.file_name}/g' {self.condor_run_script_name}")
     else:
       os.system(f"sed -i 's/<file_name>//g' {self.condor_run_script_name}")
+    
+    if self.applyMuonScaleFactors is None:
+      os.system(f"sed -i 's/<muon_SFs>//g' {self.condor_run_script_name}")
+    else:
+      os.system(f"sed -i 's/<muon_SFs>/--apply_muon_SFs {int(self.applyMuonScaleFactors)}/g' {self.condor_run_script_name}")
+    
+    if self.applyMuonTriggerScaleFactors is None:
+      os.system(f"sed -i 's/<muonTrigger_SFs>//g' {self.condor_run_script_name}")
+    else:
+      os.system(f"sed -i 's/<muonTrigger_SFs>/--apply_muon_trigger_SFs {int(self.applyMuonTriggerScaleFactors)}/g' {self.condor_run_script_name}")
     
     self.__set_python_executable()
     

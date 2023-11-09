@@ -1,4 +1,5 @@
 from HistogramPlotter import HistogramPlotter
+from Logger import *
 
 from ROOT import TFile
 import importlib
@@ -32,13 +33,9 @@ def main():
     for hist in config.histograms2D:
       plotter.addHistosample2D(hist, sample, input_files[sample.name])
   
-  print("Setting up legends")
   plotter.setupLegends()
-  
-  print("Building stacks")
   plotter.buildStacks()
   plotter.addHists2D(input_files[sample.name], sample)
-
   plotter.drawStacks()
   plotter.drawHists2D()
 
