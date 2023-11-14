@@ -11,6 +11,15 @@ skim = "skimmed_looseSemimuonic_tightMuon"
 # output_dir = f"./skimmed_loose/"
 
 # Backgrounds
+# dataset = "/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM"
+# output_dir = f"{base_path}/backgrounds2018/TTZToLLNuNu_M-1to10/{skim}/"
+
+# dataset = "/TTZZ_TuneCP5_13TeV-madgraph-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM"
+# output_dir = f"{base_path}/backgrounds2018/TTZZ/{skim}/"
+
+# dataset = "/TTZH_TuneCP5_13TeV-madgraph-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
+# output_dir = f"{base_path}/backgrounds2018/TTZH/{skim}/"
+
 # dataset = "/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
 # output_dir = f"{base_path}/backgrounds2018/ttZJets/{skim}/"
 
@@ -41,8 +50,8 @@ skim = "skimmed_looseSemimuonic_tightMuon"
 # dataset = "/DYJetsToMuMu_M-50_massWgtFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
 # output_dir = f"{base_path}/backgrounds2018/DYJetsToMuMu_M-50/{skim}/"
 
-# dataset = "/TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM"
-# output_dir = f"{base_path}/backgrounds2018/TTZToLLNuNu/{skim}/"
+dataset = "/TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM"
+output_dir = f"{base_path}/backgrounds2018/TTZToLLNuNu/{skim}/"
 
 # dataset = "/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM"
 # output_dir = f"{base_path}/backgrounds2018/TTWJetsToLNu/{skim}/"
@@ -133,8 +142,8 @@ skim = "skimmed_looseSemimuonic_tightMuon"
 # dataset = "/QCD_Pt-800To1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
 # output_dir = f"{base_path}/backgrounds2018/QCD_Pt_800to1000_MuEnriched/{skim}/"
 
-dataset = "/QCD_Pt-1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
-output_dir = f"{base_path}/backgrounds2018/QCD_Pt_1000_MuEnriched/{skim}/"
+# dataset = "/QCD_Pt-1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
+# output_dir = f"{base_path}/backgrounds2018/QCD_Pt_1000_MuEnriched/{skim}/"
 
 
 # Data
