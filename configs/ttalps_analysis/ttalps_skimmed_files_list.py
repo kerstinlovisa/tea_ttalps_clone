@@ -7,7 +7,7 @@ input_skim = "skimmed_looseSemimuonic_tightMuon"
 # output_skim = "skimmed_ttbarSemimuonicCR_tightMuon"
 output_skim = "skimmed_ttZSemimuonicCR_tightMuon_noLooseMuonIso"
 
-file_name = "C55A6FA8-6732-0046-B89B-2FCB6E264FB2.root"
+# file_name = "C55A6FA8-6732-0046-B89B-2FCB6E264FB2.root"
 
 # input_file_list = ("./skimmed_loose/test_TTToSemileptonic.root",)
 # output_dir = f"./skimmed_ttbar/"
@@ -18,6 +18,10 @@ samples = (
   # Backgrounds
   # "backgrounds2018/ttZJets",
   # "backgrounds2018/TTZToLLNuNu",
+
+  "backgrounds2018/TTZToLLNuNu_M-1to10",
+  # "backgrounds2018/TTZZ",
+  # "backgrounds2018/TTZH",
   
   # "backgrounds2018/ttWJets",
   # "backgrounds2018/TTWJetsToLNu",
@@ -70,7 +74,7 @@ samples = (
 
   # # Data
   # "collision_data2018/SingleMuon2018A",
-  "collision_data2018/SingleMuon2018B",
+  # "collision_data2018/SingleMuon2018B",
   # "collision_data2018/SingleMuon2018C",
   # "collision_data2018/SingleMuon2018D",
 )

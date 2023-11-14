@@ -6,6 +6,10 @@ cross_sections = {
   
   "ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8": 0.5407,
   "TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8": 0.2439,
+  "TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8": 0.05324,
+  
+  "TTZZ_TuneCP5_13TeV-madgraph-pythia8": 0.001386,
+  "TTZH_TuneCP5_13TeV-madgraph-pythia8": 0.00113,
   
   "ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8": 0.4611,
   "TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8": 0.2163,
