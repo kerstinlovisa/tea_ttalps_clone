@@ -53,9 +53,6 @@ class TTAlpsSelections {
   bool PassesHadronSelections(const std::shared_ptr<Event> event);
 
  private:
-  std::map<std::string, std::pair<float, float>> eventSelections;
-  std::vector<std::string> requiredFlags;
-
   bool PassesMetFilters(const std::shared_ptr<Event> event);
 
 };

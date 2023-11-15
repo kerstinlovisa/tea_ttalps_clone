@@ -10,8 +10,8 @@ weightsBranchName = "genWeight"
 applyMuonScaleFactors = False
 applyMuonTriggerScaleFactors = False
 
-# from ttalps_skimmer_ttbarLike_semimuonic_config import extraEventCollections
-from ttalps_skimmer_ttZLike_semimuonic_config import extraEventCollections
+from ttalps_skimmer_ttbarLike_semimuonic_config import extraEventCollections
+# from ttalps_skimmer_ttZLike_semimuonic_config import extraEventCollections
 
 extraEventCollections["GoodNonBtaggedJets"] = {
   "inputCollections": ("Jet", ),
@@ -34,13 +34,13 @@ defaultHistParams = (
   ("TightMuons"         , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
   ("TightMuons"         , "dxy"                 , 1600  , -20   , 20    , ""  ),
   ("TightMuons"         , "dz"                  , 1600  , -20   , 20    , ""  ),
-  ("TightMuons"         , "pfRelIso04_all"      , 2000  , -100  , 100   , ""  ),
-  ("TightMuons"         , "pfRelIso03_chg"      , 2000  , -100  , 100   , ""  ),
-  ("TightMuons"         , "pfRelIso03_all"      , 2000  , -100  , 100   , ""  ),
-  ("TightMuons"         , "tkRelIso"            , 2000  , -100  , 100   , ""  ),
-  ("TightMuons"         , "miniPFRelIso_chg"    , 2000  , -100  , 100   , ""  ),
-  ("TightMuons"         , "miniPFRelIso_all"    , 2000  , -100  , 100   , ""  ),
-  ("TightMuons"         , "jetRelIso"           , 2000  , -100  , 100   , ""  ),
+  ("TightMuons"         , "pfRelIso04_all"      , 2000  , -10   , 10    , ""  ),
+  ("TightMuons"         , "pfRelIso03_chg"      , 2000  , -10   , 10    , ""  ),
+  ("TightMuons"         , "pfRelIso03_all"      , 2000  , -10   , 10    , ""  ),
+  ("TightMuons"         , "tkRelIso"            , 2000  , -10   , 10    , ""  ),
+  ("TightMuons"         , "miniPFRelIso_chg"    , 2000  , -10   , 10    , ""  ),
+  ("TightMuons"         , "miniPFRelIso_all"    , 2000  , -10   , 10    , ""  ),
+  ("TightMuons"         , "jetRelIso"           , 2000  , -10   , 10    , ""  ),
 
   
   ("Event"              , "nLooseMuons"         , 50    , 0     , 50    , ""  ),
@@ -72,18 +72,21 @@ defaultHistParams = (
   ("GoodJets"           , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
   ("GoodJets"           , "phi"                 , 100   , -2.5  , 2.5   , ""  ),
   ("GoodJets"           , "btagDeepB"           , 200   , -1    , 1     , ""  ),
+  ("GoodJets"           , "btagDeepFlavB"       , 200   , -1    , 1     , ""  ),
   
   ("Event"              , "nGoodBtaggedJets"    , 50    , 0     , 50    , ""  ),
   ("GoodBtaggedJets"    , "pt"                  , 2000  , 0     , 2000  , ""  ),
   ("GoodBtaggedJets"    , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
   ("GoodBtaggedJets"    , "phi"                 , 100   , -2.5  , 2.5   , ""  ),
   ("GoodBtaggedJets"    , "btagDeepB"           , 200   , -1    , 1     , ""  ),
+  ("GoodBtaggedJets"    , "btagDeepFlavB"       , 200   , -1    , 1     , ""  ),
   
   ("Event"              , "nGoodNonBtaggedJets" , 50    , 0     , 50    , ""  ),
   ("GoodNonBtaggedJets" , "pt"                  , 2000  , 0     , 2000  , ""  ),
   ("GoodNonBtaggedJets" , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
   ("GoodNonBtaggedJets" , "phi"                 , 100   , -2.5  , 2.5   , ""  ),
   ("GoodNonBtaggedJets" , "btagDeepB"           , 200   , -1    , 1     , ""  ),
+  ("GoodNonBtaggedJets" , "btagDeepFlavB"       , 200   , -1    , 1     , ""  ),
 )
 
 histParams = (

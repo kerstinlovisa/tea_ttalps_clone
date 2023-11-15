@@ -9,9 +9,6 @@ applySignalLikeSkimming = False
 weightsBranchName = "genWeight"
 
 triggerSelection = (
-    "HLT_Ele28_eta2p1_WPTight_Gsf_HT150",
-    "HLT_Ele30_eta2p1_WPTight_Gsf_CentralPFJet35_EleCleaned",
-    "HLT_Ele32_WPTight_Gsf",
     "HLT_IsoMu24",
 )
 
