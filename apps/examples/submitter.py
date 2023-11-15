@@ -44,13 +44,13 @@ def get_files_config(args):
   return files_config
 
 
-def update_files_config(path, sample):
+def update_files_config(path, key, value):
   with open(path, "r") as f:
     lines = f.readlines()
   with open(path, "w") as f:
     for line in lines:
-      if line.startswith("sample_path"):
-        line = f"sample_path = \"{sample}\"\n"
+      if line.startswith(key):
+        line = f"{key} \"{value}\"\n"
       f.write(line)
 
 
@@ -80,7 +80,19 @@ def main():
       
       info(f"Creating a temporary files config: {tmp_files_config_path}")
       os.system(f"cp {args.files_config} {tmp_files_config_path}")
-      update_files_config(tmp_files_config_path, sample)
+      update_files_config(tmp_files_config_path, "sample_path =", sample)
+      tmp_files_config_paths.append(tmp_files_config_path)
+  elif hasattr(files_config, "datasets_and_output_dirs"):
+    datasets_and_output_dirs = files_config.datasets_and_output_dirs
+    for dataset, output_dir in datasets_and_output_dirs:
+      hash_string = str(uuid.uuid4().hex[:6])
+      tmp_files_config_path = f"/tmp/files_config_{hash_string}.py"
+      
+      info(f"Creating a temporary files config: {tmp_files_config_path}")
+      os.system(f"cp {args.files_config} {tmp_files_config_path}")
+      update_files_config(tmp_files_config_path, "dataset =", dataset)
+      update_files_config(tmp_files_config_path, "output_dir =", output_dir)
+      
       tmp_files_config_paths.append(tmp_files_config_path)
   else:
     tmp_files_config_paths.append(args.files_config)
