@@ -21,6 +21,12 @@ EventProcessor::EventProcessor() {
   } catch (const Exception &e) {
     warn() << "Couldn't read eventSelections from config file " << endl;
   }
+
+    try {
+    config.GetVector("requiredFlags", requiredFlags);
+  } catch (const Exception &e) {
+    warn() << "Couldn't read requiredFlags from config file ";
+  }
 }
 
 bool EventProcessor::PassesTriggerSelections(const shared_ptr<Event> event) {
@@ -38,6 +44,14 @@ bool EventProcessor::PassesTriggerSelections(const shared_ptr<Event> event) {
     if (passes) return true;
   }
   return passes;
+}
+
+bool EventProcessor::PassesMetFilters(const shared_ptr<Event> event){
+  for(string flag : requiredFlags){
+    bool flagValue = event->Get(flag);
+    if(!flagValue) return false;
+  }
+  return true;
 }
 
 void EventProcessor::RegisterCuts(shared_ptr<CutFlowManager> cutFlowManager) {
