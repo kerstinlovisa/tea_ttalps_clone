@@ -151,7 +151,7 @@ class Styler:
       plot.GetYaxis().CenterTitle()
       plot.GetYaxis().SetNdivisions(505)
       
-    except:
+    except Exception:
       warn("Couldn't set axes limits")
       return
   
@@ -192,7 +192,7 @@ class Styler:
       plot.GetZaxis().SetLabelSize(0.06)
       plot.GetZaxis().SetNdivisions(505)
 
-    except:
+    except Exception:
       warn("Couldn't set axes limits")
       return
     

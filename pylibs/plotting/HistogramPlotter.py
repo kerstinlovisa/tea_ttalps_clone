@@ -239,7 +239,7 @@ class HistogramPlotter:
     
     try:
       base_hist = self.stacks[base_sample_type][hist.getName()].GetHists()[0]
-    except:
+    except Exception:
       return None
     
     title = "backgrounds_" + ("sum" if doRatio else "unc" ) + "_" + hist.getName()
