@@ -27,7 +27,7 @@ class EventProcessor {
 
  private:
   std::vector<std::string> triggerNames;
-  std::map<std::string, std::pair<float, float>> eventSelections;
+  std::unordered_map<std::string, std::pair<float, float>> eventSelections;
   std::vector<std::string> triggerWarningsPrinted;
 };
 

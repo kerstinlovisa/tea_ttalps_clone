@@ -32,7 +32,7 @@ class ConfigManager {
 
   void GetScaleFactors(std::string name, std::map<std::string, ScaleFactorsMap> &scaleFactors);
 
-  void GetSelections(std::map<std::string, std::pair<float, float>> &selections);
+  void GetSelections(std::unordered_map<std::string, std::pair<float, float>> &selections);
 
   void SetInputPath(std::string path) { inputPath = path; }
   void SetOutputPath(std::string path) { outputPath = path; }

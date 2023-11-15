@@ -377,7 +377,7 @@ void ConfigManager::GetHistogramsParams(std::map<std::string, HistogramParams2D>
   }
 }
 
-void ConfigManager::GetSelections(map<string, pair<float, float>> &selections) {
+void ConfigManager::GetSelections(unordered_map<string, pair<float, float>> &selections) {
   PyObject *pythonDict = GetPythonDict("eventSelections");
 
   PyObject *cutName, *cutValues;
@@ -392,4 +392,17 @@ void ConfigManager::GetSelections(map<string, pair<float, float>> &selections) {
     PyObject *max = GetItem(cutValues, 1);
     selections[PyUnicode_AsUTF8(cutName)] = {PyFloat_AsDouble(min), PyFloat_AsDouble(max)};
   }
+
+  // for some reason cuts are inverted after loading from python file. This is a workaround to bring the order back to normal
+  vector<pair<string, pair<float, float>>> selectionsVector;
+  for (auto &[cutName, cutValues] : selections) {
+    selectionsVector.push_back({cutName, cutValues});
+  }
+  unordered_map<string, pair<float, float>> selectionsInverted;
+  for (auto it = selectionsVector.rbegin(); it != selectionsVector.rend(); ++it) {
+    auto &[cutName, cutValues] = *it;
+
+    selectionsInverted[cutName] = cutValues;
+  }
+  selections = selectionsInverted;
 }
