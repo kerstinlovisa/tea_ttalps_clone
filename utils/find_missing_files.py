@@ -3,8 +3,10 @@ import glob
 
 # skim = "skimmed_looseSemileptonic"
 # skim = "skimmed_looseSemimuonic_tightMuon"
-skim = "skimmed_looseSemimuonic_tightMuon_newBtag"
+# skim = "skimmed_looseSemimuonic_tightMuon_newBtag"
 # skim = "skimmed_ttZSemimuonicCR_tightMuon_noLooseMuonIso"
+# skim = "skimmed_ttbarSemimuonicCR"
+skim = "skimmed_ttbarSemimuonicCR/histograms_noSFs"
 
 samples = (
   # ("/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM",
@@ -57,10 +59,10 @@ samples = (
    f"/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018A/{skim}/"),
   ("/SingleMuon/Run2018B-UL2018_MiniAODv2_NanoAODv9-v2/NANOAOD",
    f"/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018B/{skim}/"),
-  # ("/SingleMuon/Run2018C-UL2018_MiniAODv2_NanoAODv9-v2/NANOAOD",
-  #  f"/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018C/{skim}/"),
-  # ("/SingleMuon/Run2018D-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD",
-  #  f"/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018D/{skim}/"),
+  ("/SingleMuon/Run2018C-UL2018_MiniAODv2_NanoAODv9-v2/NANOAOD",
+   f"/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018C/{skim}/"),
+  ("/SingleMuon/Run2018D-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD",
+   f"/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018D/{skim}/"),
 )
 
 def main():

@@ -5,8 +5,11 @@ base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
 
 # sub_path = "skimmed_ttbarLike/histograms/"
 # sub_path = "skimmed_looseSemimuonic_tightMuon/"
-sub_path = "skimmed_looseSemimuonic_tightMuon_newBtag/"
+# sub_path = "skimmed_looseSemimuonic_tightMuon_newBtag/"
+# sub_path = "skimmed_looseSemimuonic/"
 # sub_path = "skimmed_ttbarSemimuonicCR_tightMuon/"
+# sub_path = "skimmed_ttbarSemimuonicCR_tightMuon_newBtag/"
+sub_path = "skimmed_ttbarSemimuonicCR/"
 # sub_path = "skimmed_ttZSemimuonicCR_tightMuon_noLooseMuonIso/"
 
 def count_events_in_files(files):
@@ -42,7 +45,7 @@ def count_files(input_path):
             n_events = count_events_in_files([os.path.join(input_path, path, sub_path, file) for file in files])
             total_size = get_total_size_of_files([os.path.join(input_path, path, sub_path, file) for file in files])
             print(f"{path}: N files: {len(files)}, N events: {n_events}, size: {total_size/1024/1024/1024:.3f} GB".replace(".", ","))
-        except:
+        except Exception:
             pass
     
 
