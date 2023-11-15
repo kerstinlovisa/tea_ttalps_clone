@@ -33,7 +33,7 @@ extraEventCollections = {
         "inputCollections": ("Jet", ),
         "pt": (30., 9999999.),
         "eta": (-2.4, 2.4),
-        "btagDeepB": (0.5, 9999999.),
+        "btagDeepFlavB": (0.7100, 9999999.),
         "jetId": 6, #  bit1 is loose (always false in 2017 since it does not exist), bit2 is tight, bit3 is tightLepVeto*
     },
     "LooseMuons": {

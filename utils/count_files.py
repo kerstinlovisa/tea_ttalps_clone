@@ -1,11 +1,11 @@
 import ROOT
 import os
-import sys
 
 base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
 
 # sub_path = "skimmed_ttbarLike/histograms/"
-sub_path = "skimmed_looseSemimuonic_tightMuon/"
+# sub_path = "skimmed_looseSemimuonic_tightMuon/"
+sub_path = "skimmed_looseSemimuonic_tightMuon_newBtag/"
 # sub_path = "skimmed_ttbarSemimuonicCR_tightMuon/"
 # sub_path = "skimmed_ttZSemimuonicCR_tightMuon_noLooseMuonIso/"
 
@@ -47,7 +47,7 @@ def count_files(input_path):
     
 
 if __name__ == "__main__":
-    count_files(f"{base_path}/backgrounds2018")
+    # count_files(f"{base_path}/backgrounds2018")
     count_files(f"{base_path}/collision_data2018")
-    count_files(f"{base_path}/signals")
+    # count_files(f"{base_path}/signals")
     
