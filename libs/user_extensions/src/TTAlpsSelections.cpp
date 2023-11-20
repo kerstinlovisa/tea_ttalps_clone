@@ -14,23 +14,7 @@ TTAlpsSelections::TTAlpsSelections(){
 }
 
 bool TTAlpsSelections::PassesSignalLikeSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  // float metPt = event->Get("MET_pt");
-  // if (!inRange(metPt, eventSelections["MET_pt"])) return false;
-
-  // if (!inRange(event->GetCollectionSize("GoodLeptons"), eventSelections["nGoodLeptons"])) return false;
-  // if (!inRange(event->GetCollectionSize("GoodBtaggedJets"), eventSelections["nGoodBtaggedJets"])) return false;
-  // if (!inRange(event->GetCollectionSize("GoodJets"), eventSelections["nGoodJets"])) return false;
-
-  // auto goodLeptons = event->GetCollection("GoodLeptons");
-  // int requiredGoodMuons = 3;
-  // for (auto lepton : *goodLeptons) {
-  //   if (lepton->GetOriginalCollection() != "Electron") continue;
-  //   requiredGoodMuons = 2;
-  //   break;
-  // }
-  // if (event->GetCollectionSize("GoodMuons") < requiredGoodMuons) return false;
-  // cutFlowManager->UpdateCutFlow("twoAdditionalMuons");
-
+  
   return true;
 }
 
