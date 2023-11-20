@@ -90,6 +90,15 @@ void Event::AddExtraCollections() {
           }
         }
 
+        for (auto &[branchName, cuts] : extraCollection.optionRanges) {
+          UChar_t value = physicsObject->Get(branchName);
+
+          if (value < cuts.first || value > cuts.second) {
+            passes = false;
+            break;
+          }
+        }
+
         if (passes) newCollection->push_back(physicsObject);
       }
     }

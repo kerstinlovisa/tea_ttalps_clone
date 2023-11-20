@@ -96,6 +96,7 @@ struct ExtraCollection {
   std::map<std::string, std::pair<float, float>> selections;
   std::map<std::string, bool> flags;
   std::map<std::string, int> options;
+  std::map<std::string, std::pair<int, int>> optionRanges;
 
   void Print() {
     info() << "Input collections: \n";
@@ -110,6 +111,9 @@ struct ExtraCollection {
     }
     for (auto &[name, option] : options) {
       info() << "\t" << name << ": " << option << std::endl;
+    }
+    for (auto &[name, optionRange] : optionRanges) {
+      info() << "\t" << name << ": " << optionRange.first << ", " << optionRange.second << std::endl;
     }
   }
 };

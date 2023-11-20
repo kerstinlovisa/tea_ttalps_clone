@@ -25,7 +25,7 @@ EventProcessor::EventProcessor() {
     try {
     config.GetVector("requiredFlags", requiredFlags);
   } catch (const Exception &e) {
-    warn() << "Couldn't read requiredFlags from config file ";
+    warn() << "Couldn't read requiredFlags from config file " << endl;
   }
 }
 

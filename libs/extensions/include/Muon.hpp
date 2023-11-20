@@ -31,6 +31,12 @@ class Muon {
   MuonID GetID();
   MuonIso GetIso();
 
+  void Print(){
+    info()<<"Muon: pt="<<GetPt()<<" eta="<<GetEta()<<" phi="<<GetPhi()<<std::endl;
+    GetID().Print();
+    GetIso().Print();
+  }
+
  private:
   std::shared_ptr<PhysicsObject> physicsObject;
 };
