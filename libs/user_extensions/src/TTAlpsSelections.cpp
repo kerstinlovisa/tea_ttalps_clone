@@ -10,7 +10,7 @@
 using namespace std;
 
 TTAlpsSelections::TTAlpsSelections(){
-  auto &config = ConfigManager::GetInstance();
+  eventProcessor = make_unique<EventProcessor>();
 }
 
 bool TTAlpsSelections::PassesSignalLikeSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
@@ -35,19 +35,24 @@ bool TTAlpsSelections::PassesSignalLikeSelections(const shared_ptr<Event> event,
 }
 
 void TTAlpsSelections::RegisterSingleLeptonSelections(shared_ptr<CutFlowManager> cutFlowManager) {
-  cutFlowManager->RegisterCut("nLooseMuons");
+  cutFlowManager->RegisterCut("nAdditionalLooseMuons");
 }
 
 bool TTAlpsSelections::PassesSingleLeptonSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   
-  int looseMuons = event->GetCollectionSize("LooseMuons");
-  if (looseMuons > 1) return false;
-  if (looseMuons == 1) {
-    auto leadingMuon = event->GetCollection("TightMuons")->at(0);
-    auto survivingMuon = event->GetCollection("LooseMuons")->at(0);
-    if (survivingMuon != leadingMuon) return false;
+  auto looseMuons = event->GetCollection("LooseMuons");
+  auto tightMuons = event->GetCollection("TightMuons");
+
+  int nLooseMuons = event->GetCollectionSize("LooseMuons");
+  
+  if (nLooseMuons > 1) return false;
+  
+  if (nLooseMuons == 1) {
+    auto tightMuon = event->GetCollection("TightMuons")->at(0);
+    auto looseMuon = event->GetCollection("LooseMuons")->at(0);
+    if (looseMuon != tightMuon) return false;
   }
-  if(cutFlowManager) cutFlowManager->UpdateCutFlow("nLooseMuons");
+  if(cutFlowManager) cutFlowManager->UpdateCutFlow("nAdditionalLooseMuons");
 
   return true;
 }
@@ -58,6 +63,7 @@ void TTAlpsSelections::RegisterTTZLikeSelections(shared_ptr<CutFlowManager> cutF
 
 bool TTAlpsSelections::PassesTTZLikeSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   auto looseMuons = event->GetCollection("LooseMuons");
+  
   double zMass = 91.1876; // GeV
   double smallestDifferenceToZmass = 999999;
   double maxDistanceFromZ = 30;

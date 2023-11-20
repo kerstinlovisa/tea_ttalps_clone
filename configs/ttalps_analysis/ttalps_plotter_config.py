@@ -21,11 +21,16 @@ hist_path = "histograms_noSFs"
 # skim = "skimmed_looseSemileptonic"
 # skim = "skimmed_signalLike"
 # skim = "skimmed_ttbarLike"
-# skim = "skimmed_ttZLike"
+
 # skim = "skimmed_ttbarSemimuonicCR_tightMuon"
 # skim = "skimmed_ttbarSemimuonicCR_tightMuon_newBtag"
-skim = "skimmed_ttbarSemimuonicCR"
+# skim = "skimmed_ttbarSemimuonicCR"
+# skim = "skimmed_ttbarSemimuonicCR_Met30GeV"
+# skim = "skimmed_ttbarSemimuonicCR_Met50GeV"
+
+# skim = "skimmed_ttZLike"
 # skim = "skimmed_ttZSemimuonicCR_tightMuon_noLooseMuonIso"
+skim = "skimmed_ttZSemimuonicCR_Met50GeV"
 
 # luminosity = 63670. # pb^-1
 luminosity = 59830. # recommended lumi from https://twiki.cern.ch/twiki/bin/view/CMS/LumiRecommendationsRun2
@@ -47,7 +52,7 @@ legends = {
 
 canvas_size = (800, 600)
 show_ratio_plots = True
-ratio_limits = (0.0, 2.0)
+ratio_limits = (0.5, 1.5)
 
 background_uncertainty_style = 3244 # available styles: https://root.cern.ch/doc/master/classTAttFill.html
 background_uncertainty_color = ROOT.kBlack
@@ -64,67 +69,67 @@ default_norm = NormalizationType.to_lumi
 
 histograms = (
 #           name                                  title logy    norm_type                 rebin xmin   xmax    ymin    ymax,   xlabel                                             ylabel
-  Histogram("Event_nTightMuons"                   , "", True  , default_norm              , 1  , 0     , 10    , 1e1   , 1e9   , "Number of tight #mu"                            , "# events (2018)"   ),
-  Histogram("TightMuons_pt"                       , "", True  , default_norm              , 50 , 0     , 450   , 1e-2  , 1e4   , "tight #mu p_{T} [GeV]"                          , "# events (2018)"   ),
-  Histogram("TightMuons_leadingPt"                , "", True  , default_norm              , 50 , 0     , 1000  , 1e-5  , 1e4   , "leading tight #mu p_{T} [GeV]"                  , "# events (2018)"   ),
-  # Histogram("TightMuons_subleadingPt"             , "", True  , default_norm              , 50 , 0     , 1000  , 1e-5  , 1e4   , "all subleading tight #mu p_{T} [GeV]"           , "# events (2018)"   ),
-  Histogram("TightMuons_eta"                      , "", True  , default_norm              , 10 , -3.0  , 5.0   , 1e0   , 2e3   , "tight #mu #eta"                                 , "# events (2018)"   ),
-  Histogram("TightMuons_dxy"                      , "", True  , default_norm              , 1  , -0.5  , 0.5   , 1e-2  , 1e6   , "tight #mu d_{xy} [cm]"                          , "# events (2018)"   ),
-  Histogram("TightMuons_dz"                       , "", True  , default_norm              , 1  , -1    , 1     , 1e-2  , 1e6   , "tight #mu d_{z} [cm]"                           , "# events (2018)"   ),
+  # Histogram("Event_nTightMuons"                   , "", True  , default_norm              , 1  , 0     , 10    , 1e1   , 1e9   , "Number of tight #mu"                            , "# events (2018)"   ),
+  # Histogram("TightMuons_pt"                       , "", True  , default_norm              , 50 , 0     , 1000  , 1e-3  , 1e5   , "tight #mu p_{T} [GeV]"                          , "# events (2018)"   ),
+  # Histogram("TightMuons_leadingPt"                , "", True  , default_norm              , 50 , 0     , 1000  , 1e-5  , 1e5   , "leading tight #mu p_{T} [GeV]"                  , "# events (2018)"   ),
+  # # Histogram("TightMuons_subleadingPt"             , "", True  , default_norm              , 50 , 0     , 1000  , 1e-5  , 1e4   , "all subleading tight #mu p_{T} [GeV]"           , "# events (2018)"   ),
+  # Histogram("TightMuons_eta"                      , "", True  , default_norm              , 10 , -3.0  , 5.0   , 1e0   , 1e5   , "tight #mu #eta"                                 , "# events (2018)"   ),
+  # Histogram("TightMuons_dxy"                      , "", True  , default_norm              , 1  , -0.5  , 0.5   , 1e-2  , 1e8   , "tight #mu d_{xy} [cm]"                          , "# events (2018)"   ),
+  # Histogram("TightMuons_dz"                       , "", True  , default_norm              , 1  , -1    , 1     , 1e-2  , 1e8   , "tight #mu d_{z} [cm]"                           , "# events (2018)"   ),
   
-  Histogram("TightMuons_pfRelIso04_all"           , "", True  , default_norm              , 1  , 0.08  , 0.2   , 1e-2  , 1e6   , "tight #mu PF Rel Iso 0.4 (all)"                 , "# events (2018)"   ),
-  Histogram("TightMuons_pfRelIso03_chg"           , "", True  , default_norm              , 1  , 0     , 0.5   , 1e-2  , 1e6   , "tight #mu PF Rel Iso 0.3 (chg)"                 , "# events (2018)"   ),
-  Histogram("TightMuons_pfRelIso03_all"           , "", True  , default_norm              , 1  , 0     , 0.5   , 1e-2  , 1e6   , "tight #mu PF Rel Iso 0.3 (all)"                 , "# events (2018)"   ),
-  Histogram("TightMuons_miniPFRelIso_chg"         , "", True  , default_norm              , 1  , -0.1  , 3.5   , 1e-2  , 1e6   , "tight #mu mini PF Rel Iso (chg)"                , "# events (2018)"   ),
-  Histogram("TightMuons_miniPFRelIso_all"         , "", True  , default_norm              , 5  , -0.1  , 3.5   , 1e-2  , 1e6   , "tight #mu mini PF Rel Iso (all)"                , "# events (2018)"   ),
-  Histogram("TightMuons_jetRelIso"                , "", True  , default_norm              , 5  , -1    , 8.0   , 1e-2  , 1e6   , "tight #mu jet Rel Iso"                          , "# events (2018)"   ),
-  Histogram("TightMuons_tkRelIso"                 , "", True  , default_norm              , 5  , -0.1  , 8.0    , 1e-2  , 1e6   , "tight #mu track Rel Iso"                       , "# events (2018)"   ),
+  # Histogram("TightMuons_pfRelIso04_all"           , "", True  , default_norm              , 1  , 0.0   , 0.2   , 1e-2  , 1e6   , "tight #mu PF Rel Iso 0.4 (all)"                 , "# events (2018)"   ),
+  # Histogram("TightMuons_pfRelIso03_chg"           , "", True  , default_norm              , 1  , 0     , 0.5   , 1e-2  , 1e6   , "tight #mu PF Rel Iso 0.3 (chg)"                 , "# events (2018)"   ),
+  # Histogram("TightMuons_pfRelIso03_all"           , "", True  , default_norm              , 1  , 0     , 0.5   , 1e-2  , 1e6   , "tight #mu PF Rel Iso 0.3 (all)"                 , "# events (2018)"   ),
+  # Histogram("TightMuons_miniPFRelIso_chg"         , "", True  , default_norm              , 10 , -0.1  , 3.5   , 1e-2  , 1e6   , "tight #mu mini PF Rel Iso (chg)"                , "# events (2018)"   ),
+  # Histogram("TightMuons_miniPFRelIso_all"         , "", True  , default_norm              , 5  , -0.1  , 3.5   , 1e-2  , 1e6   , "tight #mu mini PF Rel Iso (all)"                , "# events (2018)"   ),
+  # Histogram("TightMuons_jetRelIso"                , "", True  , default_norm              , 50 , -1    , 8.0   , 1e-2  , 1e6   , "tight #mu jet Rel Iso"                          , "# events (2018)"   ),
+  # Histogram("TightMuons_tkRelIso"                 , "", True  , default_norm              , 20 , -0.1  , 8.0   , 1e-2  , 1e6   , "tight #mu track Rel Iso"                       , "# events (2018)"   ),
   
   Histogram("Event_nLooseMuons"                   , "", True  , default_norm              , 1  , 0     , 10    , 1e1   , 1e9   , "Number of loose #mu"                            , "# events (2018)"   ),
-  # Histogram("LooseMuons_pt"                       , "", True  , default_norm              , 20 , 0     , 500   , 1e-2  , 1e6   , "loose #mu p_{T} [GeV]"                          , "# events (2018)"   ),
-  # Histogram("LooseMuons_leadingPt"                , "", True  , default_norm              , 20 , 0     , 500   , 1e-2  , 1e6   , "leading loose #mu p_{T} [GeV]"                  , "# events (2018)"   ),
-  # Histogram("LooseMuons_subleadingPt"             , "", True  , default_norm              , 20 , 0     , 500   , 1e-2  , 1e6   , "all subleading loose #mu p_{T} [GeV]"           , "# events (2018)"   ),
-  # Histogram("LooseMuons_eta"                      , "", True  , default_norm              , 5  , -3.5  , 3.5   , 1e0   , 1e6   , "loose #mu #eta"                                 , "# events (2018)"   ),
-  # Histogram("LooseMuons_dxy"                      , "", True  , default_norm              , 2  , -10   , 10    , 1e-2  , 1e6   , "loose #mu d_{xy} [cm]"                          , "# events (2018)"   ),
-  # Histogram("LooseMuons_dz"                       , "", True  , default_norm              , 2  , -10   , 10    , 1e-2  , 1e6   , "loose #mu d_{z} [cm]"                           , "# events (2018)"   ),
+  Histogram("LooseMuons_pt"                       , "", True  , default_norm              , 20 , 0     , 500   , 1e-2  , 1e6   , "loose #mu p_{T} [GeV]"                          , "# events (2018)"   ),
+  Histogram("LooseMuons_leadingPt"                , "", True  , default_norm              , 20 , 0     , 500   , 1e-2  , 1e6   , "leading loose #mu p_{T} [GeV]"                  , "# events (2018)"   ),
+  Histogram("LooseMuons_subleadingPt"             , "", True  , default_norm              , 20 , 0     , 500   , 1e-2  , 1e6   , "all subleading loose #mu p_{T} [GeV]"           , "# events (2018)"   ),
+  Histogram("LooseMuons_eta"                      , "", True  , default_norm              , 5  , -3.5  , 3.5   , 1e0   , 1e6   , "loose #mu #eta"                                 , "# events (2018)"   ),
+  Histogram("LooseMuons_dxy"                      , "", True  , default_norm              , 5  , -10   , 10    , 1e-2  , 1e6   , "loose #mu d_{xy} [cm]"                          , "# events (2018)"   ),
+  Histogram("LooseMuons_dz"                       , "", True  , default_norm              , 5  , -10   , 10    , 1e-2  , 1e6   , "loose #mu d_{z} [cm]"                           , "# events (2018)"   ),
   
-  Histogram("Event_nLooseElectrons"               , "", True  , default_norm              , 1  , 0     , 10    , 1e1   , 1e9   , "Number of loose electrons"                      , "# events (2018)"   ),
-  # Histogram("LooseElectrons_pt"                   , "", True  , default_norm              , 10 , 0     , 500   , 1e-2  , 1e6   , "loose electron p_{T} [GeV]"                     , "# events (2018)"   ),
-  # Histogram("LooseElectrons_leadingPt"            , "", True  , default_norm              , 10 , 0     , 500   , 1e-2  , 1e6   , "leading loose electron p_{T} [GeV]"             , "# events (2018)"   ),
-  # Histogram("LooseElectrons_subleadingPt"         , "", True  , default_norm              , 10 , 0     , 500   , 1e-2  , 1e6   , "all subleading loose electron p_{T} [GeV]"      , "# events (2018)"   ),
-  # Histogram("LooseElectrons_eta"                  , "", True  , default_norm              , 5  , -3.5  , 3.5   , 1e-2  , 1e6   , "loose electron #eta"                            , "# events (2018)"   ),
-  # Histogram("LooseElectrons_dxy"                  , "", True  , default_norm              , 10 , -10   , 10    , 1e-2  , 1e6   , "loose electron d_{xy}"                          , "# events (2018)"   ),
-  # Histogram("LooseElectrons_dz"                   , "", True  , default_norm              , 10 , -10   , 10    , 1e-2  , 1e6   , "loose electron d_{z}"                           , "# events (2018)"   ),
+  # # Histogram("Event_nLooseElectrons"               , "", True  , default_norm              , 1  , 0     , 10    , 1e1   , 1e9   , "Number of loose electrons"                      , "# events (2018)"   ),
+  # # Histogram("LooseElectrons_pt"                   , "", True  , default_norm              , 10 , 0     , 500   , 1e-2  , 1e6   , "loose electron p_{T} [GeV]"                     , "# events (2018)"   ),
+  # # Histogram("LooseElectrons_leadingPt"            , "", True  , default_norm              , 10 , 0     , 500   , 1e-2  , 1e6   , "leading loose electron p_{T} [GeV]"             , "# events (2018)"   ),
+  # # Histogram("LooseElectrons_subleadingPt"         , "", True  , default_norm              , 10 , 0     , 500   , 1e-2  , 1e6   , "all subleading loose electron p_{T} [GeV]"      , "# events (2018)"   ),
+  # # Histogram("LooseElectrons_eta"                  , "", True  , default_norm              , 5  , -3.5  , 3.5   , 1e-2  , 1e6   , "loose electron #eta"                            , "# events (2018)"   ),
+  # # Histogram("LooseElectrons_dxy"                  , "", True  , default_norm              , 10 , -10   , 10    , 1e-2  , 1e6   , "loose electron d_{xy}"                          , "# events (2018)"   ),
+  # # Histogram("LooseElectrons_dz"                   , "", True  , default_norm              , 10 , -10   , 10    , 1e-2  , 1e6   , "loose electron d_{z}"                           , "# events (2018)"   ),
   
-  Histogram("Event_nGoodJets"                     , "", True  , default_norm              , 1  , 2     , 16    , 1e-2  , 1e7   , "Number of good jets"                            , "# events (2018)"   ),
-  Histogram("GoodJets_pt"                         , "", True  , default_norm              , 50 , 0     , 1300  , 1e-3  , 1e4   , "good jet p_{T} [GeV]"                           , "# events (2018)"   ),
-  Histogram("GoodJets_eta"                        , "", True  , default_norm              , 10 , -3    , 5.0   , 1e1   , 1e4   , "good jet #eta"                                  , "# events (2018)"   ),
-  Histogram("GoodJets_btagDeepB"                  , "", True  , default_norm              , 10 , 0     , 1.5   , 2e0   , 1e5   , "good jet deepCSV score"                         , "# events (2018)"   ),
-  Histogram("GoodJets_btagDeepFlavB"              , "", True  , default_norm              , 10 , 0     , 1.5   , 2e0   , 1e5   , "good jet deepJet score"                         , "# events (2018)"   ),
+  # Histogram("Event_nGoodJets"                     , "", True  , default_norm              , 1  , 2     , 16    , 1e-2  , 1e7   , "Number of good jets"                            , "# events (2018)"   ),
+  # Histogram("GoodJets_pt"                         , "", True  , default_norm              , 25 , 0     , 1300  , 1e-3  , 1e6   , "good jet p_{T} [GeV]"                           , "# events (2018)"   ),
+  # Histogram("GoodJets_eta"                        , "", True  , default_norm              , 10 , -3    , 5.0   , 1e1   , 1e6   , "good jet #eta"                                  , "# events (2018)"   ),
+  # Histogram("GoodJets_btagDeepB"                  , "", True  , default_norm              , 10 , 0     , 1.5   , 2e0   , 1e6   , "good jet deepCSV score"                         , "# events (2018)"   ),
+  # Histogram("GoodJets_btagDeepFlavB"              , "", True  , default_norm              , 10 , 0     , 1.5   , 2e0   , 1e6   , "good jet deepJet score"                         , "# events (2018)"   ),
   
-  Histogram("Event_nGoodBtaggedJets"              , "", True  , default_norm              , 1  , 0     , 20    , 1e0   , 1e9   , "Number of good b-jets"                          , "# events (2018)"   ),
-  Histogram("GoodBtaggedJets_pt"                  , "", True  , default_norm              , 50 , 0     , 2000  , 1e-5  , 1e4   , "good b-jet p_{T} [GeV]"                         , "# events (2018)"   ),
-  Histogram("GoodBtaggedJets_eta"                 , "", True  , default_norm              , 5  , -3.5  , 3.5   , 1e0   , 1e10  , "good b-jet #eta"                                , "# events (2018)"   ),
-  Histogram("GoodBtaggedJets_btagDeepB"           , "", True  , default_norm              , 10 , -1    , 1     , 1e0   , 1e8   , "good b-jet btagDeepB"                           , "# events (2018)"   ),
+  # Histogram("Event_nGoodBtaggedJets"              , "", True  , default_norm              , 1  , 0     , 20    , 1e0   , 1e9   , "Number of good b-jets"                          , "# events (2018)"   ),
+  # Histogram("GoodBtaggedJets_pt"                  , "", True  , default_norm              , 50 , 0     , 2000  , 1e-5  , 1e4   , "good b-jet p_{T} [GeV]"                         , "# events (2018)"   ),
+  # Histogram("GoodBtaggedJets_eta"                 , "", True  , default_norm              , 5  , -3.5  , 3.5   , 1e0   , 1e10  , "good b-jet #eta"                                , "# events (2018)"   ),
+  # Histogram("GoodBtaggedJets_btagDeepB"           , "", True  , default_norm              , 10 , -1    , 1     , 1e0   , 1e8   , "good b-jet btagDeepB"                           , "# events (2018)"   ),
   
-  Histogram("Event_nGoodNonBtaggedJets"           , "", True  , default_norm              , 1  , 0     , 20    , 1e0   , 1e9   , "Number of good non-b jets"                      , "# events (2018)"   ),
-  Histogram("GoodNonBtaggedJets_pt"               , "", True  , default_norm              , 50 , 0     , 2000  , 1e-5  , 1e4   , "good non-b jet p_{T} [GeV]"                     , "# events (2018)"   ),
-  Histogram("GoodNonBtaggedJets_eta"              , "", True  , default_norm              , 5  , -3.5  , 3.5   , 1e0   , 1e10  , "good non-b jet #eta"                            , "# events (2018)"   ),
-  Histogram("GoodNonBtaggedJets_btagDeepB"        , "", True  , default_norm              , 10 , -1    , 1     , 1e0   , 1e8   , "good non-b jet btagDeepB"                       , "# events (2018)"   ),
+  # Histogram("Event_nGoodNonBtaggedJets"           , "", True  , default_norm              , 1  , 0     , 20    , 1e0   , 1e9   , "Number of good non-b jets"                      , "# events (2018)"   ),
+  # Histogram("GoodNonBtaggedJets_pt"               , "", True  , default_norm              , 50 , 0     , 2000  , 1e-5  , 1e4   , "good non-b jet p_{T} [GeV]"                     , "# events (2018)"   ),
+  # Histogram("GoodNonBtaggedJets_eta"              , "", True  , default_norm              , 5  , -3.5  , 3.5   , 1e0   , 1e10  , "good non-b jet #eta"                            , "# events (2018)"   ),
+  # Histogram("GoodNonBtaggedJets_btagDeepB"        , "", True  , default_norm              , 10 , -1    , 1     , 1e0   , 1e8   , "good non-b jet btagDeepB"                       , "# events (2018)"   ),
   
-  Histogram("Event_METpt"                         , "", True  , default_norm              , 40 , 0     , 640   , 1e-3  , 2e3   , "MET p_{T} [GeV]"                                , "# events (2018)"   ),
+  Histogram("Event_METpt"                         , "", True  , default_norm              , 10 , 0     , 640   , 1e-3  , 1e5   , "MET p_{T} [GeV]"                                , "# events (2018)"   ),
   
   Histogram("LooseMuons_dimuonMinv"               , "", True  , default_norm              , 1  , 70    , 110   , 1e0   , 1e4   , "loose muons m_{#mu#mu} [GeV]"                   , "# events (2018)"   ),
   Histogram("LooseMuons_dimuonMinvClosestToZ"     , "", True  , default_norm              , 1  , 70    , 110   , 1e0   , 1e4   , "loose muons closest to Z m_{#mu#mu} [GeV]"      , "# events (2018)"   ),
   Histogram("LooseMuons_dimuonDeltaRclosestToZ"   , "", True  , default_norm              , 1  , -1    , 6     , 1e0   , 1e3   , "loose muons closest to Z #Delta R_{#mu#mu}"     , "# events (2018)"   ),
-  Histogram("LooseMuons_dimuonDeltaEtaclosestToZ" , "", True  , default_norm              , 1  , -1    , 6     , 1e0   , 1e3   , "loose muons closest to Z #Delta #eta_{#mu#mu}"  , "# events (2018)"   ),
-  Histogram("LooseMuons_dimuonDeltaPhiclosestToZ" , "", True  , default_norm              , 1  , -3.5  , 6     , 1e0   , 1e3   , "loose muons closest to Z #Delta #phi_{#mu#mu}"  , "# events (2018)"   ),
+  Histogram("LooseMuons_dimuonDeltaEtaclosestToZ" , "", True  , default_norm              , 1  , -1    , 6     , 1e-1  , 1e3   , "loose muons closest to Z #Delta #eta_{#mu#mu}"  , "# events (2018)"   ),
+  Histogram("LooseMuons_dimuonDeltaPhiclosestToZ" , "", True  , default_norm              , 1  , -3.5  , 6     , 1e-1  , 1e3   , "loose muons closest to Z #Delta #phi_{#mu#mu}"  , "# events (2018)"   ),
   
   Histogram("TightMuons_deltaPhiMuonMET"          , "", True  , default_norm              , 20 , -4    , 4     , 1e0   , 1e7   , "tight muon #Delta #phi(MET, #mu)"               , "# events (2018)"   ),
-  Histogram("TightMuons_minvMuonMET"              , "", True  , default_norm              , 40 , 0     , 1000  , 1e-4  , 2e3   , "tight muon m_{MET, l} [GeV]"                    , "# events (2018)"   ),
+  Histogram("TightMuons_minvMuonMET"              , "", True  , default_norm              , 40 , 0     , 1000  , 1e-4  , 1e5   , "tight muon m_{MET, l} [GeV]"                    , "# events (2018)"   ),
   Histogram("GoodJets_minvBjet2jets"              , "", True  , default_norm              , 25 , 0     , 1500  , 1e-1  , 1e5   , "good jets m_{bjj} [GeV]"                        , "# events (2018)"   ),
   
-  Histogram("cutFlow"                             , "", True  , NormalizationType.to_lumi , 1  , 0     , 12    , 1e2   , 1e11  , "Selection"                                      , "Number of events"  ),
+  Histogram("cutFlow"                             , "", True  , NormalizationType.to_lumi , 1  , 0     , 13    , 1e1   , 1e15  , "Selection"                                      , "Number of events"  ),
   Histogram("Event_normCheck"                     , "", True  , NormalizationType.to_lumi , 1  , 0     , 1     , 1e-2  , 1e7   , "norm check"                                     , "# events (2018)"   ),
 )
 
@@ -139,6 +144,7 @@ color_palette_wong = (
 )
 
 samples = (
+  # Data
   Sample(
     name="SingleMuon",
     file_path=f"{base_path}/collision_data2018/SingleMuon2018_{skim}_{hist_path}.root",
@@ -152,6 +158,21 @@ samples = (
     legend_description="SingleMuon2018",
   ),
   
+  # Signal
+  Sample(
+    name="tta_mAlp-0p35GeV_ctau-1e5mm",
+    file_path=f"{base_path}/signals/tta_mAlp-0p35GeV_ctau-1e5mm/{skim}/{hist_path}/histograms.root",
+    type=SampleType.signal,
+    cross_sections=cross_sections,
+    line_alpha=1,
+    line_style=2,
+    fill_alpha=0,
+    marker_size=0,
+    line_color=ROOT.kRed,
+    legend_description="0.35 GeV, 1e5 mm",
+  ),
+  
+  # Backgrounds
   Sample(
     name="TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8",
     file_path=f"{base_path}/backgrounds2018/TTToSemiLeptonic/{skim}/{hist_path}/histograms.root",
@@ -213,7 +234,7 @@ samples = (
     custom_legend=Legend(0, 0, 0, 0, "")
   ),
   
-    # Sample(
+  # Sample(
   #   name="DYJetsToMuMu_M-10to50_H2ErratumFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos",
   #   file_path=f"{base_path}/backgrounds2018/DYJetsToMuMu_M-10to50/{skim}/{hist_path}/histograms.root",
   #   type=SampleType.background,
@@ -222,8 +243,10 @@ samples = (
   #   fill_color=ROOT.kMagenta+1,
   #   fill_alpha=0.7,
   #   marker_size=0,
-  #   legend_description="DY",
-  #   custom_legend=Legend(legend_max_x-2*legend_width, legend_max_y-3*legend_height, legend_max_x-legend_width, legend_max_y-2*legend_height, "f")
+  #   # legend_description="DY",
+  #   # custom_legend=Legend(legend_max_x-2*legend_width, legend_max_y-3*legend_height, legend_max_x-legend_width, legend_max_y-2*legend_height, "f"),
+  #   legend_description=" ",
+  #   custom_legend=Legend(0, 0, 0, 0, ""),
   # ),
   Sample(
     name="DYJetsToMuMu_M-50_massWgtFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos",
@@ -234,8 +257,10 @@ samples = (
     fill_color=ROOT.kMagenta+1,
     fill_alpha=0.7,
     marker_size=0,
-    legend_description=" ",
-    custom_legend=Legend(0, 0, 0, 0, "")
+    legend_description="DY",
+    custom_legend=Legend(legend_max_x-2*legend_width, legend_max_y-3*legend_height, legend_max_x-legend_width, legend_max_y-2*legend_height, "f"),
+    # legend_description=" ",
+    # custom_legend=Legend(0, 0, 0, 0, ""),
   ),
   
   Sample(
@@ -307,17 +332,17 @@ samples = (
     legend_description="ttW",
   ),
   
-  Sample(
-    name="ttHToMuMu_M125_TuneCP5_13TeV-powheg-pythia8",
-    file_path=f"{base_path}/backgrounds2018/ttHToMuMu/{skim}/{hist_path}/histograms.root",
-    type=SampleType.background,
-    cross_sections=cross_sections,
-    line_alpha=0,
-    fill_color=color_palette_wong[3],
-    fill_alpha=1.0,
-    marker_size=0,
-    legend_description="ttH (#mu#mu)",
-  ),
+  # Sample(
+  #   name="ttHToMuMu_M125_TuneCP5_13TeV-powheg-pythia8",
+  #   file_path=f"{base_path}/backgrounds2018/ttHToMuMu/{skim}/{hist_path}/histograms.root",
+  #   type=SampleType.background,
+  #   cross_sections=cross_sections,
+  #   line_alpha=0,
+  #   fill_color=color_palette_wong[3],
+  #   fill_alpha=1.0,
+  #   marker_size=0,
+  #   legend_description="ttH (#mu#mu)",
+  # ),
   Sample(
     name="ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8",
     file_path=f"{base_path}/backgrounds2018/ttHTobb/{skim}/{hist_path}/histograms.root",
@@ -487,18 +512,20 @@ samples = (
   #   legend_description=" ",
   #   custom_legend=Legend(0, 0, 0, 0, "")
   # ),
-  Sample(
-    name="QCD_Pt-120To170_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-    file_path=f"{base_path}/backgrounds2018/QCD_Pt_120to170_MuEnriched/{skim}/{hist_path}/histograms.root",
-    type=SampleType.background,
-    cross_sections=cross_sections,
-    line_alpha=0,
-    fill_color=color_palette_wong[0],
-    fill_alpha=1.0,
-    marker_size=0,
-    legend_description="QCD (#mu enriched)",
-    custom_legend=Legend(legend_max_x-2*legend_width, legend_max_y-4*legend_height, legend_max_x-legend_width, legend_max_y-3*legend_height, "f")
-  ),
+  # Sample(
+  #   name="QCD_Pt-120To170_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
+  #   file_path=f"{base_path}/backgrounds2018/QCD_Pt_120to170_MuEnriched/{skim}/{hist_path}/histograms.root",
+  #   type=SampleType.background,
+  #   cross_sections=cross_sections,
+  #   line_alpha=0,
+  #   fill_color=color_palette_wong[0],
+  #   fill_alpha=1.0,
+  #   marker_size=0,
+  #   # legend_description="QCD (#mu enriched)",
+  #   # custom_legend=Legend(legend_max_x-2*legend_width, legend_max_y-4*legend_height, legend_max_x-legend_width, legend_max_y-3*legend_height, "f"),
+  #   legend_description=" ",
+  #   custom_legend=Legend(0, 0, 0, 0, ""),
+  # ),
   Sample(
     name="QCD_Pt-170To300_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
     file_path=f"{base_path}/backgrounds2018/QCD_Pt_170to300_MuEnriched/{skim}/{hist_path}/histograms.root",
@@ -508,8 +535,10 @@ samples = (
     fill_color=color_palette_wong[0],
     fill_alpha=1.0,
     marker_size=0,
-    legend_description=" ",
-    custom_legend=Legend(0, 0, 0, 0, "")
+    legend_description="QCD (#mu enriched)",
+    custom_legend=Legend(legend_max_x-2*legend_width, legend_max_y-4*legend_height, legend_max_x-legend_width, legend_max_y-3*legend_height, "f"),
+    # legend_description=" ",
+    # custom_legend=Legend(0, 0, 0, 0, ""),
   ),
   Sample(
     name="QCD_Pt-300To470_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
@@ -576,6 +605,7 @@ samples = (
 
 custom_stacks_order = (
   "SingleMuon",
+  "tta_mAlp-0p35GeV_ctau-1e5mm",
   
   "ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8",
   "TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8",
@@ -588,6 +618,9 @@ custom_stacks_order = (
   "ttHToMuMu_M125_TuneCP5_13TeV-powheg-pythia8",
   "ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8",
   "ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8",
+  
+  "DYJetsToMuMu_M-10to50_H2ErratumFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos",
+  "DYJetsToMuMu_M-50_massWgtFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos",
   
   "ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8",
   "ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8",
@@ -620,7 +653,4 @@ custom_stacks_order = (
   
   
   "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8",
-  
-  "DYJetsToMuMu_M-10to50_H2ErratumFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos",
-  "DYJetsToMuMu_M-50_massWgtFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos",
 )
