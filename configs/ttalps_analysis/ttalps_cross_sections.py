@@ -3,6 +3,8 @@
 # Cross sections in (pb) from XSDB
 cross_sections = {
   "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8": 365.34,
+  "TTToHadronic_TuneCP5_13TeV-powheg-pythia8": 377.96,
+  "TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8": 88.29,
   
   "ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8": 32.45,
   "ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8": 32.51,
@@ -59,7 +61,7 @@ cross_sections = {
   "QCD_Pt-1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8": 1.085,
   
   "SingleMuon": 1.0,
-  "tta_mAlp-0p35GeV_ctau-1e5mm": 1.0,
+  "tta_mAlp-0p35GeV_ctau-1e5mm": 0.35,
 }
 
 # Cross sections in (pb) from AN2018_025_v12

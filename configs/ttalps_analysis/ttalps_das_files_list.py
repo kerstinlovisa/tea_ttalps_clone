@@ -14,57 +14,63 @@ skim = "skimmed_looseSemimuonic_looseMuon_looseBjet"
 
 datasets_and_output_dirs = (
 # tt̄
-  ("/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
-   f"{base_path}/backgrounds2018/TTToSemiLeptonic/{skim}/"),
+  # ("/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
+  #  f"{base_path}/backgrounds2018/TTToSemiLeptonic/{skim}/"),
+  
+  ("/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
+   f"{base_path}/backgrounds2018/TTToHadronic/{skim}/"),
+  
+  # ("/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
+  #  f"{base_path}/backgrounds2018/TTTo2L2Nu/{skim}/"),
 
 # Single top
-  ("/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM",
-   f"{base_path}/backgrounds2018/ST_tW_antitop/{skim}/"),
-  ("/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
-   f"{base_path}/backgrounds2018/ST_tW_top/{skim}/"),
-  ("/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
-   f"{base_path}/backgrounds2018/ST_t-channel_antitop/{skim}/"),
-  ("/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
-   f"{base_path}/backgrounds2018/ST_t-channel_top/{skim}/"),
+#   ("/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM",
+#    f"{base_path}/backgrounds2018/ST_tW_antitop/{skim}/"),
+#   ("/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
+#    f"{base_path}/backgrounds2018/ST_tW_top/{skim}/"),
+#   ("/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
+#    f"{base_path}/backgrounds2018/ST_t-channel_antitop/{skim}/"),
+#   ("/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
+#    f"{base_path}/backgrounds2018/ST_t-channel_top/{skim}/"),
 
-# DY
-  ("/DYJetsToMuMu_M-10to50_H2ErratumFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
-   f"{base_path}/backgrounds2018/DYJetsToMuMu_M-10to50/{skim}/"),
-  ("/DYJetsToMuMu_M-50_massWgtFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM",
-   f"{base_path}/backgrounds2018/DYJetsToMuMu_M-50/{skim}/"),
+# # DY
+#   ("/DYJetsToMuMu_M-10to50_H2ErratumFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
+#    f"{base_path}/backgrounds2018/DYJetsToMuMu_M-10to50/{skim}/"),
+#   ("/DYJetsToMuMu_M-50_massWgtFix_TuneCP5_13TeV-powhegMiNNLO-pythia8-photos/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM",
+#    f"{base_path}/backgrounds2018/DYJetsToMuMu_M-50/{skim}/"),
 
-# W+jets
-  ("/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
-   f"{base_path}/backgrounds2018/WJetsToLNu/{skim}/"),
+# # W+jets
+#   ("/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
+#    f"{base_path}/backgrounds2018/WJetsToLNu/{skim}/"),
 
-# ttV
-  ("/TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
-   f"{base_path}/backgrounds2018/TTZToLLNuNu/{skim}/"),
-  ("/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
-   f"{base_path}/backgrounds2018/TTZToLLNuNu_M-1to10/{skim}/"),
-  # ("/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM",
-  #  f"{base_path}/backgrounds2018/ttZJets/{skim}/"),
+# # ttV
+#   ("/TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
+#    f"{base_path}/backgrounds2018/TTZToLLNuNu/{skim}/"),
+#   ("/TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
+#    f"{base_path}/backgrounds2018/TTZToLLNuNu_M-1to10/{skim}/"),
+#   # ("/ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM",
+#   #  f"{base_path}/backgrounds2018/ttZJets/{skim}/"),
 
-  ("/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
-   f"{base_path}/backgrounds2018/TTWJetsToLNu/{skim}/"),
-  # ("/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM",
-  #  f"{base_path}/backgrounds2018/ttWJets/{skim}/"),
+#   ("/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
+#    f"{base_path}/backgrounds2018/TTWJetsToLNu/{skim}/"),
+#   # ("/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM",
+#   #  f"{base_path}/backgrounds2018/ttWJets/{skim}/"),
 
-# ttH
-  ("/ttHToMuMu_M125_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
-   f"{base_path}/backgrounds2018/ttHToMuMu/{skim}/"),
-  ("/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
-   f"{base_path}/backgrounds2018/ttHTobb/{skim}/"),
-  ("/ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM",
-   f"{base_path}/backgrounds2018/ttHToNonbb/{skim}/"),
+# # ttH
+#   ("/ttHToMuMu_M125_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
+#    f"{base_path}/backgrounds2018/ttHToMuMu/{skim}/"),
+#   ("/ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
+#    f"{base_path}/backgrounds2018/ttHTobb/{skim}/"),
+#   ("/ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM",
+#    f"{base_path}/backgrounds2018/ttHToNonbb/{skim}/"),
   
-# TTZZ, TTZH, TTTT
-  ("/TTZZ_TuneCP5_13TeV-madgraph-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
-   f"{base_path}/backgrounds2018/TTZZ/{skim}/"),
-  ("/TTZH_TuneCP5_13TeV-madgraph-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM",
-   f"{base_path}/backgrounds2018/TTZH/{skim}/"),
-  ("/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM",
-   f"{base_path}/backgrounds2018/TTTT/{skim}/"),
+# # TTZZ, TTZH, TTTT
+#   ("/TTZZ_TuneCP5_13TeV-madgraph-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
+#    f"{base_path}/backgrounds2018/TTZZ/{skim}/"),
+#   ("/TTZH_TuneCP5_13TeV-madgraph-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM",
+#    f"{base_path}/backgrounds2018/TTZH/{skim}/"),
+#   ("/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM",
+#    f"{base_path}/backgrounds2018/TTTT/{skim}/"),
 
 
 # QCD
@@ -126,8 +132,8 @@ datasets_and_output_dirs = (
   #  f"{base_path}/backgrounds2018/QCD_Pt_1000_MuEnriched/{skim}/"),
 
 # Data
-  ("/SingleMuon/Run2018A-UL2018_MiniAODv2_NanoAODv9-v2/NANOAOD",
-   f"{base_path}/collision_data2018/SingleMuon2018A/{skim}/"),
+  # ("/SingleMuon/Run2018A-UL2018_MiniAODv2_NanoAODv9-v2/NANOAOD",
+  #  f"{base_path}/collision_data2018/SingleMuon2018A/{skim}/"),
   # ("/SingleMuon/Run2018B-UL2018_MiniAODv2_NanoAODv9-v2/NANOAOD",
   #  f"{base_path}/collision_data2018/SingleMuon2018B/{skim}/"),
   # ("/SingleMuon/Run2018C-UL2018_MiniAODv2_NanoAODv9-v2/NANOAOD",
