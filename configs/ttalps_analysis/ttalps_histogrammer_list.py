@@ -6,10 +6,12 @@ max_files = -1
 # skim = "skimmed_ttbarSemimuonicCR_tightMuon_newBtag"
 # skim = "skimmed_ttbarSemimuonicCR"
 # skim = "skimmed_ttbarSemimuonicCR_Met30GeV"
-# skim = "skimmed_ttbarSemimuonicCR_Met50GeV"
+skim = "skimmed_ttbarSemimuonicCR_Met50GeV"
 
 # skim = "skimmed_ttZSemimuonicCR_tightMuon_noLooseMuonIso"
-skim = "skimmed_ttZSemimuonicCR_Met50GeV"
+# skim = "skimmed_ttZSemimuonicCR_Met50GeV"
+
+# skim = "skimmed_SR_Met50GeV"
 
 base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
 
@@ -19,6 +21,8 @@ excludeTriggerSFs = False
 samples = (
   # Backgrounds
   "backgrounds2018/TTToSemiLeptonic",
+  "backgrounds2018/TTToHadronic",
+  "backgrounds2018/TTTo2L2Nu",
   
   "backgrounds2018/ST_tW_antitop",
   "backgrounds2018/ST_tW_top",
