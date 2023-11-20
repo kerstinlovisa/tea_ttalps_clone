@@ -37,7 +37,7 @@ bool EventProcessor::PassesTriggerSelections(const shared_ptr<Event> event) {
       passes = event->Get(triggerName);
     } catch (Exception &) {
       if (find(triggerWarningsPrinted.begin(), triggerWarningsPrinted.end(), triggerName) == triggerWarningsPrinted.end()) {
-        warn() << "Trigger not present: " << triggerName << "\n";
+        warn() << "Trigger not present: " << triggerName << endl;
         triggerWarningsPrinted.push_back(triggerName);
       }
     }

@@ -20,7 +20,7 @@ CutFlowManager::CutFlowManager(shared_ptr<EventReader> eventReader_, shared_ptr<
   }
 
   if (eventReader->inputFile->Get("CutFlow")) {
-    info() << "Input file contains CutFlow directory - will store existing cutflow in the output.\n";
+    info() << "Input file contains CutFlow directory - will store existing cutflow in the output." << endl;
 
     auto sourceDir = (TDirectory *)eventReader->inputFile->Get("CutFlow");
 
@@ -39,7 +39,7 @@ CutFlowManager::CutFlowManager(shared_ptr<EventReader> eventReader_, shared_ptr<
       currentIndex++;
     }
   }
-  if (!eventWriter_) info() << "No eventWriter given for CutFlowManager\n";
+  if (!eventWriter_) info() << "No eventWriter given for CutFlowManager" << endl;
   
 }
 
@@ -124,7 +124,7 @@ void CutFlowManager::Print() {
     sortedWeightsAfterCuts[index] = {cutName, sumOfWeights};
   }
 
-  info() << "CutFlow:\n";
+  info() << "CutFlow:" << endl;
   for (auto &[index, values] : sortedWeightsAfterCuts) {
     info() << get<0>(values) << " " << get<1>(values) << endl;
   }

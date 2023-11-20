@@ -77,7 +77,7 @@ void EventReader::SetupBranches(string inputPath) {
     auto branch = (TBranch *)i;
     string branchName = branch->GetName();
     string branchType = branch->FindLeaf(branchName.c_str())->GetTypeName();
-    if (branchType == "") error() << "Couldn't find branch type for branch: " << branchName << "\n";
+    if (branchType == "") error() << "Couldn't find branch type for branch: " << branchName << endl;
 
     bool branchIsVector = false;
 
@@ -85,7 +85,7 @@ void EventReader::SetupBranches(string inputPath) {
     if (leaf) {
       branchIsVector = leaf->GetLenStatic() > 1 || leaf->GetLeafCount() != nullptr;
     } else {
-      fatal() << "Couldn't get leaf for branch: " << branchName << "\n";
+      fatal() << "Couldn't get leaf for branch: " << branchName << endl;
       exit(1);
     }
 
@@ -192,16 +192,16 @@ void EventReader::SetCollectionSizeFromHepMC(shared_ptr<PhysicsObjects> collecti
   } catch (Exception &e) {
     workedWithHepMC = false;
     if (find(sizeWarningsPrinted.begin(), sizeWarningsPrinted.end(), name) == sizeWarningsPrinted.end()) {
-      error() << "Could not set size of collection: " << name << "\n";
-      error() << "Range-based loops over this collection should not be used!\n";
+      error() << "Could not set size of collection: " << name << endl;
+      error() << "Range-based loops over this collection should not be used!" << endl;
       sizeWarningsPrinted.push_back(name);
     }
   }
 
   if (!workedWithHepMC) {
     if (find(sizeWarningsPrinted.begin(), sizeWarningsPrinted.end(), name) == sizeWarningsPrinted.end()) {
-      error() << "Could not set size of collection: " << name << "\n";
-      error() << "Range-based loops over this collection should not be used!\n";
+      error() << "Could not set size of collection: " << name << endl;
+      error() << "Range-based loops over this collection should not be used!" << endl;
       sizeWarningsPrinted.push_back(name);
     }
   }

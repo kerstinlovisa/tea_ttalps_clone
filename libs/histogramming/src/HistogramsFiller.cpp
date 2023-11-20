@@ -111,6 +111,7 @@ void HistogramsFiller::FillDefaultVariables(const std::shared_ptr<Event> event) 
   try {
     weight = event->Get(weightsBranchName);
   } catch (...) {
+    warn() << "Coudn't get weight from branch: " << weightsBranchName << endl;
   }
 
   auto& scaleFactorsManager = ScaleFactorsManager::GetInstance();
@@ -120,11 +121,13 @@ void HistogramsFiller::FillDefaultVariables(const std::shared_ptr<Event> event) 
   try {
     IsoMu24included = event->Get("HLT_IsoMu24");
   } catch (...) {
+    warn() << "Coudn't get HLT_IsoMu24" << endl;
   }
 
   try {
     IsoMu50included = event->Get("HLT_IsoMu50");
   } catch (...) {
+    warn() << "Coudn't get HLT_IsoMu50" << endl;
   }
 
   for (auto& [title, params] : defaultHistVariables) {
