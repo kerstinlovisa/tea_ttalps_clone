@@ -1,4 +1,5 @@
 from scale_factors_config import *
+from ttalps_extra_collections import extraEventCollections
 
 nEvents = -1
 printEveryNevents = 10000
@@ -10,19 +11,10 @@ weightsBranchName = "genWeight"
 applyMuonScaleFactors = False
 applyMuonTriggerScaleFactors = False
 
-# from ttalps_skimmer_ttbarLike_semimuonic_config import extraEventCollections
-from ttalps_skimmer_ttZLike_semimuonic_config import extraEventCollections
-
-extraEventCollections["GoodNonBtaggedJets"] = {
-  "inputCollections": ("Jet", ),
-  "pt": (30., 9999999.),
-  "eta": (-2.4, 2.4),
-  "btagDeepFlavB": (0, 0.7100),
-  "jetId": 6, #  bit1 is loose (always false in 2017 since it does not exist), bit2 is tight, bit3 is tightLepVeto*
-}
-
 defaultHistParams = (
 #  collection             variable               bins    xmin    xmax    dir
+  # ("Pileup"             , "nPU"                 , 300   , 0     , 300   , ""  ),
+  
   ("Event"              , "nMuon"               , 50    , 0     , 50    , ""  ),
   ("Muon"               , "pt"                  , 2000  , 0     , 1000  , ""  ),
   ("Muon"               , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
@@ -48,6 +40,13 @@ defaultHistParams = (
   ("LooseMuons"         , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
   ("LooseMuons"         , "dxy"                 , 1600  , -20   , 20    , ""  ),
   ("LooseMuons"         , "dz"                  , 1600  , -20   , 20    , ""  ),
+  ("LooseMuons"         , "pfRelIso04_all"      , 2000  , -10   , 10    , ""  ),
+  ("LooseMuons"         , "pfRelIso03_chg"      , 2000  , -10   , 10    , ""  ),
+  ("LooseMuons"         , "pfRelIso03_all"      , 2000  , -10   , 10    , ""  ),
+  ("LooseMuons"         , "tkRelIso"            , 2000  , -10   , 10    , ""  ),
+  ("LooseMuons"         , "miniPFRelIso_chg"    , 2000  , -10   , 10    , ""  ),
+  ("LooseMuons"         , "miniPFRelIso_all"    , 2000  , -10   , 10    , ""  ),
+  ("LooseMuons"         , "jetRelIso"           , 2000  , -10   , 10    , ""  ),
   
   ("Event"              , "nElectron"           , 50    , 0     , 50    , ""  ),
   ("Electron"           , "pt"                  , 2000  , 0     , 1000  , ""  ),
