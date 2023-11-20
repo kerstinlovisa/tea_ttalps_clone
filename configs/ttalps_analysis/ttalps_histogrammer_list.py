@@ -4,8 +4,12 @@ max_files = -1
 # skim = "skimmed_ttZLike"
 # skim = "skimmed_ttbarSemimuonicCR_tightMuon"
 # skim = "skimmed_ttbarSemimuonicCR_tightMuon_newBtag"
-skim = "skimmed_ttbarSemimuonicCR"
+# skim = "skimmed_ttbarSemimuonicCR"
+# skim = "skimmed_ttbarSemimuonicCR_Met30GeV"
+# skim = "skimmed_ttbarSemimuonicCR_Met50GeV"
+
 # skim = "skimmed_ttZSemimuonicCR_tightMuon_noLooseMuonIso"
+skim = "skimmed_ttZSemimuonicCR_Met50GeV"
 
 base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
 
@@ -39,22 +43,22 @@ samples = (
   "backgrounds2018/TTZH",
   "backgrounds2018/TTTT"
   
-  # # QCD
-  # "backgrounds2018/QCD_Pt_15to30",
-  # "backgrounds2018/QCD_Pt_30to50",
-  # "backgrounds2018/QCD_Pt_50to80",
-  # "backgrounds2018/QCD_Pt_80to120",
-  # "backgrounds2018/QCD_Pt_120to170",
-  # "backgrounds2018/QCD_Pt_170to300",
-  # "backgrounds2018/QCD_Pt_300to470",
-  # "backgrounds2018/QCD_Pt_470to600",
-  # "backgrounds2018/QCD_Pt_600to800",
-  # "backgrounds2018/QCD_Pt_800to1000",
-  # "backgrounds2018/QCD_Pt_1000to1400",
-  # "backgrounds2018/QCD_Pt_1400to1800",
-  # "backgrounds2018/QCD_Pt_1800to2400",
-  # "backgrounds2018/QCD_Pt_2400to3200",
-  # "backgrounds2018/QCD_Pt_3200toInf",
+  # # # QCD
+  # # "backgrounds2018/QCD_Pt_15to30",
+  # # "backgrounds2018/QCD_Pt_30to50",
+  # # "backgrounds2018/QCD_Pt_50to80",
+  # # "backgrounds2018/QCD_Pt_80to120",
+  # # "backgrounds2018/QCD_Pt_120to170",
+  # # "backgrounds2018/QCD_Pt_170to300",
+  # # "backgrounds2018/QCD_Pt_300to470",
+  # # "backgrounds2018/QCD_Pt_470to600",
+  # # "backgrounds2018/QCD_Pt_600to800",
+  # # "backgrounds2018/QCD_Pt_800to1000",
+  # # "backgrounds2018/QCD_Pt_1000to1400",
+  # # "backgrounds2018/QCD_Pt_1400to1800",
+  # # "backgrounds2018/QCD_Pt_1800to2400",
+  # # "backgrounds2018/QCD_Pt_2400to3200",
+  # # "backgrounds2018/QCD_Pt_3200toInf",
 
   # QCD mu enhanced
   "backgrounds2018/QCD_Pt_15to20_MuEnriched",
@@ -70,11 +74,14 @@ samples = (
   "backgrounds2018/QCD_Pt_800to1000_MuEnriched",
   "backgrounds2018/QCD_Pt_1000_MuEnriched",
 
-  # # Data
+  # Data
   "collision_data2018/SingleMuon2018A",
   "collision_data2018/SingleMuon2018B",
   "collision_data2018/SingleMuon2018C",
   "collision_data2018/SingleMuon2018D",
+  
+  # Signal
+  "signals/tta_mAlp-0p35GeV_ctau-1e5mm",
 )
 
 

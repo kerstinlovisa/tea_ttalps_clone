@@ -15,15 +15,7 @@
 class TTAlpsSelections {
  public:
   TTAlpsSelections();
-
-  // Very inclusive semileptonic tt selections. Requires:
-  // - at least one good lepton (allows for additional leptons)
-  // - at least 4 good jets
-  // - at least 1 good b-tagged jet
-  // - some amount of MET
-  bool PassesLooseSemileptonicSelections(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
-  void RegisterSingleLeptonSelections(std::shared_ptr<CutFlowManager> cutFlowManager);
-
+  
   // Selections targetting semi-leptonic ttbar + two muons. Requires:
   // - 1 good e/μ (the top-lepton)
   // - at least 2 additional good muons (different than the top-lepton)
@@ -39,6 +31,7 @@ class TTAlpsSelections {
   // - at least 1 good b-tagged jet
   // - some amount of MET
   bool PassesSingleLeptonSelections(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager = nullptr);
+  void RegisterSingleLeptonSelections(std::shared_ptr<CutFlowManager> cutFlowManager);
 
   // Selections targetting ttZ, Z->μμ process. Requires:
   // - 1 good e/μ (the top-lepton)
@@ -53,7 +46,7 @@ class TTAlpsSelections {
   bool PassesHadronSelections(const std::shared_ptr<Event> event);
 
  private:
-  bool PassesMetFilters(const std::shared_ptr<Event> event);
+  std::unique_ptr<EventProcessor> eventProcessor;
 
 };
 

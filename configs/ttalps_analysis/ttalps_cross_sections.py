@@ -59,6 +59,7 @@ cross_sections = {
   "QCD_Pt-1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8": 1.085,
   
   "SingleMuon": 1.0,
+  "tta_mAlp-0p35GeV_ctau-1e5mm": 1.0,
 }
 
 # Cross sections in (pb) from AN2018_025_v12

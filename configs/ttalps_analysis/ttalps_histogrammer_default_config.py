@@ -10,8 +10,8 @@ weightsBranchName = "genWeight"
 applyMuonScaleFactors = False
 applyMuonTriggerScaleFactors = False
 
-from ttalps_skimmer_ttbarLike_semimuonic_config import extraEventCollections
-# from ttalps_skimmer_ttZLike_semimuonic_config import extraEventCollections
+# from ttalps_skimmer_ttbarLike_semimuonic_config import extraEventCollections
+from ttalps_skimmer_ttZLike_semimuonic_config import extraEventCollections
 
 extraEventCollections["GoodNonBtaggedJets"] = {
   "inputCollections": ("Jet", ),
