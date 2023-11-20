@@ -11,7 +11,7 @@ class Styler:
     self.topMargin = 0.06
     self.bottomMargin = 0.3
     self.leftMargin = 0.16
-    self.rightMargin = 0.06
+    self.rightMargin = 0.15
     
     self.__setStyle()
   
@@ -28,7 +28,10 @@ class Styler:
     pad.SetTopMargin(self.topMargin + 0.03)
     
   def setup_main_pad_without_ratio(self, pad):
+    # pad.SetPad(0, 0.0, 1, 1)
     self.__setupPadDefaults(pad)
+    pad.SetBottomMargin(0.2)
+    pad.SetTopMargin(self.topMargin + 0.03)
   
   def __setupPadDefaults(self, pad):
     pad.SetLeftMargin(self.leftMargin)
@@ -137,10 +140,15 @@ class Styler:
       plot.GetXaxis().SetLimits(hist.x_min, hist.x_max)
       
       plot.GetXaxis().SetTitle(hist.x_label)
-      plot.GetXaxis().SetTitleSize(0.12 if is_ratio else 0.06)
-      plot.GetXaxis().SetTitleOffset(1.0 if is_ratio else 1.0)
       
-      plot.GetXaxis().SetLabelSize(0.1 if is_ratio else 0.06)
+      plot.GetXaxis().SetTitleOffset(1.0 if is_ratio else 1.7)
+      
+      if self.config.show_ratio_plots:
+        plot.GetXaxis().SetTitleSize(0.12 if is_ratio else 0.06)
+        plot.GetXaxis().SetLabelSize(0.1 if is_ratio else 0.06)
+      else:
+        plot.GetXaxis().SetTitleSize(0.04)
+        plot.GetXaxis().SetLabelSize(0.04)
       
       plot.GetYaxis().SetTitle("Data/MC" if is_ratio else hist.y_label)
       plot.GetYaxis().SetTitleSize(0.1 if is_ratio else 0.05)
