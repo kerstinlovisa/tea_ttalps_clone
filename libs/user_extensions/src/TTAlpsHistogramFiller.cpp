@@ -114,15 +114,17 @@ void TTAlpsHistogramFiller::FillLeadingPt(const std::shared_ptr<Event> event, st
   auto maxPtObject = eventProcessor->GetMaxPtObject(event, params.collection);
   if(!maxPtObject) return;
 
+  float pileupSF = event->GetScaleFactor();
+
   float pt = maxPtObject->Get("pt");
   if (params.collection == "Muon" || maxPtObject->GetOriginalCollection() == "Muon") {
     
     auto muon = asMuon(maxPtObject);
     float muonSF = muon->GetScaleFactor();
 
-    histogramsHandler->Fill(histName, pt, weight * muonSF);
+    histogramsHandler->Fill(histName, pt, weight * muonSF * pileupSF);
   } else {
-    histogramsHandler->Fill(histName, pt, weight);
+    histogramsHandler->Fill(histName, pt, weight * pileupSF);
   }
 }
 
@@ -134,6 +136,8 @@ void TTAlpsHistogramFiller::FillAllSubLeadingPt(const std::shared_ptr<Event> eve
   } catch (...) {
   }
 
+  float pileupSF = event->GetScaleFactor();
+
   auto collection = event->GetCollection(params.collection);
   for (auto object : *collection) {
     float pt = object->Get("pt");
@@ -142,9 +146,9 @@ void TTAlpsHistogramFiller::FillAllSubLeadingPt(const std::shared_ptr<Event> eve
     if (params.collection == "Muon" || object->GetOriginalCollection() == "Muon") {
       auto muon = asMuon(object);
       float muonSF = muon->GetScaleFactor();
-      histogramsHandler->Fill(histName, pt, weight * muonSF);
+      histogramsHandler->Fill(histName, pt, weight * muonSF * pileupSF);
     } else {
-      histogramsHandler->Fill(histName, pt, weight);
+      histogramsHandler->Fill(histName, pt, weight * pileupSF);
     }
   }
 }
@@ -175,6 +179,8 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariables(const std::shared_ptr<Even
     IsoMu50included = event->Get("HLT_IsoMu50");
   } catch (...) {
   }
+
+  float pileupSF = event->GetScaleFactor();
 
   float leadingMuonPhi = -1;
   float leadingMuonPt = -1;
@@ -236,32 +242,32 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariables(const std::shared_ptr<Even
         muon1SFsave = muon1SF;
         muon2SFsave = muon2SF;
       }
-      histogramsHandler->Fill("LooseMuons_dimuonMinv", diMuonMass, weight * muon1SF * muon2SF * leadingMuonTriggerSF);
+      histogramsHandler->Fill("LooseMuons_dimuonMinv", diMuonMass, weight * muon1SF * muon2SF * leadingMuonTriggerSF * pileupSF);
     }
   }
 
   float metPhi = event->Get("MET_phi");
   float metPt = event->Get("MET_pt");
 
-  histogramsHandler->Fill("Event_METpt", metPt, weight);
+  histogramsHandler->Fill("Event_METpt", metPt, weight * pileupSF);
 
  
 
-  histogramsHandler->Fill("LooseMuons_dimuonMinvClosestToZ", massClosestToZ, weight * muon1SFsave * muon2SFsave * leadingMuonTriggerSF);
-  histogramsHandler->Fill("LooseMuons_dimuonDeltaRclosestToZ", deltaRclosestToZ, weight * muon1SFsave * muon2SFsave * leadingMuonTriggerSF);
-  histogramsHandler->Fill("LooseMuons_dimuonDeltaEtaclosestToZ", deltaEtaclosestToZ, weight * muon1SFsave * muon2SFsave * leadingMuonTriggerSF);
-  histogramsHandler->Fill("LooseMuons_dimuonDeltaPhiclosestToZ", deltaPhiclosestToZ, weight * muon1SFsave * muon2SFsave * leadingMuonTriggerSF);
+  histogramsHandler->Fill("LooseMuons_dimuonMinvClosestToZ", massClosestToZ, weight * muon1SFsave * muon2SFsave * leadingMuonTriggerSF * pileupSF);
+  histogramsHandler->Fill("LooseMuons_dimuonDeltaRclosestToZ", deltaRclosestToZ, weight * muon1SFsave * muon2SFsave * leadingMuonTriggerSF * pileupSF);
+  histogramsHandler->Fill("LooseMuons_dimuonDeltaEtaclosestToZ", deltaEtaclosestToZ, weight * muon1SFsave * muon2SFsave * leadingMuonTriggerSF * pileupSF);
+  histogramsHandler->Fill("LooseMuons_dimuonDeltaPhiclosestToZ", deltaPhiclosestToZ, weight * muon1SFsave * muon2SFsave * leadingMuonTriggerSF * pileupSF);
 
   TLorentzVector leadingMuon, metVector, muonPlusMet;
   leadingMuon.SetPtEtaPhiM(leadingMuonPt, leadingMuonEta, leadingMuonPhi, leadingMuonMass);
   metVector.SetPtEtaPhiM(metPt, 0, metPhi, 0);
   muonPlusMet = leadingMuon + metVector;
 
-  histogramsHandler->Fill("TightMuons_deltaPhiMuonMET", metVector.DeltaPhi(leadingMuon), weight * leadingMuonSF * leadingMuonTriggerSF);
-  histogramsHandler->Fill("TightMuons_minvMuonMET", muonPlusMet.M(), weight * leadingMuonSF * leadingMuonTriggerSF);
+  histogramsHandler->Fill("TightMuons_deltaPhiMuonMET", metVector.DeltaPhi(leadingMuon), weight * leadingMuonSF * leadingMuonTriggerSF * pileupSF);
+  histogramsHandler->Fill("TightMuons_minvMuonMET", muonPlusMet.M(), weight * leadingMuonSF * leadingMuonTriggerSF * pileupSF);
 
-  auto bJets = event->GetCollection("GoodBtaggedJets");
-  auto jets = event->GetCollection("GoodNonBtaggedJets");
+  auto bJets = event->GetCollection("GoodTightBtaggedJets");
+  auto jets = event->GetCollection("GoodNonTightBtaggedJets");
 
   for (auto bJet : *bJets) {
     TLorentzVector bJetVector;
@@ -278,7 +284,7 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariables(const std::shared_ptr<Even
         jet2vector.SetPtEtaPhiM(jet2->Get("pt"), jet2->Get("eta"), jet2->Get("phi"), jet2->Get("mass"));
         sum = bJetVector + jet1vector + jet2vector;
 
-        histogramsHandler->Fill("GoodJets_minvBjet2jets", sum.M(), weight * leadingMuonTriggerSF);
+        histogramsHandler->Fill("GoodJets_minvBjet2jets", sum.M(), weight * leadingMuonTriggerSF * pileupSF);
       }
     }
   }

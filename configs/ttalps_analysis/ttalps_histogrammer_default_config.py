@@ -6,14 +6,23 @@ printEveryNevents = 10000
 
 runDefaultHistograms = True
 runTriggerHistograms = False
+runPileupHistograms = False
 
 weightsBranchName = "genWeight"
-applyMuonScaleFactors = False
-applyMuonTriggerScaleFactors = False
+
+pileupScaleFactorsPath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/pileup_scale_factors.root"
+pileupScaleFactorsHistName = "pileup_scale_factors"
+
+applyScaleFactors = {
+  "muon": False,
+  "muonTrigger": False,
+  "pileup": True,
+}
 
 defaultHistParams = (
 #  collection             variable               bins    xmin    xmax    dir
-  # ("Pileup"             , "nPU"                 , 300   , 0     , 300   , ""  ),
+  ("Event"             , "PV_npvs"              , 300   , 0     , 300   , ""  ),
+  ("Event"             , "PV_npvsGood"          , 300   , 0     , 300   , ""  ),
   
   ("Event"              , "nMuon"               , 50    , 0     , 50    , ""  ),
   ("Muon"               , "pt"                  , 2000  , 0     , 1000  , ""  ),
@@ -48,6 +57,12 @@ defaultHistParams = (
   ("LooseMuons"         , "miniPFRelIso_all"    , 2000  , -10   , 10    , ""  ),
   ("LooseMuons"         , "jetRelIso"           , 2000  , -10   , 10    , ""  ),
   
+  # ("Event"              , "nLooseDSAMuons"      , 50    , 0     , 50    , ""  ),
+  # ("LooseDSAMuons"      , "pt"                  , 2000  , 0     , 1000  , ""  ),
+  # ("LooseDSAMuons"      , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
+  # ("LooseDSAMuons"      , "dxy"                 , 1600  , -20   , 20    , ""  ),
+  # ("LooseDSAMuons"      , "dz"                  , 1600  , -20   , 20    , ""  ),
+  
   ("Event"              , "nElectron"           , 50    , 0     , 50    , ""  ),
   ("Electron"           , "pt"                  , 2000  , 0     , 1000  , ""  ),
   ("Electron"           , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
@@ -73,19 +88,19 @@ defaultHistParams = (
   ("GoodJets"           , "btagDeepB"           , 200   , -1    , 1     , ""  ),
   ("GoodJets"           , "btagDeepFlavB"       , 200   , -1    , 1     , ""  ),
   
-  ("Event"              , "nGoodBtaggedJets"    , 50    , 0     , 50    , ""  ),
-  ("GoodBtaggedJets"    , "pt"                  , 2000  , 0     , 2000  , ""  ),
-  ("GoodBtaggedJets"    , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("GoodBtaggedJets"    , "phi"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("GoodBtaggedJets"    , "btagDeepB"           , 200   , -1    , 1     , ""  ),
-  ("GoodBtaggedJets"    , "btagDeepFlavB"       , 200   , -1    , 1     , ""  ),
+  ("Event"                    , "nGoodMediumBtaggedJets"    , 50    , 0     , 50    , ""  ),
+  ("GoodMediumBtaggedJets"    , "pt"                  , 2000  , 0     , 2000  , ""  ),
+  ("GoodMediumBtaggedJets"    , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
+  ("GoodMediumBtaggedJets"    , "phi"                 , 100   , -2.5  , 2.5   , ""  ),
+  ("GoodMediumBtaggedJets"    , "btagDeepB"           , 200   , -1    , 1     , ""  ),
+  ("GoodMediumBtaggedJets"    , "btagDeepFlavB"       , 200   , -1    , 1     , ""  ),
   
-  ("Event"              , "nGoodNonBtaggedJets" , 50    , 0     , 50    , ""  ),
-  ("GoodNonBtaggedJets" , "pt"                  , 2000  , 0     , 2000  , ""  ),
-  ("GoodNonBtaggedJets" , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("GoodNonBtaggedJets" , "phi"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("GoodNonBtaggedJets" , "btagDeepB"           , 200   , -1    , 1     , ""  ),
-  ("GoodNonBtaggedJets" , "btagDeepFlavB"       , 200   , -1    , 1     , ""  ),
+  ("Event"                    , "nGoodNonTightBtaggedJets" , 50    , 0     , 50    , ""  ),
+  ("GoodNonTightBtaggedJets"  , "pt"                  , 2000  , 0     , 2000  , ""  ),
+  ("GoodNonTightBtaggedJets"  , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
+  ("GoodNonTightBtaggedJets"  , "phi"                 , 100   , -2.5  , 2.5   , ""  ),
+  ("GoodNonTightBtaggedJets"  , "btagDeepB"           , 200   , -1    , 1     , ""  ),
+  ("GoodNonTightBtaggedJets"  , "btagDeepFlavB"       , 200   , -1    , 1     , ""  ),
 )
 
 histParams = (

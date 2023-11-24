@@ -18,7 +18,7 @@ eventSelections = {
     "MET_pt": (30, 9999999),
     "nLooseMuons": (1, 9999999),
     "nGoodJets": (4, 9999999),
-    "nGoodBtaggedJets": (1, 9999999),
+    "nGoodMediumBtaggedJets": (1, 9999999),
 }
 
 requiredFlags = (

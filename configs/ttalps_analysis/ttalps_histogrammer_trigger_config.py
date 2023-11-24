@@ -3,6 +3,7 @@ printEveryNevents = 1000
 
 runDefaultHistograms = False
 runTriggerHistograms = True
+runPileupHistograms = False
 
 ttbarCategories = ["inclusive", "hh", "he", "hmu", "htau", "ee", "mumu", "tautau", "emu", "etau", "mutau", "other"]
 variableNames = ["muonMaxPt", "eleMaxPt", "jetMaxPt", "jetHt"]

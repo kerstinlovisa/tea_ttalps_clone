@@ -14,8 +14,6 @@ void CheckArgs(int argc, char **argv) {
     fatal() << "Usage: " << argv[0] << " config_path"<<endl;
     fatal() << "or"<<endl;
     fatal() << argv[0] << " config_path input_path output_path"<<endl;
-    fatal() << "or"<<endl;
-    fatal() << argv[0] << " config_path input_path output_path apply_muon_scale_factors apply_muon_trigger_scale_factors"<<endl;
     exit(1);
   }
 }
@@ -29,35 +27,28 @@ int main(int argc, char **argv) {
     config.SetInputPath(argv[2]);
     config.SetOutputPath(argv[3]);
   }
-  if(argc == 6){
-    bool applyMounScaleFactors = atoi(argv[4]);
-    if (applyMounScaleFactors) info() << "Muon Scale Factors will be applied" << endl;
-    else info() << "Muon Scale Factors were explicitely turned off" << endl;
 
-    bool applyMounTriggerScaleFactors = atoi(argv[5]);
-    if (applyMounTriggerScaleFactors) info() << "Muon Trigger Scale Factors will be applied" << endl;
-    else info() << "Muon Trigger Scale Factors were explicitely turned off" << endl;
-    config.SetApplyMuonScaleFactors(applyMounScaleFactors);
-    config.SetApplyMuonTriggerScaleFactors(applyMounTriggerScaleFactors);
-  }
-
+  info() << "Creating objects..." << endl;
   auto eventReader = make_shared<EventReader>();
   auto cutFlowManager = make_shared<CutFlowManager>(eventReader);
   auto histogramsHandler = make_shared<HistogramsHandler>();
   auto histogramFiller = make_unique<HistogramsFiller>(histogramsHandler);
   auto ttalpsHistogramsFiller = make_unique<TTAlpsHistogramFiller>(histogramsHandler);
 
-  bool runDefaultHistograms, runTriggerHistograms;
+  bool runDefaultHistograms, runTriggerHistograms, runPileupHistograms;
   config.GetValue("runDefaultHistograms", runDefaultHistograms);
   config.GetValue("runTriggerHistograms", runTriggerHistograms);
+  config.GetValue("runPileupHistograms", runPileupHistograms);
 
+  if (runPileupHistograms) cutFlowManager->RegisterCut("initial");
+  
+  info() << "Starting event loop..." << endl;
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
 
-    cutFlowManager->UpdateCutFlow("initial");
-    ttalpsHistogramsFiller->FillNormCheck(event);
-
     if (runDefaultHistograms) {
+      cutFlowManager->UpdateCutFlow("initial");
+      ttalpsHistogramsFiller->FillNormCheck(event);
       histogramFiller->FillDefaultVariables(event);
       ttalpsHistogramsFiller->FillCustomTTAlpsVariables(event);
     }
@@ -70,10 +61,15 @@ int main(int argc, char **argv) {
       ttalpsHistogramsFiller->FillTriggerVariablesPerTriggerSet(event, "inclusive");
       ttalpsHistogramsFiller->FillTriggerVariablesPerTriggerSet(event, ttbarCategory);
     }
+
+    if (runPileupHistograms) {
+      cutFlowManager->UpdateCutFlow("initial");
+      histogramFiller->FillDefaultVariables(event);
+    }
   }
 
   if(runTriggerHistograms) ttalpsHistogramsFiller->FillTriggerEfficiencies();
-  if(runDefaultHistograms) histogramFiller->FillCutFlow(cutFlowManager);
+  if(runDefaultHistograms || runPileupHistograms) histogramFiller->FillCutFlow(cutFlowManager);
   
   cutFlowManager->Print();
   histogramsHandler->SaveHistograms();

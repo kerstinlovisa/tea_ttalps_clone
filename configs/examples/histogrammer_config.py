@@ -29,5 +29,12 @@ histParams = (
 )
 
 weightsBranchName = "genWeight"
-applyMuonScaleFactors = True
-applyMuonTriggerScaleFactors = True
+
+pileupScaleFactorsPath = "../data/pileup/pileup_scale_factors.root"
+pileupScaleFactorsHistName = "pileup_scale_factors"
+
+applyScaleFactors = {
+  "muon": False,
+  "muonTrigger": False,
+  "pileup": True,
+}

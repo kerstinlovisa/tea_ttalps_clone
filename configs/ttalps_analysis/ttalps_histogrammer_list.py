@@ -6,7 +6,11 @@ max_files = -1
 # skim = "skimmed_ttbarSemimuonicCR_tightMuon_newBtag"
 # skim = "skimmed_ttbarSemimuonicCR"
 # skim = "skimmed_ttbarSemimuonicCR_Met30GeV"
-skim = "skimmed_ttbarSemimuonicCR_Met50GeV"
+# skim = "skimmed_ttbarSemimuonicCR_Met50GeV"
+# skim = "skimmed_ttbarSemimuonicCR_Met50GeV_2mediumBjets"
+# skim = "skimmed_ttbarSemimuonicCR_Met50GeV_2tightBjets"
+# skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets"
+skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso"
 
 # skim = "skimmed_ttZSemimuonicCR_tightMuon_noLooseMuonIso"
 # skim = "skimmed_ttZSemimuonicCR_Met50GeV"
@@ -15,8 +19,11 @@ skim = "skimmed_ttbarSemimuonicCR_Met50GeV"
 
 base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
 
-doScaleFactors = False
-excludeTriggerSFs = False
+applyScaleFactors = {
+  "muon": False,
+  "muonTrigger": False,
+  "pileup": True,
+}
 
 samples = (
   # Backgrounds
@@ -85,27 +92,21 @@ samples = (
   "collision_data2018/SingleMuon2018D",
   
   # Signal
-  "signals/tta_mAlp-0p35GeV_ctau-1e5mm",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e2mm",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e3mm",
+  # "signals/tta_mAlp-0p35GeV_ctau-1e5mm",
 )
 
-
+# this has to be here, otherwise the script will not work:
 sample_path = ""
 input_directory = f"{base_path}/{sample_path}/{skim}/"
 
-if doScaleFactors and not excludeTriggerSFs:
-  output_dir = f"{input_directory}/histograms/"
-  applyMuonScaleFactors = "collision_data" not in sample_path
-  applyMuonTriggerScaleFactors = "collision_data" not in sample_path
-elif not excludeTriggerSFs:
-  output_dir = f"{input_directory}/histograms_noSFs/"
-  applyMuonScaleFactors = False
-  applyMuonTriggerScaleFactors = False
-else:
-  output_dir = f"{input_directory}/histograms_noTriggerSFs/"
-  applyMuonScaleFactors = "collision_data" not in sample_path
-  applyMuonTriggerScaleFactors = False
+output_dir = f"{input_directory}/histograms"
 
-
-
-
-
+for name, apply in applyScaleFactors.items():
+  if not apply:
+    continue
+  
+  output_dir += f"_{name}SFs"
+  
+output_dir += "/"

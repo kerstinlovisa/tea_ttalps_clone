@@ -50,11 +50,13 @@ int main(int argc, char **argv) {
     cutFlowManager->RegisterCut("trigger");
     cutFlowManager->RegisterCut("metFilters");
   }
-  eventProcessor->RegisterCuts(cutFlowManager);
-  
+
   if(applyTTbarLikeSkimming) ttAlpsSelections->RegisterSingleLeptonSelections(cutFlowManager);
   if(applyTTZLikeSkimming) ttAlpsSelections->RegisterTTZLikeSelections(cutFlowManager);
+  if(applySignalLikeSkimming) ttAlpsSelections->RegisterSignalLikeSelections(cutFlowManager);
 
+  eventProcessor->RegisterCuts(cutFlowManager);
+    
   info() << "Starting events loop" << endl;
 
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
@@ -70,11 +72,11 @@ int main(int argc, char **argv) {
       cutFlowManager->UpdateCutFlow("metFilters");
     }
 
-    if(!eventProcessor->PassesEventSelections(event, cutFlowManager)) continue;
-
     if(applyTTbarLikeSkimming){
       if(!ttAlpsSelections->PassesSingleLeptonSelections(event, cutFlowManager)) continue;
     }
+
+    if(!eventProcessor->PassesEventSelections(event, cutFlowManager)) continue;
 
     if(applySignalLikeSkimming){
       if(!ttAlpsSelections->PassesSignalLikeSelections(event, cutFlowManager)) continue;

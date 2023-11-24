@@ -15,7 +15,17 @@ extraEventCollections = {
     # 1=PFIsoVeryLoose, 2=PFIsoLoose, 3=PFIsoMedium, 4=PFIsoTight, 5=PFIsoVeryTight, 6=PFIsoVeryVeryTight
     "pfIsoId": (1, 6),
   },
-
+  # "LooseDSAMuons": {
+  #   "inputCollections": ("DSAMuon",),
+  #   "pt": (15., 9999999.),
+  #   "eta": (-2.5, 2.5),
+  # },
+  # "LooseMuonsAndDSAMuons": {
+  #   "inputCollections": ("Muon", "DSAMuon"),
+  #   "pt": (15., 9999999.),
+  #   "eta": (-2.5, 2.5),
+  # },
+  
   "LooseElectrons": {
     "inputCollections": ("Electron",),
     "pt": (15., 9999999.),
@@ -30,7 +40,7 @@ extraEventCollections = {
     # bit1 is loose (always false in 2017 since it does not exist), bit2 is tight, bit3 is tightLepVeto*
     "jetId": 6,
   },
-  "GoodBtaggedJets": {
+  "GoodTightBtaggedJets": {
     "inputCollections": ("Jet", ),
     "pt": (30., 9999999.),
     "eta": (-2.4, 2.4),
@@ -38,7 +48,16 @@ extraEventCollections = {
     # bit1 is loose (always false in 2017 since it does not exist), bit2 is tight, bit3 is tightLepVeto*
     "jetId": 6,
   },
-  "GoodNonBtaggedJets": {
+  "GoodMediumBtaggedJets": {
+    "inputCollections": ("Jet", ),
+    "pt": (30., 9999999.),
+    "eta": (-2.4, 2.4),
+    "btagDeepFlavB": (0.2783, 9999999.),
+    # bit1 is loose (always false in 2017 since it does not exist), bit2 is tight, bit3 is tightLepVeto*
+    "jetId": 6,
+  },
+  
+  "GoodNonTightBtaggedJets": {
     "inputCollections": ("Jet", ),
     "pt": (30., 9999999.),
     "eta": (-2.4, 2.4),
