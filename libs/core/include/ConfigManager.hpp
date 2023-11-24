@@ -36,9 +36,7 @@ class ConfigManager {
 
   void SetInputPath(std::string path) { inputPath = path; }
   void SetOutputPath(std::string path) { outputPath = path; }
-  void SetApplyMuonScaleFactors(bool apply) { applyMuonScaleFactors = apply; }
-  void SetApplyMuonTriggerScaleFactors(bool apply) { applyMuonTriggerScaleFactors = apply; }
-
+  
  private:
   std::string configPath;
   ConfigManager(std::string* const _configPath);
@@ -63,8 +61,6 @@ class ConfigManager {
 
   std::string inputPath = "";
   std::string outputPath = "";
-  std::optional<bool> applyMuonScaleFactors = std::nullopt;
-  std::optional<bool> applyMuonTriggerScaleFactors = std::nullopt;
 };
 
 #endif /* ConfigManager_hpp */

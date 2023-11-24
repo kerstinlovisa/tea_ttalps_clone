@@ -27,7 +27,8 @@ HistogramsFiller::HistogramsFiller(shared_ptr<HistogramsHandler> histogramsHandl
 
 HistogramsFiller::~HistogramsFiller() {}
 
-float HistogramsFiller::GetValue(shared_ptr<PhysicsObject> object, string branchName) {
+template <typename T>
+float HistogramsFiller::GetValue(shared_ptr<T> object, string branchName) {
   if (defaultCollectionsTypes.count(branchName)) {
     string branchType = defaultCollectionsTypes[branchName];
     if (branchType == "Int_t") {
@@ -130,18 +131,22 @@ void HistogramsFiller::FillDefaultVariables(const std::shared_ptr<Event> event) 
     warn() << "Coudn't get HLT_IsoMu50" << endl;
   }
 
+  float pileupSF = event->GetScaleFactor();
+
   for (auto& [title, params] : defaultHistVariables) {
     string collectionName = params.collection;
     string branchName = params.variable;
 
     if (collectionName == "Event") {
-      uint eventVariable;
+      
+      
+      float eventVariable;
       if (branchName[0] == 'n') {
         eventVariable = event->GetCollectionSize(branchName.substr(1));
       } else {
-        eventVariable = event->Get(branchName);
+        eventVariable = GetValue(event, branchName);
       }
-      histogramsHandler->Fill(title, eventVariable, weight);
+      histogramsHandler->Fill(title, eventVariable, weight * pileupSF);
     } else {
       auto collection = event->GetCollection(collectionName);
       for (auto object : *collection) {
@@ -151,9 +156,9 @@ void HistogramsFiller::FillDefaultVariables(const std::shared_ptr<Event> event) 
           float triggerSF = scaleFactorsManager.GetMuonTriggerScaleFactor(muon->GetEta(), muon->GetPt(), muon->GetID(), muon->GetIso(),
                                                                           IsoMu24included, IsoMu50included);
 
-          histogramsHandler->Fill(title, GetValue(object, branchName), weight * muonSF * triggerSF);
+          histogramsHandler->Fill(title, GetValue(object, branchName), weight * muonSF * triggerSF * pileupSF);
         } else {
-          histogramsHandler->Fill(title, GetValue(object, branchName), weight);
+          histogramsHandler->Fill(title, GetValue(object, branchName), weight * pileupSF);
         }
       }
     }

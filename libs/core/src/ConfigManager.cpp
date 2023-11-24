@@ -122,15 +122,6 @@ void ConfigManager::GetValue<int>(std::string name, int &outputValue) {
 
 template <>
 void ConfigManager::GetValue<bool>(std::string name, bool &outputValue) {
-  if (name == "applyMuonScaleFactors" && applyMuonScaleFactors.has_value()) {
-    outputValue = applyMuonScaleFactors.value();
-    return;
-  }
-  if (name == "applyMuonTriggerScaleFactors" && applyMuonTriggerScaleFactors.has_value()) {
-    outputValue = applyMuonTriggerScaleFactors.value();
-    return;
-  }
-
   PyObject *pythonValue = GetPythonValue(name);
   if (!pythonValue || (!PyUnicode_Check(pythonValue) && !PyBool_Check(pythonValue))) {
     error() << "Failed retriving python value (int)" << endl;
@@ -218,6 +209,22 @@ void ConfigManager::GetMap<std::string, float>(std::string name, std::map<std::s
       continue;
     }
     outputMap[PyUnicode_AsUTF8(pKey)] = PyFloat_AsDouble(pValue);
+  }
+}
+
+template <>
+void ConfigManager::GetMap<std::string, bool>(std::string name, std::map<std::string, bool> &outputMap) {
+  PyObject *pythonDict = GetPythonDict(name);
+
+  PyObject *pKey, *pValue;
+  Py_ssize_t pos = 0;
+
+  while (PyDict_Next(pythonDict, &pos, &pKey, &pValue)) {
+    if (!PyUnicode_Check(pKey) || !PyLong_Check(pValue)) {
+      error() << "Failed retriving python key-value pair (string-bool)" << endl;
+      continue;
+    }
+    outputMap[PyUnicode_AsUTF8(pKey)] = PyLong_AsLong(pValue);
   }
 }
 

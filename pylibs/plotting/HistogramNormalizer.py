@@ -1,5 +1,5 @@
 from enum import Enum
-from ROOT import TFile
+from ROOT import TFile, TObject
 from Sample import SampleType
 from Logger import *
 
@@ -91,6 +91,11 @@ class HistogramNormalizer:
       file = TFile.Open(sample.file_path, "READ")
 
       cut_flow = file.Get("cutFlow")
+      
+      if cut_flow is None or type(cut_flow) == TObject:
+        error(f"Couldn't find cut flow histogram for sample {sample.name}")
+        continue
+      
       initial_weight_sum = cut_flow.GetBinContent(1)
       final_weight_sum = cut_flow.GetBinContent(cut_flow.GetNbinsX())
       

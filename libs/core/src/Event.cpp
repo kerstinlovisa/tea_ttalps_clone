@@ -4,6 +4,7 @@
 
 #include "Event.hpp"
 #include "Helpers.hpp"
+#include "ScaleFactorsManager.hpp"
 
 using namespace std;
 
@@ -11,15 +12,13 @@ using namespace std;
 
 using namespace std;
 
-Event::Event() 
-{
+Event::Event() {
   auto &config = ConfigManager::GetInstance();
 
-  try{
+  try {
     config.GetExtraEventCollections(extraCollectionsDescriptions);
-  }
-  catch(...){
-    info() << "No extra event collections found" <<endl;
+  } catch (...) {
+    info() << "No extra event collections found" << endl;
     hasExtraCollections = false;
   }
 }
@@ -42,7 +41,7 @@ void Event::Reset() {
 }
 
 void Event::AddExtraCollections() {
-  if(!hasExtraCollections) return;
+  if (!hasExtraCollections) return;
 
   for (auto &[name, extraCollection] : extraCollectionsDescriptions) {
     auto newCollection = make_shared<PhysicsObjects>();
@@ -75,16 +74,20 @@ void Event::AddExtraCollections() {
         }
 
         for (auto &[branchName, option] : extraCollection.options) {
-          try{
+          try {
             UChar_t value = physicsObject->Get(branchName);
-            if (value != option) { passes = false; break;}
-          }
-          catch(BadTypeException &e){
-            try{
-              Int_t value = physicsObject->Get(branchName);
-              if (value != option) { passes = false; break; }
+            if (value != option) {
+              passes = false;
+              break;
             }
-            catch(BadTypeException &e){
+          } catch (BadTypeException &e) {
+            try {
+              Int_t value = physicsObject->Get(branchName);
+              if (value != option) {
+                passes = false;
+                break;
+              }
+            } catch (BadTypeException &e) {
               fatal() << e.what() << endl;
             }
           }
@@ -104,4 +107,10 @@ void Event::AddExtraCollections() {
     }
     extraCollections.insert({name, newCollection});
   }
+}
+
+float Event::GetScaleFactor() {
+  auto &scaleFactorsManager = ScaleFactorsManager::GetInstance();
+  int nVertices = Get("PV_npvsGood");
+  return scaleFactorsManager.GetPileupScaleFactor(nVertices);
 }

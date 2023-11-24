@@ -53,6 +53,8 @@ class Event {
     exit(1);
   }
 
+  float GetScaleFactor();
+
   void AddExtraCollections();
 
  private:

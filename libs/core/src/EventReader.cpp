@@ -71,7 +71,10 @@ void EventReader::SetupBranches(string inputPath) {
     cout << "Loading tree: " << treeName << endl;
     inputTrees[treeName] = (TTree *)inputFile->Get(treeName.c_str());
   }
-
+  if(!inputTrees.count("Events")){
+    fatal() << "Input file does not contain Events tree" << endl;
+    exit(1);
+  }
   auto keysInEventTree = inputTrees["Events"]->GetListOfBranches();
   for (auto i : *keysInEventTree) {
     auto branch = (TBranch *)i;
