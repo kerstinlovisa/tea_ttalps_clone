@@ -19,7 +19,9 @@ templates/*
 bin/*
 build/*
 plots/*
-plots_noSFs/*
+plots_*/*
+
+utils/*.pdf
 
 .vscode/*
 
@@ -27,6 +29,7 @@ samples/*/*_hists.root
 samples/*/*/*
 
 data/*root
+data/*/*root
 
 update_tea.sh
 .gitignore_tea
