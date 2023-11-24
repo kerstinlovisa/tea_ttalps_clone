@@ -13,7 +13,7 @@ base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
 # sub_path = "skimmed_ttbarSemimuonicCR_tightMuon/"
 # sub_path = "skimmed_ttbarSemimuonicCR_tightMuon_newBtag/"
 # sub_path = "skimmed_ttbarSemimuonicCR_Met30GeV/"
-sub_path = "skimmed_ttbarSemimuonicCR_Met50GeV/"
+# sub_path = "skimmed_ttbarSemimuonicCR_Met50GeV/"
 # sub_path = "skimmed_ttbarSemimuonicCR/"
 # sub_path = "skimmed_ttZSemimuonicCR_tightMuon_noLooseMuonIso/"
 
@@ -21,6 +21,7 @@ sub_path = "skimmed_ttbarSemimuonicCR_Met50GeV/"
 # sub_path = "skimmed_ttbarLike/histograms/"
 # sub_path = "skimmed_ttbarSemimuonicCR_Met30GeV/histograms_noSFs/"
 # sub_path = "skimmed_ttbarSemimuonicCR_Met50GeV/histograms_noSFs/"
+sub_path = "histograms_pileup/"
 
 
 def count_events_in_files(files):

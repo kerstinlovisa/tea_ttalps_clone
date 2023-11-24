@@ -23,6 +23,7 @@ class TTAlpsSelections {
   // - at least 1 good b-tagged jet
   // - some amount of MET
   bool PassesSignalLikeSelections(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
+  void RegisterSignalLikeSelections(std::shared_ptr<CutFlowManager> cutFlowManager);
 
   // Selections targetting semi-leptonic ttbar, and additional leptons. Requires:
   // - 1 good e/μ (the top-lepton)
