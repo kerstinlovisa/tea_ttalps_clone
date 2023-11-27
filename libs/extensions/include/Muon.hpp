@@ -17,6 +17,7 @@ class Muon {
   Muon(std::shared_ptr<PhysicsObject> physicsObject_);
 
   auto Get(std::string branchName) { return physicsObject->Get(branchName); }
+  float GetAsFloat(std::string branchName) { return physicsObject->GetAsFloat(branchName); }
   std::string GetOriginalCollection() { return physicsObject->GetOriginalCollection(); }
   void Reset() { physicsObject->Reset(); }
 

@@ -7,6 +7,7 @@
 #include "HepMCParticle.hpp"
 #include "Jet.hpp"
 #include "Muon.hpp"
+#include "NanoEvent.hpp"
 #include "PhysicsObject.hpp"
 
 inline std::shared_ptr<GenParticle> asGenParticle(const std::shared_ptr<PhysicsObject> physicsObject) {
@@ -28,6 +29,10 @@ inline std::shared_ptr<Jet> asJet(const std::shared_ptr<PhysicsObject> physicsOb
 inline std::shared_ptr<HepMCParticle> asHepMCParticle(const std::shared_ptr<PhysicsObject> physicsObject, int index = -1,
                                                       int maxNdaughters = 10) {
   return std::make_shared<HepMCParticle>(physicsObject, index, maxNdaughters);
+}
+
+inline std::shared_ptr<NanoEvent> asNanoEvent(const std::shared_ptr<Event> physicsObject) {
+  return std::make_shared<NanoEvent>(physicsObject);
 }
 
 #endif /* ExtensionsHelpers_hpp */

@@ -6,10 +6,10 @@
 #define EventProcessor_hpp
 
 #include "ConfigManager.hpp"
+#include "CutFlowManager.hpp"
 #include "Event.hpp"
 #include "Helpers.hpp"
 #include "PhysicsObject.hpp"
-#include "CutFlowManager.hpp"
 
 class EventProcessor {
  public:
