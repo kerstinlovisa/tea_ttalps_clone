@@ -21,8 +21,9 @@ applyScaleFactors = {
 
 defaultHistParams = (
 #  collection             variable               bins    xmin    xmax    dir
-  ("Event"             , "PV_npvs"              , 300   , 0     , 300   , ""  ),
-  ("Event"             , "PV_npvsGood"          , 300   , 0     , 300   , ""  ),
+  ("Event"              , "PV_npvs"             , 300   , 0     , 300   , ""  ),
+  ("Event"              , "PV_npvsGood"         , 300   , 0     , 300   , ""  ),
+  ("Event"              , "MET_pt"              , 1000  , 0     , 1000  , ""  ),
   
   ("Event"              , "nMuon"               , 50    , 0     , 50    , ""  ),
   ("Muon"               , "pt"                  , 2000  , 0     , 1000  , ""  ),
@@ -130,6 +131,5 @@ histParams = (
   ("TightMuons"     , "deltaPhiMuonMET"           , 200   , -4  , 4     , ""  ),
   ("TightMuons"     , "minvMuonMET"               , 1000  , 0   , 1000  , ""  ),
   
-  ("Event"          , "METpt"                     , 1000  , 0   , 1000  , ""  ),
   ("Event"          , "normCheck"                 , 1     , 0   , 1     , ""  ),
 )
