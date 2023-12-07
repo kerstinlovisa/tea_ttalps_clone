@@ -11,19 +11,23 @@ using namespace std;
 ScaleFactorsManager::ScaleFactorsManager() {
   auto &config = ConfigManager::GetInstance();
   map<string, ScaleFactorsMap> muonSFs;
-  config.GetScaleFactors("muonSFs", muonSFs);
-
-  for (auto &[name, values] : muonSFs) {
-    string path = "../data/" + name + ".root";
-    if (!FileExists(path)) {
-      ScaleFactorsMap muonSFs;
-      CreateMuonSFsHistogram(values, path, name);
-    }
-    muonSFvalues[name] = (TH2D *)TFile::Open(path.c_str())->Get(name.c_str());
-  }
-
   config.GetValue("applyMuonScaleFactors", applyMuonScaleFactors);
   config.GetValue("applyMuonTriggerScaleFactors", applyMuonTriggerScaleFactors);
+  if(applyMuonScaleFactors){
+    config.GetScaleFactors("muonSFs", muonSFs);
+
+    for (auto &[name, values] : muonSFs) {
+      string path = "../data/" + name + ".root";
+      if (!FileExists(path)) {
+        ScaleFactorsMap muonSFs;
+        CreateMuonSFsHistogram(values, path, name);
+      }
+      muonSFvalues[name] = (TH2D *)TFile::Open(path.c_str())->Get(name.c_str());
+    }
+  }
+
+  // config.GetValue("applyMuonScaleFactors", applyMuonScaleFactors);
+  // config.GetValue("applyMuonTriggerScaleFactors", applyMuonTriggerScaleFactors);
 }
 
 void ScaleFactorsManager::CreateMuonSFsHistogram(const ScaleFactorsMap &muonSFs, string outputPath, string histName) {

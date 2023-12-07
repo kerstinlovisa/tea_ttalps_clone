@@ -21,12 +21,7 @@ class TTAlpsHistogramFiller {
 
   void FillCustomTTAlpsVariables(const std::shared_ptr<Event> event);
 
-  void FillGenParticleVariables(const std::shared_ptr<Event> event, std::string histName, std::string variable, int pdgid_);
-  void FillGenParticleBoost(const std::shared_ptr<Event> event, std::string histName, int pdgid_);
-  void FillGenParticleVxyz(const std::shared_ptr<Event> event, std::string histName, int pdgid_);
-  void FillGenParticleProperVxyz(const std::shared_ptr<Event> event, std::string histName, int pdgid_);
-  void FillGenMuonsFromALPs(const std::shared_ptr<Event> event, std::string histName, std::string variable);
-  void FillMuonVariables(const std::shared_ptr<Event> event, std::string histName, std::string collection, std::string variable);
+  void FillGenMuonsFromALPs(const std::shared_ptr<Event> event);
   void FillCustomLLPNanoAODVariables(const std::shared_ptr<Event> event);
 
   void FillNormCheck(const std::shared_ptr<Event> event);

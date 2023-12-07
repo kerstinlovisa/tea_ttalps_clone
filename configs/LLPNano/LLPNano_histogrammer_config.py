@@ -4,39 +4,34 @@ printEveryNevents = 1000
 runDefaultHistograms = True
 runLLPNanoAODHistograms = True
 
+applyMuonScaleFactors = False
+applyMuonTriggerScaleFactors = False
+
 # weightsBranchName = "genWeight"
 
 basePath = "/nfs/dust/cms/user/lrygaard/ttalps_cms/"
 
-# inputFile = "signal/tta_mAlp-0p35GeV_ctau-1e3mm_nEvents-100000.root"
-# outputFile = "signal/tta_mAlp-0p35GeV_ctau-1e3mm_nEvents-1000/histograms/tta_mAlp-0p35GeV_ctau-1e3mm_nEvents-100000_hist.root"
+# inputFile = "signal/tta_mAlp-0p35GeV_ctau-1e0mm_nEvents-100/tta_mAlp-0p35GeV_ctau-1e0mm.root"
+# outputFile = "signal/tta_mAlp-0p35GeV_ctau-1e0mm_nEvents-100/histograms/tta_mAlp-0p35GeV_ctau-1e0mm_hist.root"
 
-# inputFile = "signal/tta_mAlp-0p35GeV_ctau-1e5mm_nEvents-100000.root"
+# inputFile = "signal/tta_mAlp-0p35GeV_ctau-1e1mm_nEvents-100/tta_mAlp-0p35GeV_ctau-1e1mm.root"
+# outputFile = "signal/tta_mAlp-0p35GeV_ctau-1e1mm_nEvents-100/histograms/tta_mAlp-0p35GeV_ctau-1e1mm_hist.root"
+
+# inputFile = "signal/tta_mAlp-0p35GeV_ctau-1e2mm_nEvents-100/tta_mAlp-0p35GeV_ctau-1e2mm.root"
+# outputFile = "signal/tta_mAlp-0p35GeV_ctau-1e2mm_nEvents-100/histograms/tta_mAlp-0p35GeV_ctau-1e2mm_hist.root"
+
+# inputFile = "signal/tta_mAlp-0p35GeV_ctau-1e3mm_nEvents-100/tta_mAlp-0p35GeV_ctau-1e3mm.root"
+# outputFile = "signal/tta_mAlp-0p35GeV_ctau-1e3mm_nEvents-100/histograms/tta_mAlp-0p35GeV_ctau-1e3mm_hist.root"
+
+# inputFile = "signal/tta_mAlp-0p35GeV_ctau-1e5mm_nEvents-1000/LLPNanoAOD/tta_mAlp-0p35GeV_ctau-1e5mm_nEvents-100000.root"
 # outputFile = "signal/tta_mAlp-0p35GeV_ctau-1e5mm_nEvents-1000/histograms/tta_mAlp-0p35GeV_ctau-1e5mm_nEvents-100000_hist.root"
-
-# inputFile = "signal/tta_mAlp-0p35GeV_ctau-1e7mm_nEvents-100000.root"
-# outputFile = "signal/tta_mAlp-0p35GeV_ctau-1e7mm_nEvents-1000/histograms/tta_mAlp-0p35GeV_ctau-1e7mm_nEvents-100000_hist.root"
-
-# inputFile = "signal/tta_mAlp-0p35GeV_ctau-1e3mm_nEvents-1000/LLPNanoAOD/tta_mAlp-0p35GeV_ctau-1e3mm_nEvents-1000_part-0.root"
-# outputFile = "signal/tta_mAlp-0p35GeV_ctau-1e3mm_nEvents-1000/histograms/tta_mAlp-0p35GeV_ctau-1e3mm_nEvents-1000_part-0_hist.root"
-
-# inputFile = "signal/tta_mAlp-0p35GeV_ctau-1e5mm_nEvents-1000/LLPNanoAOD/tta_mAlp-0p35GeV_ctau-1e5mm_nEvents-1000_part-0.root"
-# outputFile = "signal/tta_mAlp-0p35GeV_ctau-1e5mm_nEvents-1000/histograms/tta_mAlp-0p35GeV_ctau-1e5mm_nEvents-1000_part-0_hist.root"
-
-inputFile = "signal/tta_mAlp-0p35GeV_ctau-1e5mm_nEvents-1000/LLPNanoAOD/tta_mAlp-0p35GeV_ctau-1e5mm_nEvents-100000.root"
-outputFile = "signal/tta_mAlp-0p35GeV_ctau-1e5mm_nEvents-1000/histograms/tta_mAlp-0p35GeV_ctau-1e5mm_nEvents-100000_hist.root"
 
 extraEventCollections = {
   "LooseDSAMuon": {
     "inputCollections": ("DSAMuon",),
-    "pt": (5., 9999999.),
+    "pt": (3.5, 9999999.),
     "eta": (-2.4, 2.4),
-    "trkNumPlanes": (1, 9999999.),
-    "trkNumHits": (12, 9999999.),
-    # "trkNumDTHits": (18, 9999999.),
-    # "trkNumCSCHits": (0, 0),
-    # "chi2overndof": (-9999999., 2.5),
-    # "ptErr/pt": (-9999999., 1),
+    # "displacedId": (1, 9999999.),
   },
 }
 
@@ -49,15 +44,16 @@ defaultHistParams = (
 #  collection             variable                  bins    xmin     xmax     dir
   ("Event",               "nMuon",                  50,     0,       50,      ""  ),
   ("Muon",                "pt",                     2000,   0,       1000,    ""  ),
+  ("Muon",                "ptErr",                  2000,   0,       1000,    ""  ),
   ("Muon",                "eta",                    100,    -2.5,    2.5,     ""  ),
   ("Muon",                "dxy",                    2000,   -1000,   1000,    ""  ),
   ("Muon",                "dz",                     2000,   -1000,   1000,    ""  ),
   ("Muon",                "ip3d",                   2000,   0,       1000,    ""  ),
   ("Muon",                "sip3d",                  2000,   0,       1000,    ""  ),
-  ("Muon",                "trkNumPlanes",           400,    0,       20,      ""  ),
-  ("Muon",                "trkNumHits",             400,    0,       20,      ""  ),
-  ("Muon",                "trkNumDTHits",           400,    0,       20,      ""  ),
-  ("Muon",                "trkNumCSCHits",          400,    0,       20,      ""  ),
+  ("Muon",                "trkNumPlanes",           50,     0,       50,      ""  ),
+  ("Muon",                "trkNumHits",             50,     0,       50,      ""  ),
+  ("Muon",                "trkNumDTHits",           50,     0,       50,      ""  ),
+  ("Muon",                "trkNumCSCHits",          50,     0,       50,      ""  ),
   ("Muon",                "normChi2",               400,    -20,     20,      ""  ),
 
   ("Event",               "nMuonExtended",          50,     0,       50,      ""  ),
@@ -92,12 +88,14 @@ defaultHistParams = (
 
   ("Event",               "nDSAMuon",               50,     0,       50,      ""  ),
   ("DSAMuon",             "pt",                     2000,    0,      1000,    ""  ),
+  ("DSAMuon",             "ptErr",                  2000,    0,      1000,    ""  ),
   ("DSAMuon",             "eta",                    100,    -2.5,    2.5,     ""  ),
-  ("DSAMuon",             "trkNumPlanes",           400,    0,       20,      ""  ),
-  ("DSAMuon",             "trkNumHits",             400,    0,       20,      ""  ),
-  ("DSAMuon",             "trkNumDTHits",           400,    0,       20,      ""  ),
-  ("DSAMuon",             "trkNumCSCHits",          400,    0,       20,      ""  ),
+  ("DSAMuon",             "trkNumPlanes",           50,     0,       50,      ""  ),
+  ("DSAMuon",             "trkNumHits",             50,     0,       50,      ""  ),
+  ("DSAMuon",             "trkNumDTHits",           50,     0,       50,      ""  ),
+  ("DSAMuon",             "trkNumCSCHits",          50,     0,       50,      ""  ),
   ("DSAMuon",             "normChi2",               400,    -20,     20,      ""  ),
+  # ("DSAMuon",             "displacedId",            10,     0,       10,      ""  ),
 
   ("DSAMuon",             "dxyPV",                  2000,    -1000,   1000,   ""  ),
   ("DSAMuon",             "dxyPVErr",               2000,    -1000,   1000,   ""  ),
@@ -130,44 +128,46 @@ defaultHistParams = (
 
   ("Event",               "nLooseDSAMuon",          50,     0,       50,      ""  ),
   ("LooseDSAMuon",        "pt",                     2000,    0,      1000,    ""  ),
+  ("LooseDSAMuon",        "ptErr",                  2000,    0,      1000,    ""  ),
   ("LooseDSAMuon",        "eta",                    100,    -2.5,    2.5,     ""  ),
-  ("LooseDSAMuon",        "trkNumPlanes",           400,    0,       20,      ""  ),
-  ("LooseDSAMuon",        "trkNumHits",             400,    0,       20,      ""  ),
-  ("LooseDSAMuon",        "trkNumDTHits",           400,    0,       20,      ""  ),
-  ("LooseDSAMuon",        "trkNumCSCHits",          400,    0,       20,      ""  ),
+  ("LooseDSAMuon",        "trkNumPlanes",           50,     0,       50,      ""  ),
+  ("LooseDSAMuon",        "trkNumHits",             50,     0,       50,      ""  ),
+  ("LooseDSAMuon",        "trkNumDTHits",           50,     0,       50,      ""  ),
+  ("LooseDSAMuon",        "trkNumCSCHits",          50,     0,       50,      ""  ),
   ("LooseDSAMuon",        "normChi2",               400,    -20,     20,      ""  ),
 
-  ("LooseDSAMuon",        "dxyPV",                  2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "dxyPVErr",               2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "dzPV",                   2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "dzPVErr",                2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "dxyPVTraj",              2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "dxyPVTrajErr",           2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "dxyPVAbs",               2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "dxyPVAbsErr",            2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "dxyPVSigned",            2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "dxyPVSignedErr",         2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "ip3DPVAbs",              2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "ip3DPVAbsErr",           2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "ip3DPVSigned",           2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "ip3DPVSignedErr",        2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "dxyBS",                  2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "dxyBSErr",               2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "dzBS",                   2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "dzBSErr",                2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "dxyBSTraj",              2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "dxyBSTrajErr",           2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "dxyBSAbs",               2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "dxyBSAbsErr",            2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "dxyBSSigned",            2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "dxyBSSignedErr",         2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "ip3DBSAbs",              2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "ip3DBSAbsErr",           2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "ip3DBSSigned",           2000,    -1000,   1000,   ""  ),
-  ("LooseDSAMuon",        "ip3DBSSignedErr",        2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "dxyPV",                  2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "dxyPVErr",               2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "dzPV",                   2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "dzPVErr",                2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "dxyPVTraj",              2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "dxyPVTrajErr",           2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "dxyPVAbs",               2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "dxyPVAbsErr",            2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "dxyPVSigned",            2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "dxyPVSignedErr",         2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "ip3DPVAbs",              2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "ip3DPVAbsErr",           2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "ip3DPVSigned",           2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "ip3DPVSignedErr",        2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "dxyBS",                  2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "dxyBSErr",               2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "dzBS",                   2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "dzBSErr",                2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "dxyBSTraj",              2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "dxyBSTrajErr",           2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "dxyBSAbs",               2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "dxyBSAbsErr",            2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "dxyBSSigned",            2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "dxyBSSignedErr",         2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "ip3DBSAbs",              2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "ip3DBSAbsErr",           2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "ip3DBSSigned",           2000,    -1000,   1000,   ""  ),
+  # ("LooseDSAMuon",        "ip3DBSSignedErr",        2000,    -1000,   1000,   ""  ),
   
   ("Event",               "nElectron",              50,     0,       50,      ""  ),
   ("Electron",            "pt",                     2000,    0,      1000,    ""  ),
+  # ("Electron",            "ptErr",                  2000,    0,      1000,    ""  ),
   ("Electron",            "eta",                    100,    -2.5,    2.5,     ""  ),
   ("Electron",            "dxy",                    2000,   -1000,   1000,    ""  ),
   ("Electron",            "dz",                     2000,   -1000,   1000,    ""  ),
@@ -207,6 +207,7 @@ defaultHistParams = (
 
   ("Event",               "nLowPtElectron",         50,     0,       50,      ""  ),
   ("LowPtElectron",       "pt",                     2000,    0,      1000,    ""  ),
+  # ("LowPtElectron",       "ptErr",                  2000,    0,      1000,    ""  ),
   ("LowPtElectron",       "eta",                    100,    -2.5,    2.5,     ""  ),
   ("LowPtElectron",       "dxy",                    2000,   -1000,   1000,    ""  ),
   ("LowPtElectron",       "dz",                     2000,   -1000,   1000,    ""  ),
@@ -301,30 +302,45 @@ defaultHistParams = (
 )
 
 histParams = (
-#  histName               bins    xmin     xmax     dir
- ("GenALP_pdgId",         500,    0,       500,     ""  ),
- ("GenALP_mass",          2000,   0,       100,     ""  ),
- ("GenALP_vx",            2000,   -1e6,    1e6,     ""  ),
- ("GenALP_vy",            2000,   -1e6,    1e6,     ""  ),
- ("GenALP_vz",            2000,   -1e6,    1e6,     ""  ),
-#  ("GenALP_boost",         2000,   0,       1000,    ""  ),
- ("GenALP_vxyz",          2000,   0,       1000,    ""  ),
-#  ("GenALP_proper_vxyz",   2000,   0,       1000,    ""  ),
- ("GenMuon_pdgId",        500,    0,       500,     ""  ),
- ("GenMuon_mass",         2000,   0,       100,     ""  ),
- ("GenMuon_vx",           2000,   -1e6,    1e6,     ""  ),
- ("GenMuon_vy",           2000,   -1e6,    1e6,     ""  ),
- ("GenMuon_vz",           2000,   -1e6,    1e6,     ""  ),
-#  ("GenMuon_boost",        2000,   0,       1000,    ""  ),
- ("GenMuon_vxyz",         2000,   0,       1000,    ""  ),
-#  ("GenMuon_proper_vxyz",  2000,   0,       1000,    ""  ),
- ("GenMuonFromALP_vx",           2000,   -1e8,    1e8,     ""  ),
- ("GenMuonFromALP_vy",           2000,   -1e8,    1e8,     ""  ),
- ("GenMuonFromALP_vz",           2000,   -1e8,    1e8,     ""  ),
-#  ("GenMuonFromALP_boost",        2000,   0,       1000,    ""  ),
- ("GenMuonFromALP_vxyz",         2000,   0,       1000,    ""  ),
-#  ("GenMuonFromALP_proper_vxyz",  2000,   0,       1000,    ""  ),
- ("DSAMuon_chi2overndof",  400,  -20,     20,      ""  ),
- ("DSAMuon_ptErroverpt",   1000, 0,       2000,    ""  ),
- ("DSAMuon_DThitsCheck",   10,   0,       2,       ""  ),
+#  histName                       bins    xmin     xmax     dir
+
+ ("GenMuonFromALP_vx",            2000,   -1e8,    1e8,     ""  ),
+ ("GenMuonFromALP_vy",            2000,   -1e8,    1e8,     ""  ),
+ ("GenMuonFromALP_vz",            2000,   -1e8,    1e8,     ""  ),
+ ("GenMuonFromALP_pt",            2000,   0,       1000,    ""  ),
+ ("GenMuonFromALP_mass",          2000,   0,       1000,    ""  ),
+ ("GenMuonFromALP_boost",         2000,   0,       1000,    ""  ),
+ ("GenMuonFromALP_vxy",           2000,   0,       1000,    ""  ),
+ ("GenMuonFromALP_proper_vxy",    2000,   0,       1000,    ""  ),
+
+ ("DSAMuon_chi2overndof",         400,    -20,     20,      ""  ),
+ ("DSAMuon_ptErroverpt",          2000,   0,       1000,    ""  ),
+ ("nDSAMuonID",                   50,     0,       50,      ""  ),
+ ("nDSAMuonIDPt5",                50,     0,       50,      ""  ),
+ ("DSAMuon_displacedId",          10,     0,       10,      ""  ),
+
+ ("MuonDxyDiff",                  2000,   -1000,   1000      , ""  ),
+ ("MuonDzDiff",                   2000,   -1000,   1000      , ""  ),
+ ("MuonEtaDiff",                  100,    -2.5,    2.5      , ""  ),
+
+ ("Muon_dxy_eta-max0p9",          2000,   -1000,   1000      , ""  ),
+ ("Muon_dz_eta-max0p9",           2000,   -1000,   1000      , ""  ),
+ ("MuonExtended_dxy_eta-max0p9",  2000,   -1000,   1000      , ""  ),
+ ("MuonExtended_dz_eta-max0p9",   2000,   -1000,   1000      , ""  ),
+ ("DSAMuon_dxy_eta-max0p9",       2000,   -1000,   1000      , ""  ),
+ ("DSAMuon_dz_eta-max0p9",        2000,   -1000,   1000      , ""  ),
+ 
+ ("Muon_dxy_eta-max1p2",          2000,   -1000,   1000      , ""  ),
+ ("Muon_dz_eta-max1p2",           2000,   -1000,   1000      , ""  ),
+ ("MuonExtended_dxy_eta-max1p2",  2000,   -1000,   1000      , ""  ),
+ ("MuonExtended_dz_eta-max1p2",   2000,   -1000,   1000      , ""  ),
+ ("DSAMuon_dxy_eta-max1p2",       2000,   -1000,   1000      , ""  ),
+ ("DSAMuon_dz_eta-max1p2",        2000,   -1000,   1000      , ""  ),
+
+ ("Muon_dxy_eta-max2p4",          2000,   -1000,   1000      , ""  ),
+ ("Muon_dz_eta-max2p4",           2000,   -1000,   1000      , ""  ),
+ ("MuonExtended_dxy_eta-max2p4",  2000,   -1000,   1000      , ""  ),
+ ("MuonExtended_dz_eta-max2p4",   2000,   -1000,   1000      , ""  ),
+ ("DSAMuon_dxy_eta-max2p4",       2000,   -1000,   1000      , ""  ),
+ ("DSAMuon_dz_eta-max2p4",        2000,   -1000,   1000      , ""  ),
 )

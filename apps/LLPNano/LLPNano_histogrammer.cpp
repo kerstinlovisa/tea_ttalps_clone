@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
 
-    cutFlowManager->UpdateCutFlow("initial");
+    // cutFlowManager->UpdateCutFlow("initial");
     // ttalpsHistogramsFiller->FillNormCheck(event);
 
     if (runDefaultHistograms) {
@@ -53,9 +53,12 @@ int main(int argc, char **argv) {
     }
   }
 
-  if(runDefaultHistograms) histogramFiller->FillCutFlow(cutFlowManager);
+  // if(runDefaultHistograms) histogramFiller->FillCutFlow(cutFlowManager);
   
-  cutFlowManager->Print();
+  // cutFlowManager->Print();
+  std::string outputPath;
+  config.GetValue("histogramsOutputFilePath", outputPath);
+  std::cout << "outputPath: " << outputPath << std::endl;
   histogramsHandler->SaveHistograms();
 
   return 0;

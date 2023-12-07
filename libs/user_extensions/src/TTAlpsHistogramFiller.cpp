@@ -2,6 +2,7 @@
 
 #include "ConfigManager.hpp"
 #include "ExtensionsHelpers.hpp"
+#include "UserExtensionsHelpers.hpp"
 #include "TTAlpsSelections.hpp"
 
 using namespace std;
@@ -286,100 +287,7 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariables(const std::shared_ptr<Even
 
 }
 
-void TTAlpsHistogramFiller::FillGenParticleVariables(const std::shared_ptr<Event> event, std::string histName, std::string variable, int pdgid_) {
-  
-  float weight = 1.0;
-  try {
-    weight = event->Get(weightsBranchName);
-  } catch (...) {
-  }
-
-  auto genParticles = event->GetCollection("GenPart");
-  for(auto genpart : *genParticles)
-  {
-    auto genParticle = asGenParticle(genpart);
-    int pdgid = genParticle->GetPdgId();
-    if(abs(pdgid) == pdgid_ && genParticle->IsLastCopy()){
-      float var = genpart->Get(variable);
-      histogramsHandler->Fill(histName, var, weight);
-    }
-  }
-}
-
-void TTAlpsHistogramFiller::FillGenParticleBoost(const std::shared_ptr<Event> event, std::string histName, int pdgid_) {
-  float weight = 1.0;
-  try {
-    weight = event->Get(weightsBranchName);
-  } catch (...) {
-  }
-
-  auto genparticles = event->GetCollection("GenPart");
-  for(auto genpart : *genparticles)
-  {
-    auto genParticle = asGenParticle(genpart);
-    int pdgid = genParticle->GetPdgId();
-    if(abs(pdgid) == pdgid_ && genParticle->IsLastCopy()){
-      float px = genpart->Get("px");
-      float py = genpart->Get("py");
-      float pz = genpart->Get("pz");
-      float mass = genpart->Get("mass");
-      float boost = sqrt(px*px + py*py + pz*pz)/mass;
-      histogramsHandler->Fill(histName, boost, weight);
-    }
-  }
-}
-
-void TTAlpsHistogramFiller::FillGenParticleVxyz(const std::shared_ptr<Event> event, std::string histName, int pdgid_) {
-  float weight = 1.0;
-  try {
-    weight = event->Get(weightsBranchName);
-  } catch (...) {
-  }
-
-  auto genparticles = event->GetCollection("GenPart");
-  for(auto genpart : *genparticles)
-  {
-    auto genParticle = asGenParticle(genpart);
-    int pdgid = genParticle->GetPdgId();
-    if(abs(pdgid) == pdgid_ && genParticle->IsLastCopy()){
-      float vx = genpart->Get("vx");
-      float vy = genpart->Get("vy");
-      float vz = genpart->Get("vz");
-      float vxyz = sqrt(vx*vx + vy*vy + vz*vz);
-      histogramsHandler->Fill(histName, vxyz, weight);
-    }
-  }
-}
-
-void TTAlpsHistogramFiller::FillGenParticleProperVxyz(const std::shared_ptr<Event> event, std::string histName, int pdgid_) {
-  float weight = 1.0;
-  try {
-    weight = event->Get(weightsBranchName);
-  } catch (...) {
-  }
-
-  auto genparticles = event->GetCollection("GenPart");
-  for(auto genpart : *genparticles)
-  {
-    auto genParticle = asGenParticle(genpart);
-    int pdgid = genParticle->GetPdgId();
-    if(abs(pdgid) == pdgid_ && genParticle->IsLastCopy()){
-      float vx = genpart->Get("vx");
-      float vy = genpart->Get("vy");
-      float vz = genpart->Get("vz");
-      float vxyz = sqrt(vx*vx + vy*vy + vz*vz);
-      float px = genpart->Get("px");
-      float py = genpart->Get("py");
-      float pz = genpart->Get("pz");
-      float mass = genpart->Get("mass");
-      float boost = sqrt(px*px + py*py + pz*pz)/mass;
-      float proper_vxyz = vxyz/boost;
-      histogramsHandler->Fill(histName, proper_vxyz, weight);
-    }
-  }
-}
-
-void TTAlpsHistogramFiller::FillGenMuonsFromALPs(const std::shared_ptr<Event> event, std::string histName, std::string variable) {
+void TTAlpsHistogramFiller::FillGenMuonsFromALPs(const std::shared_ptr<Event> event) {
   float weight = 1.0;
   try {
     weight = event->Get(weightsBranchName);
@@ -398,58 +306,25 @@ void TTAlpsHistogramFiller::FillGenMuonsFromALPs(const std::shared_ptr<Event> ev
     auto mother = asGenParticle(genParticles->at(motherIndex));
     int mother_pdgid = mother->GetPdgId();
     if(mother_pdgid != 54) continue;
-
-    float var;
-    if(variable!="vxyz") var = genpart->Get(variable);
-    else{
-      float vx = genpart->Get("vx");
-      float vy = genpart->Get("vy");
-      float vz = genpart->Get("vz");
-      var = sqrt(vx*vx + vy*vy + vz*vz);
-    }
     
-    histogramsHandler->Fill(histName, var, weight);
+    float vx = genpart->Get("vx");
+    float vy = genpart->Get("vy");
+    float vz = genpart->Get("vz");
+    float pt = genpart->Get("pt");
+    float mass = genpart->Get("mass");
+    float boost = abs(pt)/mass;
+    float vxy = sqrt(vx*vx + vy*vy);
+    float proper_vxy = vxy/boost;
+    histogramsHandler->Fill("GenMuonFromALP_vx"         , vx,          weight);
+    histogramsHandler->Fill("GenMuonFromALP_vy"         , vy,          weight);
+    histogramsHandler->Fill("GenMuonFromALP_vz"         , vz,          weight);
+    histogramsHandler->Fill("GenMuonFromALP_pt"         , pt,          weight);
+    histogramsHandler->Fill("GenMuonFromALP_mass"       , mass,        weight);
+    histogramsHandler->Fill("GenMuonFromALP_boost"      , boost,       weight);
+    histogramsHandler->Fill("GenMuonFromALP_vxy"        , vxy,         weight);
+    histogramsHandler->Fill("GenMuonFromALP_proper_vxy" , proper_vxy,  weight);
   }
 }
-
-void TTAlpsHistogramFiller::FillMuonVariables(const std::shared_ptr<Event> event, std::string histName, std::string collection, std::string variable) {
-  
-  float weight = 1.0;
-  try {
-    weight = event->Get(weightsBranchName);
-  } catch (...) {
-  }
-
-  auto muons = event->GetCollection(collection);
-  for(auto muon : *muons)
-  {
-    float var;
-    if(variable == "chi2overndof"){
-      float chi2 = muon->Get("chi2");
-      float ndof = muon->Get("ndof");
-      var = chi2/ndof;
-    }
-    else if(variable == "ptErroverpt"){
-      float ptErr = muon->Get("ptErr");
-      float pt = muon->Get("pt");
-      var = ptErr/pt;
-    }
-    else if(variable == "DThitsCheck"){
-      float trkNumDTHits = muon->Get("trkNumDTHits");
-      float trkNumCSCHits = muon->Get("trkNumCSCHits");
-      if(trkNumCSCHits > 0){
-        var = 1;
-      }
-      else if(trkNumDTHits > 18) {
-        var = 1;
-      }
-      else{
-        var = 0;
-      }
-    }
-    histogramsHandler->Fill(histName, var, weight);
-  }
-    }
 
 void TTAlpsHistogramFiller::FillCustomLLPNanoAODVariables(const std::shared_ptr<Event> event) {
 
@@ -458,52 +333,96 @@ void TTAlpsHistogramFiller::FillCustomLLPNanoAODVariables(const std::shared_ptr<
     weight = event->Get(weightsBranchName);
   } catch (...) {
   }
+  
+  // GenMuons from ALPs
+  FillGenMuonsFromALPs(event);
 
-  for(auto &[histName, params] : ttalpsHistVariables) {
-    if(histName == "GenALP_pdgId") {
-      auto genparticles = event->GetCollection("GenPart");
-      for(auto genpart : *genparticles)
-      {
-        int pdgid = genpart->Get("pdgId");
-        if(pdgid == 54){
-          histogramsHandler->Fill(histName, pdgid, weight);
-        }
-      }
+  // DSAMuon variables
+
+  int nDSAMuons = 0;
+  int nDSAMuons_pt5 = 0;
+  auto dsamuons = event->GetCollection("DSAMuon");
+  for(auto dsamuon : *dsamuons)
+  {
+    float chi2 = dsamuon->Get("chi2");
+    float ndof = dsamuon->Get("ndof");
+    histogramsHandler->Fill("DSAMuon_chi2overndof", chi2/ndof, weight);
+    float ptErr = dsamuon->Get("ptErr");
+    float pt = dsamuon->Get("pt");
+    histogramsHandler->Fill("DSAMuon_ptErroverpt", chi2/ndof, weight);
+    int displacedId = dsamuon->Get("displacedId");
+    histogramsHandler->Fill("DSAMuon_displacedId", displacedId, weight);
+
+    // auto DSAMuon = asDSAMuon(dsamuon);
+    // if(DSAMuon->passesDSAID()) nDSAMuons = nDSAMuons + 1;
+    // if(DSAMuon->passesDSAID(5)) nDSAMuons_pt5 = nDSAMuons_pt5 + 1;
+
+    float dxy = dsamuon->Get("dxy");
+    float dz = dsamuon->Get("dz");
+
+    // eta regions
+    float eta = dsamuon->Get("eta");
+    if(eta <0.9){
+      histogramsHandler->Fill("DSAMuon_dxy_eta-max0p9", dxy, weight);
+      histogramsHandler->Fill("DSAMuon_dz_eta-max0p9", dz, weight);
     }
-    else if(histName == "GenALP_mass") FillGenParticleVariables(event, histName, "mass", 54);
-    else if(histName == "GenALP_vx") FillGenParticleVariables(event, histName, "vx", 54);
-    else if(histName == "GenALP_vy") FillGenParticleVariables(event, histName, "vy", 54);
-    else if(histName == "GenALP_vz") FillGenParticleVariables(event, histName, "vz", 54);
-    else if(histName == "GenALP_pt") FillGenParticleVariables(event, histName, "pt", 54);
-    else if(histName == "GenALP_boost") FillGenParticleBoost(event, histName, 54);
-    else if(histName == "GenALP_vxyz") FillGenParticleVxyz(event, histName, 54);
-    else if(histName == "GenALP_proper_vxyz") FillGenParticleProperVxyz(event, histName, 54);
-    if(histName == "GenMuon_pdgId") {
-      auto genparticles = event->GetCollection("GenPart");
-      for(auto genpart : *genparticles)
-      {
-        int pdgid = genpart->Get("pdgId");
-        if(pdgid == 13){
-          histogramsHandler->Fill(histName, pdgid, weight);
-        }
-      }
+    else if(eta <1.2){
+      histogramsHandler->Fill("DSAMuon_dxy_eta-max1p2", dxy, weight);
+      histogramsHandler->Fill("DSAMuon_dz_eta-max1p2", dz, weight);
+    } 
+    else if(eta <2.4){
+      histogramsHandler->Fill("DSAMuon_dxy_eta-max2p4", dxy, weight);
+      histogramsHandler->Fill("DSAMuon_dz_eta-max2p4", dz, weight);
     }
-    else if(histName == "GenMuon_mass") FillGenParticleVariables(event, histName, "mass", 13);
-    else if(histName == "GenMuon_vx") FillGenParticleVariables(event, histName, "vx", 13);
-    else if(histName == "GenMuon_vy") FillGenParticleVariables(event, histName, "vy", 13);
-    else if(histName == "GenMuon_vz") FillGenParticleVariables(event, histName, "vz", 13);
-    else if(histName == "GenMuon_pt") FillGenParticleVariables(event, histName, "pt", 13);
-    else if(histName == "GenMuon_boost") FillGenParticleBoost(event, histName, 13);
-    else if(histName == "GenMuon_vxyz") FillGenParticleVxyz(event, histName, 13);
-    else if(histName == "GenMuon_proper_vxyz") FillGenParticleProperVxyz(event, histName, 13);
 
-    else if(histName == "GenMuonFromALP_vx") FillGenMuonsFromALPs(event, histName, "vx");
-    else if(histName == "GenMuonFromALP_vy") FillGenMuonsFromALPs(event, histName, "vy");
-    else if(histName == "GenMuonFromALP_vz") FillGenMuonsFromALPs(event, histName, "vz");
-    else if(histName == "GenMuonFromALP_vxyz") FillGenMuonsFromALPs(event, histName, "vxyz");
-
-    else if(histName == "DSAMuon_chi2overndof") FillMuonVariables(event, histName, "DSAMuon", "chi2overndof");
-    else if(histName == "DSAMuon_ptErroverpt") FillMuonVariables(event, histName, "DSAMuon", "ptErroverpt");
-    else if(histName == "DSAMuon_DThitsCheck") FillMuonVariables(event, histName, "DSAMuon", "DThitsCheck");
   }
+  histogramsHandler->Fill("nDSAMuonID", nDSAMuons, weight);
+  histogramsHandler->Fill("nDSAMuonIDPt5", nDSAMuons_pt5, weight);
+
+  // Muons
+  int j = 0;
+  auto muons = event->GetCollection("Muon");
+  auto muons_extended = event->GetCollection("MuonExtended");
+  for(auto muon : *muons){
+    auto muon_extended = muons_extended->at(j);
+    float dxy = muon->Get("dxy");
+    float dz = muon->Get("dz");
+    float dxy_extended = muon_extended->Get("dxyPV");
+    float dz_extended = muon_extended->Get("dzPV");
+    histogramsHandler->Fill("MuonDxyDiff", dxy-dxy_extended, weight);
+    histogramsHandler->Fill("MuonDzDiff", dz-dz_extended, weight);
+    float eta = muon->Get("eta");
+    float eta_extended = muon->Get("eta");
+    histogramsHandler->Fill("MuonEtaDiff", eta-eta_extended, weight);
+
+    // eta regions
+    if(eta < 0.9){
+      histogramsHandler->Fill("Muon_dxy_eta-max0p9", dxy, weight);
+      histogramsHandler->Fill("Muon_dz_eta-max0p9", dz, weight);
+    }
+    else if(eta < 1.2){
+      histogramsHandler->Fill("Muon_dxy_eta-max1p2", dxy, weight);
+      histogramsHandler->Fill("Muon_dz_eta-max1p2", dz, weight);
+    } 
+    else if(eta < 2.4){
+      histogramsHandler->Fill("Muon_dxy_eta-max2p4", dxy, weight);
+      histogramsHandler->Fill("Muon_dz_eta-max2p4", dz, weight);
+    }
+    if(eta_extended < 0.9){
+      histogramsHandler->Fill("MuonExtended_dxy_eta-max0p9", dxy_extended, weight);
+      histogramsHandler->Fill("MuonExtended_dz_eta-max0p9", dz_extended, weight);
+    }
+    else if(eta_extended < 1.2){
+      histogramsHandler->Fill("MuonExtended_dxy_eta-max1p2", dxy_extended, weight);
+      histogramsHandler->Fill("MuonExtended_dz_eta-max1p2", dz_extended, weight);
+    } 
+    else if(eta_extended < 2.4){
+      histogramsHandler->Fill("MuonExtended_dxy_eta-max2p4", dxy_extended, weight);
+      histogramsHandler->Fill("MuonExtended_dz_eta-max2p4", dz_extended, weight);
+    }
+
+    j++;
+
+  }
+
 }
