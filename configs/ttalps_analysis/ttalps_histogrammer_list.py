@@ -20,6 +20,7 @@ max_files = -1
 skim = "skimmed_SemimuonicSR_Met50GeV_0LooseEle"
 
 base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms"
+# base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
 
 applyScaleFactors = {
   "muon": False,
@@ -73,7 +74,7 @@ samples = (
   # # "backgrounds2018/QCD_Pt_2400to3200",
   # # "backgrounds2018/QCD_Pt_3200toInf",
 
-  # QCD mu enhanced
+  # # QCD mu enhanced
   # "backgrounds2018/QCD_Pt_15to20_MuEnriched",
   # "backgrounds2018/QCD_Pt_20to30_MuEnriched",
   # "backgrounds2018/QCD_Pt_30to50_MuEnriched",
@@ -87,7 +88,7 @@ samples = (
   # "backgrounds2018/QCD_Pt_800to1000_MuEnriched",
   # "backgrounds2018/QCD_Pt_1000_MuEnriched",
 
-  # Data
+  # # Data
   # "collision_data2018/SingleMuon2018A",
   # "collision_data2018/SingleMuon2018B",
   # "collision_data2018/SingleMuon2018C",

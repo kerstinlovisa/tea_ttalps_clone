@@ -28,6 +28,7 @@ output_skim = "skimmed_SemimuonicSR_Met50GeV_0LooseEle"
 # input_file_list = ("./skimmed_loose/test_TTToSemileptonic.root",)
 # output_dir = f"./skimmed_ttbar/"
 
+# base_path = "/nfs/dust/cms/user/jniedzie/ttalps_cms"
 base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms"
 
 samples = (
@@ -97,11 +98,37 @@ samples = (
   # "collision_data2018/SingleMuon2018D",
   
   # Signal
-  "signals/tta_mAlp-0p35GeV_ctau-1e0mm_nEvents-100",
-  "signals/tta_mAlp-0p35GeV_ctau-1e1mm_nEvents-100",
   # "signals/tta_mAlp-0p35GeV_ctau-1e2mm",
   # "signals/tta_mAlp-0p35GeV_ctau-1e3mm",
   # "signals/tta_mAlp-0p35GeV_ctau-1e5mm",
+  
+  
+  # LLPnanoAOD
+  # tt̄
+  "/backgrounds2018/TTToSemiLeptonic_LLPnanoAOD",
+  
+  # QCD mu enriched
+   "/backgrounds2018/QCDPt15To20_LLPnanoAOD",
+   "/backgrounds2018/QCDPt20To30_LLPnanoAOD",
+   "/backgrounds2018/QCDPt30To50_LLPnanoAOD",
+   "/backgrounds2018/QCDPt50To80_LLPnanoAOD",
+   "/backgrounds2018/QCDPt80To120_LLPnanoAOD",
+   "/backgrounds2018/QCDPt120To170_LLPnanoAOD",
+   "/backgrounds2018/QCDPt170To300_LLPnanoAOD",
+   "/backgrounds2018/QCDPt300To470_LLPnanoAOD",
+   "/backgrounds2018/QCDPt470To600_LLPnanoAOD",
+   "/backgrounds2018/QCDPt600To800_LLPnanoAOD",
+   "/backgrounds2018/QCDPt800To1000_LLPnanoAOD",
+   "/backgrounds2018/QCDPt1000_LLPnanoAOD",
+  
+  # Signals
+   "/signals/tta_mAlp-0p35GeV_ctau-1e0mm_nEvents-100",
+   "/signals/tta_mAlp-0p35GeV_ctau-1e0mm_nEvents-100",
+  #  "/signals/tta_mAlp-0p35GeV_ctau-1e0mm",
+  #  "/signals/tta_mAlp-0p35GeV_ctau-1e1mm",
+   "/signals/tta_mAlp-0p35GeV_ctau-1e2mm",
+   "/signals/tta_mAlp-0p35GeV_ctau-1e3mm",
+   "/signals/tta_mAlp-0p35GeV_ctau-1e5mm",
 )
 
 # this has to be here, otherwise the script will not work:

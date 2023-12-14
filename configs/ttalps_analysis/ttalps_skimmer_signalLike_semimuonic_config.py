@@ -20,4 +20,5 @@ eventSelections = {
     # "nLooseMuonsAndDSAMuons": (3, 9999999),
     "nLooseElectrons": (0, 0),
     # "nGoodBtaggedJets": (2, 9999999),
+    "nGoodMediumBtaggedJets": (1, 9999999),
 }
