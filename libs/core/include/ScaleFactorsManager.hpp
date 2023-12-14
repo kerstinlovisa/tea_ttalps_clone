@@ -25,6 +25,8 @@ class ScaleFactorsManager {
   float GetMuonIsoScaleFactor(float eta, float pt, MuonID id, MuonIso iso);
   float GetMuonTriggerScaleFactor(float eta, float pt, MuonID id, MuonIso iso, bool IsoMu24included, bool IsoMu50included);
 
+  float GetPileupScaleFactor(int nVertices);
+
  private:
   ScaleFactorsManager();
   ~ScaleFactorsManager() {}
@@ -33,14 +35,14 @@ class ScaleFactorsManager {
     static ScaleFactorsManager instance;
     return instance;
   }
+  std::map<std::string, bool> applyScaleFactors;
 
   std::map<std::string, TH2D *> muonSFvalues;
-  bool applyMuonScaleFactors;
-  bool applyMuonTriggerScaleFactors;
-
   void CreateMuonSFsHistogram(const ScaleFactorsMap &muonSFs, std::string outputPath, std::string histName);
   void BringEtaPtToHistRange(TH2D *hist, float &eta, float &pt);
   float GetScaleFactor(std::string name, float eta, float pt);
+
+  TH1D *pileupSFvalues;
 };
 
 struct MuonID {

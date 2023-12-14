@@ -21,6 +21,12 @@ EventProcessor::EventProcessor() {
   } catch (const Exception &e) {
     warn() << "Couldn't read eventSelections from config file " << endl;
   }
+
+    try {
+    config.GetVector("requiredFlags", requiredFlags);
+  } catch (const Exception &e) {
+    warn() << "Couldn't read requiredFlags from config file " << endl;
+  }
 }
 
 bool EventProcessor::PassesTriggerSelections(const shared_ptr<Event> event) {
@@ -31,13 +37,21 @@ bool EventProcessor::PassesTriggerSelections(const shared_ptr<Event> event) {
       passes = event->Get(triggerName);
     } catch (Exception &) {
       if (find(triggerWarningsPrinted.begin(), triggerWarningsPrinted.end(), triggerName) == triggerWarningsPrinted.end()) {
-        warn() << "Trigger not present: " << triggerName << "\n";
+        warn() << "Trigger not present: " << triggerName << endl;
         triggerWarningsPrinted.push_back(triggerName);
       }
     }
     if (passes) return true;
   }
   return passes;
+}
+
+bool EventProcessor::PassesMetFilters(const shared_ptr<Event> event){
+  for(string flag : requiredFlags){
+    bool flagValue = event->Get(flag);
+    if(!flagValue) return false;
+  }
+  return true;
 }
 
 void EventProcessor::RegisterCuts(shared_ptr<CutFlowManager> cutFlowManager) {

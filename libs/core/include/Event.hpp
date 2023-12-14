@@ -26,10 +26,12 @@ class Event {
     return Multitype(this, branchName);
   }
 
+  float GetAsFloat(std::string branchName);
+
   inline std::shared_ptr<PhysicsObjects> GetCollection(std::string name) const {
     if (collections.count(name)) return collections.at(name);
     if (extraCollections.count(name)) return extraCollections.at(name);
-    fatal() << "Tried to get a collection that doesn't exist: " << name << "\n";
+    fatal() << "Tried to get a collection that doesn't exist: " << name << std::endl;
     exit(1);
   }
 
@@ -49,7 +51,7 @@ class Event {
       }
     }
     if (extraCollections.count(name)) return extraCollections.at(name)->size();
-    fatal() << "Tried to get size of a collection that doesn't exist: " << name << "\n";
+    fatal() << "Tried to get size of a collection that doesn't exist: " << name << std::endl;
     exit(1);
   }
 
@@ -89,6 +91,7 @@ class Event {
 
   bool hasExtraCollections = true;
   std::map<std::string, ExtraCollection> extraCollectionsDescriptions;
+  std::map<std::string, std::string> defaultCollectionsTypes;
 
   friend class EventReader;
   template <typename T>

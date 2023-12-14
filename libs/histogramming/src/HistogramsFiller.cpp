@@ -27,104 +27,12 @@ HistogramsFiller::HistogramsFiller(shared_ptr<HistogramsHandler> histogramsHandl
 
 HistogramsFiller::~HistogramsFiller() {}
 
-float HistogramsFiller::GetValue(shared_ptr<PhysicsObject> object, string branchName) {
-  if (defaultCollectionsTypes.count(branchName)) {
-    string branchType = defaultCollectionsTypes[branchName];
-    if (branchType == "Int_t") {
-      Int_t value = object->Get(branchName);
-      return value;
-    }
-    if (branchType == "Bool_t") {
-      Bool_t value = object->Get(branchName);
-      return value;
-    }
-    if (branchType == "Float_t") {
-      Float_t value = object->Get(branchName);
-      return value;
-    }
-    if (branchType == "UChar_t") {
-      UChar_t value = object->Get(branchName);
-      return value;
-    }
-    if (branchType == "UShort_t") {
-      UShort_t value = object->Get(branchName);
-      return value;
-    }
-    if (branchType == "Short_t") {
-      Short_t value = object->Get(branchName);
-      return value;
-    }
-    if (branchType == "UInt_t") {
-      UInt_t value = object->Get(branchName);
-      return value;
-    }
-  }
-
-  try {
-    Float_t value = object->Get(branchName);
-    defaultCollectionsTypes[branchName] = "Float_t";
-    return value;
-  } catch (BadTypeException& e) {
-    try {
-      Int_t value = object->Get(branchName);
-      defaultCollectionsTypes[branchName] = "Int_t";
-      return value;
-    } catch (BadTypeException& e) {
-      try {
-        UChar_t value = object->Get(branchName);
-        defaultCollectionsTypes[branchName] = "UChar_t";
-        return value;
-      } catch (BadTypeException& e) {
-        try {
-          UShort_t value = object->Get(branchName);
-          defaultCollectionsTypes[branchName] = "UShort_t";
-          return value;
-        } catch (BadTypeException& e) {
-          try {
-            Short_t value = object->Get(branchName);
-            defaultCollectionsTypes[branchName] = "Short_t";
-            return value;
-          } catch (BadTypeException& e) {
-            try {
-              UInt_t value = object->Get(branchName);
-              defaultCollectionsTypes[branchName] = "UInt_t";
-              return value;
-            } catch (BadTypeException& e) {
-              try {
-                Bool_t value = object->Get(branchName);
-                defaultCollectionsTypes[branchName] = "Bool_t";
-                return value;
-              } catch (BadTypeException& e) {
-                error() << "Couldn't get value for branch " << branchName << endl;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  return 0;
-}
-
 void HistogramsFiller::FillDefaultVariables(const std::shared_ptr<Event> event) {
   float weight = 1.0;
   try {
     weight = event->Get(weightsBranchName);
   } catch (...) {
-  }
-
-  auto& scaleFactorsManager = ScaleFactorsManager::GetInstance();
-  bool IsoMu24included = false;
-  bool IsoMu50included = false;
-  
-  try {
-    IsoMu24included = event->Get("HLT_IsoMu24");
-  } catch (...) {
-  }
-
-  try {
-    IsoMu50included = event->Get("HLT_IsoMu50");
-  } catch (...) {
+    warn() << "Coudn't get weight from branch: " << weightsBranchName << endl;
   }
 
   for (auto& [title, params] : defaultHistVariables) {
@@ -132,26 +40,17 @@ void HistogramsFiller::FillDefaultVariables(const std::shared_ptr<Event> event) 
     string branchName = params.variable;
 
     if (collectionName == "Event") {
-      uint eventVariable;
+      float eventVariable;
       if (branchName[0] == 'n') {
         eventVariable = event->GetCollectionSize(branchName.substr(1));
       } else {
-        eventVariable = event->Get(branchName);
+        eventVariable = event->GetAsFloat(branchName);
       }
       histogramsHandler->Fill(title, eventVariable, weight);
     } else {
       auto collection = event->GetCollection(collectionName);
       for (auto object : *collection) {
-        if (collectionName == "Muon" || object->GetOriginalCollection() == "Muon") {
-          auto muon = asMuon(object);
-          float muonSF = muon->GetScaleFactor();
-          float triggerSF = scaleFactorsManager.GetMuonTriggerScaleFactor(muon->GetEta(), muon->GetPt(), muon->GetID(), muon->GetIso(),
-                                                                          IsoMu24included, IsoMu50included);
-
-          histogramsHandler->Fill(title, GetValue(object, branchName), weight * muonSF * triggerSF);
-        } else {
-          histogramsHandler->Fill(title, GetValue(object, branchName), weight);
-        }
+        histogramsHandler->Fill(title, object->GetAsFloat(branchName), weight);
       }
     }
   }

@@ -4,8 +4,8 @@ max_files = -1
 # input_skim = "skimmed_looseSemileptonic"
 # input_skim = "skimmed_looseSemimuonic_tightMuon"
 # input_skim = "skimmed_looseSemimuonic_tightMuon_newBtag"
-input_skim = "skimmed_looseSemimuonic"
-# input_skim = "skimmed_looseSemimuonic_looseMuon_looseBjet"
+# input_skim = "skimmed_looseSemimuonic"
+input_skim = "LLPNanoAOD"
 
 # CRs & SRs
 # output_skim = "skimmed_ttbarLike"
@@ -15,13 +15,12 @@ input_skim = "skimmed_looseSemimuonic"
 # output_skim = "skimmed_ttbarSemimuonicCR_Met30GeV"
 # output_skim = "skimmed_ttbarSemimuonicCR_Met50GeV_2mediumBjets"
 # output_skim = "skimmed_ttbarSemimuonicCR_Met50GeV_2tightBjets"
-# output_skim = "skimmed_ttbarSemimuonicCR_Met50GeV_1mediumBjets_muonIdIso"
+output_skim = "skimmed_looseSemimuonic"
 
 # output_skim = "skimmed_ttZSemimuonicCR_tightMuon_noLooseMuonIso"
 # output_skim = "skimmed_ttZSemimuonicCR_Met50GeV"
 
 # output_skim = "skimmed_SR_Met50GeV"
-output_skim = "skimmed_SemimuonicSR_Met50GeV_0LooseEle"
 
 # file_name = "6476B810-7ED2-704C-B80D-6F956C63EEBD.root"
 
@@ -32,7 +31,9 @@ base_path = "/nfs/dust/cms/user/lrygaard/ttalps_cms"
 
 samples = (
   # Backgrounds
-  "backgrounds2018/TTToSemiLeptonic",
+  "backgrounds18/TTToSemiLeptonic_2",
+
+  # "backgrounds2018/TTToSemiLeptonic",
   # "backgrounds2018/TTToHadronic",
   # "backgrounds2018/TTTo2L2Nu",
   
@@ -97,9 +98,8 @@ samples = (
   # "collision_data2018/SingleMuon2018D",
   
   # Signal
-  "signals/tta_mAlp-0p35GeV_ctau-1e0mm_nEvents-100",
-  "signals/tta_mAlp-0p35GeV_ctau-1e1mm_nEvents-100",
-  # "signals/tta_mAlp-0p35GeV_ctau-1e2mm",
+  "signal/tta_mAlp-0p35GeV_ctau-1e0mm_nEvents-100",
+  "signal/tta_mAlp-0p35GeV_ctau-1e1mm_nEvents-100",
   # "signals/tta_mAlp-0p35GeV_ctau-1e3mm",
   # "signals/tta_mAlp-0p35GeV_ctau-1e5mm",
 )

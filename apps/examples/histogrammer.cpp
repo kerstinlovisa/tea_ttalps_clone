@@ -28,18 +28,7 @@ int main(int argc, char **argv) {
     config.SetInputPath(argv[2]);
     config.SetOutputPath(argv[3]);
   }
-  if(argc == 6){
-    bool applyMounScaleFactors = atoi(argv[4]);
-    if (applyMounScaleFactors) info() << "Muon Scale Factors will be applied" << endl;
-    else info() << "Muon Scale Factors were explicitely turned off" << endl;
-
-    bool applyMounTriggerScaleFactors = atoi(argv[5]);
-    if (applyMounTriggerScaleFactors) info() << "Muon Trigger Scale Factors will be applied" << endl;
-    else info() << "Muon Trigger Scale Factors were explicitely turned off" << endl;
-    config.SetApplyMuonScaleFactors(applyMounScaleFactors);
-    config.SetApplyMuonTriggerScaleFactors(applyMounTriggerScaleFactors);
-  }
-
+  
   auto eventReader = make_shared<EventReader>();
   auto histogramsHandler = make_shared<HistogramsHandler>();
   auto cutFlowManager = make_shared<CutFlowManager>(eventReader);

@@ -10,98 +10,69 @@
 using namespace std;
 
 TTAlpsSelections::TTAlpsSelections(){
-  auto &config = ConfigManager::GetInstance();
-
-  try {
-    config.GetSelections(eventSelections);
-  } catch (const Exception &e) {
-    warn() << "Couldn't read eventSelections from config file ";
-  }
-
-  try {
-    config.GetVector("requiredFlags", requiredFlags);
-  } catch (const Exception &e) {
-    warn() << "Couldn't read requiredFlags from config file ";
-  }
+  eventProcessor = make_unique<EventProcessor>();
 }
 
-bool TTAlpsSelections::PassesLooseSemileptonicSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  float metPt = event->Get("MET_pt");
-  if (!inRange(metPt, eventSelections["MET_pt"])) return false;
-  cutFlowManager->UpdateCutFlow("MetPt");
-
-  if (!inRange(event->GetCollectionSize("GoodLeptons"), eventSelections["nGoodLeptons"])) return false;
-  cutFlowManager->UpdateCutFlow("nGoodLeptons");
-
-  if (!inRange(event->GetCollectionSize("GoodBtaggedJets"), eventSelections["nGoodBtaggedJets"])) return false;
-  cutFlowManager->UpdateCutFlow("nGoodBtaggedJets");
-
-  if (!inRange(event->GetCollectionSize("GoodJets"), eventSelections["nGoodJets"])) return false;
-  cutFlowManager->UpdateCutFlow("nGoodJets");
-
-  return true;
+void TTAlpsSelections::RegisterSignalLikeSelections(shared_ptr<CutFlowManager> cutFlowManager) {
+  cutFlowManager->RegisterCut("nLooseMuonsOrDSAMuons");
 }
 
 bool TTAlpsSelections::PassesSignalLikeSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  float metPt = event->Get("MET_pt");
-  if (!inRange(metPt, eventSelections["MET_pt"])) return false;
+  
+  auto looseMuons = event->GetCollection("LooseMuons");
+  auto looseDsaMuons = event->GetCollection("LooseDSAMuons");
 
-  if (!inRange(event->GetCollectionSize("GoodLeptons"), eventSelections["nGoodLeptons"])) return false;
-  if (!inRange(event->GetCollectionSize("GoodBtaggedJets"), eventSelections["nGoodBtaggedJets"])) return false;
-  if (!inRange(event->GetCollectionSize("GoodJets"), eventSelections["nGoodJets"])) return false;
+  PhysicsObjects allMuons;
 
-  auto goodLeptons = event->GetCollection("GoodLeptons");
-  int requiredGoodMuons = 3;
-  for (auto lepton : *goodLeptons) {
-    if (lepton->GetOriginalCollection() != "Electron") continue;
-    requiredGoodMuons = 2;
-    break;
+  for(auto muonObj : *looseMuons){
+    auto muon = asMuon(muonObj);
+    auto muonP4 = muon->GetFourVector();
+
+    allMuons.push_back(muonObj);
+
+    for(auto dsaMuonObj : *looseDsaMuons){
+      auto dsaMuon = asMuon(dsaMuonObj);
+      auto dsaMuonP4 = dsaMuon->GetFourVector();
+      
+      if(muonP4.DeltaR(dsaMuonP4) < 0.01) continue;
+      allMuons.push_back(dsaMuonObj);
+    }
   }
-  if (event->GetCollectionSize("GoodMuons") < requiredGoodMuons) return false;
-  cutFlowManager->UpdateCutFlow("twoAdditionalMuons");
+
+  if(allMuons.size() < 3) return false;
+  cutFlowManager->UpdateCutFlow("nLooseMuonsOrDSAMuons");
 
   return true;
 }
 
 void TTAlpsSelections::RegisterSingleLeptonSelections(shared_ptr<CutFlowManager> cutFlowManager) {
-  cutFlowManager->RegisterCut("metFilters");
-  cutFlowManager->RegisterCut("nLooseMuons");
-}
-
-bool TTAlpsSelections::PassesMetFilters(const shared_ptr<Event> event){
-  for(string flag : requiredFlags){
-    bool flagValue = event->Get(flag);
-    if(!flagValue) return false;
-  }
-  return true;
+  cutFlowManager->RegisterCut("nAdditionalLooseMuons");
 }
 
 bool TTAlpsSelections::PassesSingleLeptonSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  if(!PassesMetFilters(event)) return false;
-  if(cutFlowManager) cutFlowManager->UpdateCutFlow("metFilters");
+  int nLooseMuons = event->GetCollectionSize("LooseMuons");
+  if (nLooseMuons > 1) return false;
 
-  int looseMuons = event->GetCollectionSize("LooseMuons");
-  if (looseMuons > 1) return false;
-  if (looseMuons == 1) {
-    auto leadingMuon = event->GetCollection("TightMuons")->at(0);
-    auto survivingMuon = event->GetCollection("LooseMuons")->at(0);
-    if (survivingMuon != leadingMuon) return false;
+  int nTightMuons = event->GetCollectionSize("TightMuons");
+  if (nTightMuons != 1) return false;
+
+  if (nLooseMuons == 1) {
+    auto tightMuon = event->GetCollection("TightMuons")->at(0);
+    auto looseMuon = event->GetCollection("LooseMuons")->at(0);
+    if (looseMuon != tightMuon) return false;
   }
-  if(cutFlowManager) cutFlowManager->UpdateCutFlow("nLooseMuons");
+  if(cutFlowManager) cutFlowManager->UpdateCutFlow("nAdditionalLooseMuons");
 
   return true;
 }
 
 void TTAlpsSelections::RegisterTTZLikeSelections(shared_ptr<CutFlowManager> cutFlowManager) {
-  cutFlowManager->RegisterCut("metFilters");
   cutFlowManager->RegisterCut("inZpeak");
 }
 
 bool TTAlpsSelections::PassesTTZLikeSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  if(!PassesMetFilters(event)) return false;
-  if(cutFlowManager) cutFlowManager->UpdateCutFlow("metFilters");
-
   auto looseMuons = event->GetCollection("LooseMuons");
+  
   double zMass = 91.1876; // GeV
   double smallestDifferenceToZmass = 999999;
   double maxDistanceFromZ = 30;

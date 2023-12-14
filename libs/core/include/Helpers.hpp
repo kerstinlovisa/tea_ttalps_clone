@@ -79,9 +79,9 @@ inline void makeParentDirectories(std::string filePath) {
 
   if (!std::filesystem::exists(directoryPath)) {
     if (std::filesystem::create_directories(directoryPath)) {
-      info() << "Created directory: " << directoryPath << "\n";
+      info() << "Created directory: " << directoryPath << std::endl;
     } else {
-      error() << "Failed to create directory: " << directoryPath << "\n";
+      error() << "Failed to create directory: " << directoryPath << std::endl;
     }
   }
 }
@@ -96,12 +96,13 @@ struct ExtraCollection {
   std::map<std::string, std::pair<float, float>> selections;
   std::map<std::string, bool> flags;
   std::map<std::string, int> options;
+  std::map<std::string, std::pair<int, int>> optionRanges;
 
   void Print() {
-    info() << "Input collections: \n";
+    info() << "Input collections: " << std::endl;
     for (std::string name : inputCollections) info() << name << std::endl;
 
-    info() << "Selections: \n";
+    info() << "Selections: " << std::endl;
     for (auto &[name, cuts] : selections) {
       info() << "\t" << name << ": " << cuts.first << ", " << cuts.second << std::endl;
     }
@@ -110,6 +111,9 @@ struct ExtraCollection {
     }
     for (auto &[name, option] : options) {
       info() << "\t" << name << ": " << option << std::endl;
+    }
+    for (auto &[name, optionRange] : optionRanges) {
+      info() << "\t" << name << ": " << optionRange.first << ", " << optionRange.second << std::endl;
     }
   }
 };

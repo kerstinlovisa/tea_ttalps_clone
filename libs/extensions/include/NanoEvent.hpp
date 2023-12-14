@@ -1,12 +1,12 @@
-#ifndef TemplateName_hpp
-#define TemplateName_hpp
+#ifndef NanoEvent_hpp
+#define NanoEvent_hpp
 
 #include "Event.hpp"
 #include "Helpers.hpp"
 
-class TemplateName {
+class NanoEvent {
  public:
-  TemplateName(std::shared_ptr<Event> event_) : event(event_) {}
+  NanoEvent(std::shared_ptr<Event> event_) : event(event_) {}
 
   auto Get(std::string branchName) { return event->Get(branchName); }
   float GetAsFloat(std::string branchName) { return event->GetAsFloat(branchName); }
@@ -14,8 +14,11 @@ class TemplateName {
   int GetCollectionSize(std::string name) { return event->GetCollectionSize(name); }
   void AddExtraCollections() { event->AddExtraCollections(); }
 
+  TLorentzVector GetMetFourVector();
+  float GetMetPt();
+
  private:
   std::shared_ptr<Event> event;
 };
 
-#endif /* TemplateName_hpp */
+#endif /* NanoEvent_hpp */

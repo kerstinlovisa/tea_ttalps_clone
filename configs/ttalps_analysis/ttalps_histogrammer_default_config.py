@@ -1,57 +1,80 @@
 from scale_factors_config import *
+from ttalps_extra_collections import extraEventCollections
 
 nEvents = -1
 printEveryNevents = 10000
 
 runDefaultHistograms = True
 runTriggerHistograms = False
+runPileupHistograms = False
 
 weightsBranchName = "genWeight"
-applyMuonScaleFactors = False
-applyMuonTriggerScaleFactors = False
 
-# from ttalps_skimmer_ttbarLike_semimuonic_config import extraEventCollections
-from ttalps_skimmer_ttZLike_semimuonic_config import extraEventCollections
+pileupScaleFactorsPath = "/nfs/dust/cms/user/jniedzie/ttalps_cms/pileup_scale_factors.root"
+pileupScaleFactorsHistName = "pileup_scale_factors"
 
-extraEventCollections["GoodNonBtaggedJets"] = {
-  "inputCollections": ("Jet", ),
-  "pt": (30., 9999999.),
-  "eta": (-2.4, 2.4),
-  "btagDeepB": (0, 0.5),
-  "jetId": 6, #  bit1 is loose (always false in 2017 since it does not exist), bit2 is tight, bit3 is tightLepVeto*
+applyScaleFactors = {
+  "muon": False,
+  "muonTrigger": False,
+  "pileup": True,
 }
 
 defaultHistParams = (
 #  collection             variable               bins    xmin    xmax    dir
+  ("Event"              , "PV_npvs"             , 300   , 0     , 300   , ""  ),
+  ("Event"              , "PV_npvsGood"         , 300   , 0     , 300   , ""  ),
+  ("Event"              , "MET_pt"              , 1000  , 0     , 1000  , ""  ),
+  
   ("Event"              , "nMuon"               , 50    , 0     , 50    , ""  ),
   ("Muon"               , "pt"                  , 2000  , 0     , 1000  , ""  ),
   ("Muon"               , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("Muon"               , "dxy"                 , 400   , -20   , 20    , ""  ),
-  ("Muon"               , "dz"                  , 400   , -20   , 20    , ""  ),
+  ("Muon"               , "dxy"                 , 1600  , -20   , 20    , ""  ),
+  ("Muon"               , "dz"                  , 1600  , -20   , 20    , ""  ),
   
   ("Event"              , "nTightMuons"         , 50    , 0     , 50    , ""  ),
   ("TightMuons"         , "pt"                  , 2000  , 0     , 1000  , ""  ),
   ("TightMuons"         , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("TightMuons"         , "dxy"                 , 400   , -20   , 20    , ""  ),
-  ("TightMuons"         , "dz"                  , 400   , -20   , 20    , ""  ),
+  ("TightMuons"         , "dxy"                 , 1600  , -20   , 20    , ""  ),
+  ("TightMuons"         , "dz"                  , 1600  , -20   , 20    , ""  ),
+  ("TightMuons"         , "pfRelIso04_all"      , 2000  , -10   , 10    , ""  ),
+  ("TightMuons"         , "pfRelIso03_chg"      , 2000  , -10   , 10    , ""  ),
+  ("TightMuons"         , "pfRelIso03_all"      , 2000  , -10   , 10    , ""  ),
+  ("TightMuons"         , "tkRelIso"            , 2000  , -10   , 10    , ""  ),
+  ("TightMuons"         , "miniPFRelIso_chg"    , 2000  , -10   , 10    , ""  ),
+  ("TightMuons"         , "miniPFRelIso_all"    , 2000  , -10   , 10    , ""  ),
+  ("TightMuons"         , "jetRelIso"           , 2000  , -10   , 10    , ""  ),
+
   
   ("Event"              , "nLooseMuons"         , 50    , 0     , 50    , ""  ),
   ("LooseMuons"         , "pt"                  , 2000  , 0     , 1000  , ""  ),
   ("LooseMuons"         , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("LooseMuons"         , "dxy"                 , 400   , -20   , 20    , ""  ),
-  ("LooseMuons"         , "dz"                  , 400   , -20   , 20    , ""  ),
+  ("LooseMuons"         , "dxy"                 , 1600  , -20   , 20    , ""  ),
+  ("LooseMuons"         , "dz"                  , 1600  , -20   , 20    , ""  ),
+  ("LooseMuons"         , "pfRelIso04_all"      , 2000  , -10   , 10    , ""  ),
+  ("LooseMuons"         , "pfRelIso03_chg"      , 2000  , -10   , 10    , ""  ),
+  ("LooseMuons"         , "pfRelIso03_all"      , 2000  , -10   , 10    , ""  ),
+  ("LooseMuons"         , "tkRelIso"            , 2000  , -10   , 10    , ""  ),
+  ("LooseMuons"         , "miniPFRelIso_chg"    , 2000  , -10   , 10    , ""  ),
+  ("LooseMuons"         , "miniPFRelIso_all"    , 2000  , -10   , 10    , ""  ),
+  ("LooseMuons"         , "jetRelIso"           , 2000  , -10   , 10    , ""  ),
+  
+  # ("Event"              , "nLooseDSAMuons"      , 50    , 0     , 50    , ""  ),
+  # ("LooseDSAMuons"      , "pt"                  , 2000  , 0     , 1000  , ""  ),
+  # ("LooseDSAMuons"      , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
+  # ("LooseDSAMuons"      , "dxy"                 , 1600  , -20   , 20    , ""  ),
+  # ("LooseDSAMuons"      , "dz"                  , 1600  , -20   , 20    , ""  ),
   
   ("Event"              , "nElectron"           , 50    , 0     , 50    , ""  ),
   ("Electron"           , "pt"                  , 2000  , 0     , 1000  , ""  ),
   ("Electron"           , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("Electron"           , "dxy"                 , 400   , -20   , 20    , ""  ),
-  ("Electron"           , "dz"                  , 400   , -20   , 20    , ""  ),
+  ("Electron"           , "dxy"                 , 1600  , -20   , 20    , ""  ),
+  ("Electron"           , "dz"                  , 1600  , -20   , 20    , ""  ),
   
   ("Event"              , "nLooseElectrons"     , 50    , 0     , 50    , ""  ),
   ("LooseElectrons"     , "pt"                  , 2000  , 0     , 1000  , ""  ),
   ("LooseElectrons"     , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("LooseElectrons"     , "dxy"                 , 400   , -20   , 20    , ""  ),
-  ("LooseElectrons"     , "dz"                  , 400   , -20   , 20    , ""  ),
+  ("LooseElectrons"     , "dxy"                 , 1600  , -20   , 20    , ""  ),
+  ("LooseElectrons"     , "dz"                  , 1600  , -20   , 20    , ""  ),
   
   ("Event"              , "nJet"                , 50    , 0     , 50    , ""  ),
   ("Jet"                , "pt"                  , 2000  , 0     , 1000  , ""  ),
@@ -64,18 +87,21 @@ defaultHistParams = (
   ("GoodJets"           , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
   ("GoodJets"           , "phi"                 , 100   , -2.5  , 2.5   , ""  ),
   ("GoodJets"           , "btagDeepB"           , 200   , -1    , 1     , ""  ),
+  ("GoodJets"           , "btagDeepFlavB"       , 200   , -1    , 1     , ""  ),
   
-  ("Event"              , "nGoodBtaggedJets"    , 50    , 0     , 50    , ""  ),
-  ("GoodBtaggedJets"    , "pt"                  , 2000  , 0     , 2000  , ""  ),
-  ("GoodBtaggedJets"    , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("GoodBtaggedJets"    , "phi"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("GoodBtaggedJets"    , "btagDeepB"           , 200   , -1    , 1     , ""  ),
+  ("Event"                    , "nGoodMediumBtaggedJets"    , 50    , 0     , 50    , ""  ),
+  ("GoodMediumBtaggedJets"    , "pt"                  , 2000  , 0     , 2000  , ""  ),
+  ("GoodMediumBtaggedJets"    , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
+  ("GoodMediumBtaggedJets"    , "phi"                 , 100   , -2.5  , 2.5   , ""  ),
+  ("GoodMediumBtaggedJets"    , "btagDeepB"           , 200   , -1    , 1     , ""  ),
+  ("GoodMediumBtaggedJets"    , "btagDeepFlavB"       , 200   , -1    , 1     , ""  ),
   
-  ("Event"              , "nGoodNonBtaggedJets" , 50    , 0     , 50    , ""  ),
-  ("GoodNonBtaggedJets" , "pt"                  , 2000  , 0     , 2000  , ""  ),
-  ("GoodNonBtaggedJets" , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("GoodNonBtaggedJets" , "phi"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("GoodNonBtaggedJets" , "btagDeepB"           , 200   , -1    , 1     , ""  ),
+  ("Event"                    , "nGoodNonTightBtaggedJets" , 50    , 0     , 50    , ""  ),
+  ("GoodNonTightBtaggedJets"  , "pt"                  , 2000  , 0     , 2000  , ""  ),
+  ("GoodNonTightBtaggedJets"  , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
+  ("GoodNonTightBtaggedJets"  , "phi"                 , 100   , -2.5  , 2.5   , ""  ),
+  ("GoodNonTightBtaggedJets"  , "btagDeepB"           , 200   , -1    , 1     , ""  ),
+  ("GoodNonTightBtaggedJets"  , "btagDeepFlavB"       , 200   , -1    , 1     , ""  ),
 )
 
 histParams = (
@@ -104,7 +130,20 @@ histParams = (
   ("GoodJets"       , "minvBjet2jets"             , 2000  , 0   , 2000  , ""  ),
   ("TightMuons"     , "deltaPhiMuonMET"           , 200   , -4  , 4     , ""  ),
   ("TightMuons"     , "minvMuonMET"               , 1000  , 0   , 1000  , ""  ),
+
+  ("Event"          , "nAllLooseMuons"            , 50    , 0     , 50    , ""  ),
+  ("AllLooseMuons"  , "pt"                        , 2000  , 0     , 1000  , ""  ),
+  ("AllLooseMuons"  , "eta"                       , 100   , -2.5  , 2.5   , ""  ),
+  ("AllLooseMuons"  , "dxy"                       , 1600  , -20   , 20    , ""  ),
+  ("AllLooseMuons"  , "dz"                        , 1600  , -20   , 20    , ""  ),
+  ("AllLooseMuons"  , "deltaR"                    , 500   , 0     , 50    , ""  ),
+  ("AllLooseMuons"  , "minDeltaR"                 , 500   , 0     , 50    , ""  ),
+
+  ("Event"          , "nLooseDSAMuons"            , 50    , 0     , 50    , ""  ),
+  ("LooseDSAMuons"  , "pt"                        , 2000  , 0     , 1000  , ""  ),
+  ("LooseDSAMuons"  , "eta"                       , 100   , -2.5  , 2.5   , ""  ),
+  ("LooseDSAMuons"  , "dxy"                       , 1600  , -20   , 20    , ""  ),
+  ("LooseDSAMuons"  , "dz"                        , 1600  , -20   , 20    , ""  ),
   
-  ("Event"          , "METpt"                     , 1000  , 0   , 1000  , ""  ),
   ("Event"          , "normCheck"                 , 1     , 0   , 1     , ""  ),
 )

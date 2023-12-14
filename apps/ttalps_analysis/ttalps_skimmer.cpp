@@ -35,19 +35,29 @@ int main(int argc, char **argv) {
   auto eventProcessor = make_unique<EventProcessor>();
   auto ttAlpsSelections = make_unique<TTAlpsSelections>();
 
+  info() << "Retrieving values from config file... " << endl;
+
   bool applyLooseSkimming, applyTTbarLikeSkimming, applySignalLikeSkimming, applyTTZLikeSkimming;
   config.GetValue("applyLooseSkimming", applyLooseSkimming);
   config.GetValue("applyTTbarLikeSkimming", applyTTbarLikeSkimming);
   config.GetValue("applySignalLikeSkimming", applySignalLikeSkimming);
   config.GetValue("applyTTZLikeSkimming", applyTTZLikeSkimming);
 
+  info() << "Registering cuts" << endl;
+
   cutFlowManager->RegisterCut("initial");
-  
-  if(applyLooseSkimming) cutFlowManager->RegisterCut("trigger");
-  eventProcessor->RegisterCuts(cutFlowManager);
-  
+  if(applyLooseSkimming){
+    cutFlowManager->RegisterCut("trigger");
+    cutFlowManager->RegisterCut("metFilters");
+  }
+
   if(applyTTbarLikeSkimming) ttAlpsSelections->RegisterSingleLeptonSelections(cutFlowManager);
   if(applyTTZLikeSkimming) ttAlpsSelections->RegisterTTZLikeSelections(cutFlowManager);
+  if(applySignalLikeSkimming) ttAlpsSelections->RegisterSignalLikeSelections(cutFlowManager);
+
+  eventProcessor->RegisterCuts(cutFlowManager);
+    
+  info() << "Starting events loop" << endl;
 
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
@@ -57,13 +67,16 @@ int main(int argc, char **argv) {
     if(applyLooseSkimming){
       if (!eventProcessor->PassesTriggerSelections(event)) continue;
       cutFlowManager->UpdateCutFlow("trigger");
-    }
 
-    if(!eventProcessor->PassesEventSelections(event, cutFlowManager)) continue;
+      if (!eventProcessor->PassesMetFilters(event)) continue;
+      cutFlowManager->UpdateCutFlow("metFilters");
+    }
 
     if(applyTTbarLikeSkimming){
       if(!ttAlpsSelections->PassesSingleLeptonSelections(event, cutFlowManager)) continue;
     }
+
+    if(!eventProcessor->PassesEventSelections(event, cutFlowManager)) continue;
 
     if(applySignalLikeSkimming){
       if(!ttAlpsSelections->PassesSignalLikeSelections(event, cutFlowManager)) continue;

@@ -42,6 +42,7 @@ class Histogram:
   def setup(self, sample):
     self.hist.SetLineStyle(sample.line_style)
     self.hist.SetLineColor(sample.line_color)
+    self.hist.SetLineWidth(sample.line_width)
     self.hist.SetMarkerStyle(sample.marker_style)
     self.hist.SetMarkerSize(sample.marker_size)
     self.hist.SetMarkerColor(sample.marker_color)

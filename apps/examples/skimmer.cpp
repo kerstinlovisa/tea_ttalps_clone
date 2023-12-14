@@ -36,6 +36,10 @@ int main(int argc, char **argv) {
   auto cutFlowManager = make_shared<CutFlowManager>(eventReader, eventWriter);
   auto eventProcessor = make_unique<EventProcessor>();
   
+  cutFlowManager->RegisterCut("initial");
+  cutFlowManager->RegisterCut("trigger");
+  eventProcessor->RegisterCuts(cutFlowManager);
+
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {    
     auto event = eventReader->GetEvent(iEvent);
 

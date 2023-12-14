@@ -99,4 +99,6 @@ void HistogramsHandler::SaveHistograms() {
     hist->Write();
   }
   outputFile->Close();
+
+  info() << "Histograms saved to: " << outputPath << endl;
 }

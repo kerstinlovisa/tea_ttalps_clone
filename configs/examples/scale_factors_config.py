@@ -17,7 +17,3 @@ muonSFs = {
   # Trigger SFs
   **scaleFactorsReader.getMuonTriggerScaleFactors("../data/Efficiencies_muon_generalTracks_Z_Run2018_UL_SingleMuonTriggers_schemaV2.json"),
 }
-
-print("Loaded SFs:")
-for name in muonSFs.keys():
-  print(name)

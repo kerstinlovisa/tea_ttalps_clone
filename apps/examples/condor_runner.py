@@ -12,9 +12,7 @@ def get_args():
   parser.add_argument("--output_dir", type=str, default="", help="output path")
   parser.add_argument("--file_index", type=int, help="index of the file from the DAS dataset to run on", required=True)
   parser.add_argument("--file_name", type=str, default="", help="name of a file from the DAS dataset to run on")
-  parser.add_argument("--apply_muon_SFs", type=int, default=-1, help="Should muon Scale Factors be applied")
-  parser.add_argument("--apply_muon_trigger_SFs", type=int, default=-1, help="Should muon trigger Scale Factors be applied")
-
+ 
   args = parser.parse_args()
   return args
 
@@ -47,12 +45,6 @@ def main():
 
   output_file_path = f"{args.output_dir}/{input_file_name}"
   command_for_file = f"{command} {input_file_path} {output_file_path}"
-
-  if args.apply_muon_SFs != -1:
-    command_for_file += f" {args.apply_muon_SFs}"
-    
-  if args.apply_muon_trigger_SFs != -1:
-    command_for_file += f" {args.apply_muon_trigger_SFs}"
 
   info(f"\n\nExecuting {command_for_file=}")
   os.system(command_for_file)

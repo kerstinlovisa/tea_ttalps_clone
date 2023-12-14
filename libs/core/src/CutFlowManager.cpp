@@ -11,18 +11,17 @@ using namespace std;
 
 CutFlowManager::CutFlowManager(shared_ptr<EventReader> eventReader_, shared_ptr<EventWriter> eventWriter_)
     : eventReader(eventReader_), eventWriter(eventWriter_), currentIndex(0), inputContainsInitial(false) {
-  
   auto &config = ConfigManager::GetInstance();
 
   try {
     config.GetValue("weightsBranchName", weightsBranchName);
-  } catch (const Exception& e) {
+  } catch (const Exception &e) {
     info() << "Weights branch not specified -- will assume weight is 1 for all events" << endl;
   }
-  
+
   if (eventReader->inputFile->Get("CutFlow")) {
-    info() << "Input file contains CutFlow directory - will store existing cutflow in the output.\n";
-    
+    info() << "Input file contains CutFlow directory - will store existing cutflow in the output." << endl;
+
     auto sourceDir = (TDirectory *)eventReader->inputFile->Get("CutFlow");
 
     TIter nextKey(sourceDir->GetListOfKeys());
@@ -31,15 +30,16 @@ CutFlowManager::CutFlowManager(shared_ptr<EventReader> eventReader_, shared_ptr<
     while ((key = dynamic_cast<TKey *>(nextKey()))) {
       TObject *obj = key->ReadObj();
       auto hist = (TH1D *)obj;
-      weightsAfterCuts[key->GetName()] = hist->GetBinContent(1);
       string cutName = key->GetName();
-      if(cutName == "0_initial") inputContainsInitial=true;
+      float sumOfWeights = hist->GetBinContent(1);
+      weightsAfterCuts[cutName] = sumOfWeights;
+      if (cutName == "0_initial") inputContainsInitial = true;
       existingCuts.push_back(cutName);
       delete obj;
       currentIndex++;
     }
   }
-  if (!eventWriter_) info() << "No eventWriter given for CutFlowManager\n";
+  if (!eventWriter_) info() << "No eventWriter given for CutFlowManager" << endl;
   
 }
 
@@ -53,7 +53,6 @@ void CutFlowManager::RegisterCut(string cutName) {
 }
 
 string CutFlowManager::GetFullCutName(string cutName) {
-
   // Find full names in the cut flow matching the given cut name
   vector<string> matchingFullCutNames;
   for (auto &[existingCutName, sumOfWeights] : weightsAfterCuts) {
@@ -73,7 +72,7 @@ string CutFlowManager::GetFullCutName(string cutName) {
       maxCutName = fullCutName;
     }
   }
-  if(maxCutName != "") return maxCutName;
+  if (maxCutName != "") return maxCutName;
 
   // If no matching full name was found, we cannot continue
   fatal() << "CutFlowManager does not contain cut " << cutName << endl;
@@ -86,7 +85,7 @@ float CutFlowManager::GetCurrentEventWeight() {
   try {
     weight = eventReader->currentEvent->Get(weightsBranchName);
   } catch (...) {
-    if(!weightsBranchWarningPrinted){
+    if (!weightsBranchWarningPrinted) {
       error() << "Could not find weights branch " << weightsBranchName << endl;
       weightsBranchWarningPrinted = true;
     }
@@ -95,7 +94,7 @@ float CutFlowManager::GetCurrentEventWeight() {
 }
 
 void CutFlowManager::UpdateCutFlow(string cutName) {
-  if(cutName == "initial" && inputContainsInitial) return;
+  if (cutName == "initial" && inputContainsInitial) return;
   string fullCutName = GetFullCutName(cutName);
   weightsAfterCuts[fullCutName] += GetCurrentEventWeight();
 }
@@ -104,7 +103,7 @@ void CutFlowManager::SaveCutFlow() {
   if (!eventWriter) {
     error() << "No existing eventWriter for CutFlowManager - cannot save CutFlow" << endl;
   }
-  eventWriter->outFile->mkdir("CutFlow");  
+  eventWriter->outFile->mkdir("CutFlow");
   eventWriter->outFile->cd("CutFlow");
 
   for (auto &[cutName, sumOfWeights] : weightsAfterCuts) {
@@ -122,10 +121,10 @@ void CutFlowManager::Print() {
   for (auto &[cutName, sumOfWeights] : weightsAfterCuts) {
     string number = cutName.substr(0, cutName.find("_"));
     int index = stoi(number);
-    sortedWeightsAfterCuts[index]  = {cutName, sumOfWeights};
+    sortedWeightsAfterCuts[index] = {cutName, sumOfWeights};
   }
 
-  info() << "CutFlow:\n";
+  info() << "CutFlow:" << endl;
   for (auto &[index, values] : sortedWeightsAfterCuts) {
     info() << get<0>(values) << " " << get<1>(values) << endl;
   }

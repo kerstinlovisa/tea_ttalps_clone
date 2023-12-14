@@ -10,10 +10,18 @@ using namespace std;
 
 ScaleFactorsManager::ScaleFactorsManager() {
   auto &config = ConfigManager::GetInstance();
-  map<string, ScaleFactorsMap> muonSFs;
-  config.GetValue("applyMuonScaleFactors", applyMuonScaleFactors);
-  config.GetValue("applyMuonTriggerScaleFactors", applyMuonTriggerScaleFactors);
-  if(applyMuonScaleFactors){
+  
+  config.GetMap("applyScaleFactors", applyScaleFactors);
+
+  info() << "\n------------------------------------" << endl;
+  info() << "Applying scale factors:" << endl;
+  for (auto &[name, apply] : applyScaleFactors) {
+    info() << "  " << name << ": " << apply << endl;
+  }
+  info() << "------------------------------------\n" << endl;
+
+  if (applyScaleFactors["muon"] || applyScaleFactors["muonTrigger"]) {
+    map<string, ScaleFactorsMap> muonSFs;
     config.GetScaleFactors("muonSFs", muonSFs);
 
     for (auto &[name, values] : muonSFs) {
@@ -26,8 +34,13 @@ ScaleFactorsManager::ScaleFactorsManager() {
     }
   }
 
-  // config.GetValue("applyMuonScaleFactors", applyMuonScaleFactors);
-  // config.GetValue("applyMuonTriggerScaleFactors", applyMuonTriggerScaleFactors);
+  if (applyScaleFactors["pileup"]) {
+    string pileupScaleFactorsPath, pileupScaleFactorsHistName;
+    config.GetValue("pileupScaleFactorsPath", pileupScaleFactorsPath);
+    config.GetValue("pileupScaleFactorsHistName", pileupScaleFactorsHistName);
+    info() << "Reading pileup scale factors from file: " << pileupScaleFactorsPath << "\thistogram: " << pileupScaleFactorsHistName << endl;
+    pileupSFvalues = (TH1D *)TFile::Open(pileupScaleFactorsPath.c_str())->Get(pileupScaleFactorsHistName.c_str());
+  }
 }
 
 void ScaleFactorsManager::CreateMuonSFsHistogram(const ScaleFactorsMap &muonSFs, string outputPath, string histName) {
@@ -60,7 +73,7 @@ void ScaleFactorsManager::CreateMuonSFsHistogram(const ScaleFactorsMap &muonSFs,
 }
 
 float ScaleFactorsManager::GetMuonRecoScaleFactor(float eta, float pt) {
-  if (!applyMuonScaleFactors) return 1.0;
+  if (!applyScaleFactors["muon"]) return 1.0;
 
   string name = "";
 
@@ -75,7 +88,7 @@ float ScaleFactorsManager::GetMuonRecoScaleFactor(float eta, float pt) {
 }
 
 float ScaleFactorsManager::GetMuonIDScaleFactor(float eta, float pt, MuonID id) {
-  if (!applyMuonScaleFactors) return 1.0;
+  if (!applyScaleFactors["muon"]) return 1.0;
   if (!id.PassesAnyId()) return 1.0;
 
   string name = "";
@@ -115,7 +128,7 @@ float ScaleFactorsManager::GetMuonIDScaleFactor(float eta, float pt, MuonID id) 
 }
 
 float ScaleFactorsManager::GetMuonIsoScaleFactor(float eta, float pt, MuonID id, MuonIso iso) {
-  if (!applyMuonScaleFactors) return 1.0;
+  if (!applyScaleFactors["muon"]) return 1.0;
   if (pt < 15) return 1;                // no SFs for low pt muons
   if (!id.PassesAnyId()) return 1.0;    // not considered an actual muon
   if (!iso.PassesAnyIso()) return 1.0;  // it's not isolated at all
@@ -192,7 +205,7 @@ float ScaleFactorsManager::GetMuonIsoScaleFactor(float eta, float pt, MuonID id,
 
 float ScaleFactorsManager::GetMuonTriggerScaleFactor(float eta, float pt, MuonID id, MuonIso iso, bool IsoMu24included,
                                                      bool IsoMu50included) {
-  if (!applyMuonTriggerScaleFactors) return 1.0;
+  if (!applyScaleFactors["muonTrigger"]) return 1.0;
   if (pt < 15) return 1;                                 // no SFs for low pt muons
   if (!id.PassesAnyId()) return 1.0;                     // not considered an actual muon
   if (!iso.PassesAnyIso()) return 1.0;                   // it's not isolated at all
@@ -279,4 +292,20 @@ void ScaleFactorsManager::BringEtaPtToHistRange(TH2D *hist, float &eta, float &p
   if (pt > hist->GetYaxis()->GetBinUpEdge(hist->GetNbinsY())) {
     pt = hist->GetYaxis()->GetBinUpEdge(hist->GetNbinsY()) - 0.01;
   }
+}
+
+float ScaleFactorsManager::GetPileupScaleFactor(int nVertices) {
+  if (!applyScaleFactors["pileup"]) return 1.0;
+
+  if(nVertices < pileupSFvalues->GetXaxis()->GetBinLowEdge(1)) {
+    warn() << "Number of vertices is lower than the lowest bin edge in pileup SF histogram" << endl;
+    return 1.0;
+  }
+  if(nVertices > pileupSFvalues->GetXaxis()->GetBinUpEdge(pileupSFvalues->GetNbinsX())) {
+    warn() << "Number of vertices is higher than the highest bin edge in pileup SF histogram" << endl;
+    return 1.0;
+  }
+
+  float sf = pileupSFvalues->GetBinContent(pileupSFvalues->FindFixBin(nVertices));
+  return sf;
 }

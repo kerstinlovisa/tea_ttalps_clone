@@ -24,10 +24,14 @@ class PhysicsObject {
 
   inline auto Get(std::string branchName) {
     if (valuesTypes.count(branchName) == 0) {
-      throw Exception(("Trying to access incorrect physics object-level branch: " + branchName + " from " + originalCollection + " collection").c_str());
+      std::string message = "Trying to access incorrect physics object-level branch: ";
+      message += branchName + " from " + originalCollection + " collection";
+      throw Exception(message.c_str());
     }
     return Multitype(this, branchName);
   }
+
+  float GetAsFloat(std::string branchName);
 
  private:
   inline UInt_t GetUint(std::string branchName) { return *valuesUint[branchName]; }
@@ -52,6 +56,7 @@ class PhysicsObject {
   std::map<std::string, Short_t *> valuesShort;
 
   std::string originalCollection;
+  std::map<std::string, std::string> defaultCollectionsTypes;
 
   friend class EventReader;
   template <typename T>

@@ -7,9 +7,9 @@ from Logger import *
 
 # enum class with signal, background, data
 class SampleType(Enum):
-  signal = 0
-  background = 1
-  data = 2
+  background = 0
+  data = 1
+  signal = 2
 
 @dataclass
 class Sample:
@@ -21,6 +21,7 @@ class Sample:
   line_color: int = ROOT.kBlack
   line_style: int = ROOT.kSolid
   line_alpha: float = 1.0
+  line_width: int = 1
   marker_color: int = ROOT.kBlack
   marker_style: int = 20
   marker_size: float = 1.0

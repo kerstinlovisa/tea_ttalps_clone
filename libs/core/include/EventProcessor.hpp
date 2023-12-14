@@ -6,10 +6,10 @@
 #define EventProcessor_hpp
 
 #include "ConfigManager.hpp"
+#include "CutFlowManager.hpp"
 #include "Event.hpp"
 #include "Helpers.hpp"
 #include "PhysicsObject.hpp"
-#include "CutFlowManager.hpp"
 
 class EventProcessor {
  public:
@@ -23,11 +23,14 @@ class EventProcessor {
   void RegisterCuts(std::shared_ptr<CutFlowManager> cutFlowManager);
 
   bool PassesTriggerSelections(const std::shared_ptr<Event> event);
+  bool PassesMetFilters(const std::shared_ptr<Event> event);
+
   bool PassesEventSelections(const std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
 
  private:
   std::vector<std::string> triggerNames;
-  std::map<std::string, std::pair<float, float>> eventSelections;
+  std::vector<std::pair<std::string, std::pair<float, float>>> eventSelections;
+  std::vector<std::string> requiredFlags;
   std::vector<std::string> triggerWarningsPrinted;
 };
 

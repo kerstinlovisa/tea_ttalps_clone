@@ -26,7 +26,8 @@ class HistogramsFiller {
 
   std::map<std::string, std::string> defaultCollectionsTypes;
 
-  float GetValue(std::shared_ptr<PhysicsObject> object, std::string branchName);
+  template <typename T>
+  float GetValue(std::shared_ptr<T> object, std::string branchName);
 };
 
 #endif /* HistogramsFiller_hpp */

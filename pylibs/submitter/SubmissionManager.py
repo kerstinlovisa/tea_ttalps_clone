@@ -21,14 +21,6 @@ class SubmissionManager:
     
     self.__setup_files_config()
 
-    self.applyMuonScaleFactors = None
-    if hasattr(self.files_config, "applyMuonScaleFactors"):
-      self.applyMuonScaleFactors = self.files_config.applyMuonScaleFactors
-      
-    self.applyMuonTriggerScaleFactors = None
-    if hasattr(self.files_config, "applyMuonTriggerScaleFactors"):
-      self.applyMuonTriggerScaleFactors = self.files_config.applyMuonTriggerScaleFactors
-
     if submission_system == SubmissionSystem.condor:
       self.__create_condor_directories()
   
@@ -79,6 +71,11 @@ class SubmissionManager:
     
     info(f"Reading files config from path: {self.files_config_path}")
     spec = importlib.util.spec_from_file_location("files_module", self.files_config_path)
+    
+    if spec is None:
+      fatal(f"Couldn't load config from path: {self.files_config_path}")
+      exit()
+    
     self.files_config = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(self.files_config)
   
@@ -129,23 +126,13 @@ class SubmissionManager:
       input_file_name = input_file_path.strip().split("/")[-1]
       output_file_path = f"{self.files_config.output_dir}/{input_file_name}"
       command_for_file = f"{self.command} {input_file_path} {output_file_path}"
-      if self.applyMuonScaleFactors is not None:
-        command_for_file += f" {int(self.applyMuonScaleFactors)}"
-      if self.applyMuonTriggerScaleFactors is not None:
-        command_for_file += f" {int(self.applyMuonTriggerScaleFactors)}"
-      
       self.__run_command(command_for_file)
   
   # option 2
   def __run_local_input_output_list(self):
     info("Running locally with input_output_file_list")
     for input_file_path, output_file_path in self.files_config.input_output_file_list:
-      command_for_file = f"{self.command} {input_file_path} {output_file_path}"
-      if self.applyMuonScaleFactors is not None:
-        command_for_file += f" {int(self.applyMuonScaleFactors)}"
-      if self.applyMuonTriggerScaleFactors is not None:
-        command_for_file += f" {int(self.applyMuonTriggerScaleFactors)}"
-        
+      command_for_file = f"{self.command} {input_file_path} {output_file_path}"  
       self.__run_command(command_for_file)
         
   def __setup_temp_file_paths(self):
@@ -185,21 +172,12 @@ class SubmissionManager:
     else:
       os.system(f"sed -i 's/<file_name>//g' {self.condor_run_script_name}")
     
-    if self.applyMuonScaleFactors is None:
-      os.system(f"sed -i 's/<muon_SFs>//g' {self.condor_run_script_name}")
-    else:
-      os.system(f"sed -i 's/<muon_SFs>/--apply_muon_SFs {int(self.applyMuonScaleFactors)}/g' {self.condor_run_script_name}")
-    
-    if self.applyMuonTriggerScaleFactors is None:
-      os.system(f"sed -i 's/<muonTrigger_SFs>//g' {self.condor_run_script_name}")
-    else:
-      os.system(f"sed -i 's/<muonTrigger_SFs>/--apply_muon_trigger_SFs {int(self.applyMuonTriggerScaleFactors)}/g' {self.condor_run_script_name}")
-    
     self.__set_python_executable()
     
     # set the app and app config to execute
     os.system(f"sed -i 's/<app>/{self.app_name}/g' {self.condor_run_script_name}")
-    os.system(f"sed -i 's/<config>/{self.config_path}/g' {self.condor_run_script_name}")
+    config_path_escaped = self.config_path.replace("/", "\/")
+    os.system(f"sed -i 's/<config>/{config_path_escaped}/g' {self.condor_run_script_name}")
     
     # set path to the list of input files
     input_files_list_file_name_escaped = self.input_files_list_file_name.replace("/", "\/")

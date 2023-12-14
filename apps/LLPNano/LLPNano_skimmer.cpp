@@ -46,16 +46,19 @@ int main(int argc, char **argv) {
 
     cutFlowManager->UpdateCutFlow("initial");
 
-    if (!eventProcessor->PassesTriggerSelections(event)) continue;
-    cutFlowManager->UpdateCutFlow("trigger");
+    if(applyLooseSkimming){
+      if (!eventProcessor->PassesTriggerSelections(event)) continue;
+      cutFlowManager->UpdateCutFlow("trigger");
 
-    if (applyLooseSkimming) {
-      if (!ttAlpsSelections->PassesLooseSemileptonicSelections(event, cutFlowManager)) continue;
+      if (!eventProcessor->PassesMetFilters(event)) continue;
+      cutFlowManager->UpdateCutFlow("metFilters");
     }
 
     if(applyTTbarLikeSkimming){
       if(!ttAlpsSelections->PassesSingleLeptonSelections(event, cutFlowManager)) continue;
     }
+
+    if(!eventProcessor->PassesEventSelections(event, cutFlowManager)) continue;
 
     if(applySignalLikeSkimming){
       if(!ttAlpsSelections->PassesSignalLikeSelections(event, cutFlowManager)) continue;
