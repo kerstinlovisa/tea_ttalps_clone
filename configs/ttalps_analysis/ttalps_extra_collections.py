@@ -15,11 +15,11 @@ extraEventCollections = {
     # 1=PFIsoVeryLoose, 2=PFIsoLoose, 3=PFIsoMedium, 4=PFIsoTight, 5=PFIsoVeryTight, 6=PFIsoVeryVeryTight
     "pfIsoId": (1, 6),
   },
-  # "LooseDSAMuons": {
-  #   "inputCollections": ("DSAMuon",),
-  #   "pt": (15., 9999999.),
-  #   "eta": (-2.5, 2.5),
-  # },
+  "LooseDSAMuons": {
+    "inputCollections": ("DSAMuon",),
+    "pt": (15., 9999999.),
+    "eta": (-2.5, 2.5),
+  },
   # "LooseMuonsAndDSAMuons": {
   #   "inputCollections": ("Muon", "DSAMuon"),
   #   "pt": (15., 9999999.),

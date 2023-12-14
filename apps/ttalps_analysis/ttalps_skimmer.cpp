@@ -76,8 +76,6 @@ int main(int argc, char **argv) {
       if(!ttAlpsSelections->PassesSingleLeptonSelections(event, cutFlowManager)) continue;
     }
 
-    if(!eventProcessor->PassesEventSelections(event, cutFlowManager)) continue;
-
     if(applySignalLikeSkimming){
       if(!ttAlpsSelections->PassesSignalLikeSelections(event, cutFlowManager)) continue;
     }
@@ -86,6 +84,8 @@ int main(int argc, char **argv) {
       if(!ttAlpsSelections->PassesTTZLikeSelections(event, cutFlowManager)) continue;
     }
 
+    if(!eventProcessor->PassesEventSelections(event, cutFlowManager)) continue;
+    
     eventWriter->AddCurrentEvent("Events");
   }
   cutFlowManager->Print();
