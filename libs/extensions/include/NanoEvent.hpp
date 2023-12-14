@@ -17,6 +17,8 @@ class NanoEvent {
   TLorentzVector GetMetFourVector();
   float GetMetPt();
 
+  std::shared_ptr<PhysicsObjects> GetAllMuons(float matchingDeltaR = 0.1);
+
  private:
   std::shared_ptr<Event> event;
 };

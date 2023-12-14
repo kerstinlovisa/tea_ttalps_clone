@@ -6,8 +6,29 @@ using namespace std;
 
 TLorentzVector NanoEvent::GetMetFourVector() {
   TLorentzVector metVector;
-  metVector.SetPtEtaPhiM(event->Get("MET_pt"), 0, event->Get("MET_phi"), 0);
+  metVector.SetPtEtaPhiM(Get("MET_pt"), 0, Get("MET_phi"), 0);
   return metVector;
 }
 
-float NanoEvent::GetMetPt() { return event->Get("MET_pt"); }
+float NanoEvent::GetMetPt() { return Get("MET_pt"); }
+
+shared_ptr<PhysicsObjects> NanoEvent::GetAllMuons(float matchingDeltaR)
+{
+
+  auto looseMuons = GetCollection("LooseMuons");
+  auto looseDsaMuons = GetCollection("LooseDSAMuons");
+
+  auto allMuons = make_shared<PhysicsObjects>();
+  for(auto muon : *looseMuons){
+    auto muonP4 = asMuon(muon)->GetFourVector();
+  
+    allMuons->push_back(muon);
+    for(auto dsaMuon : *looseDsaMuons){
+      auto dsaMuonP4 = asMuon(dsaMuon)->GetFourVector();
+      if(muonP4.DeltaR(dsaMuonP4) < matchingDeltaR) continue;
+      allMuons->push_back(dsaMuon);
+    }
+  }
+
+  return allMuons;
+}
