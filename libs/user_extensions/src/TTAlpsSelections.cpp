@@ -6,6 +6,7 @@
 
 #include "ExtensionsHelpers.hpp"
 #include "TLorentzVector.h"
+#include "UserExtensionsHelpers.hpp"
 
 using namespace std;
 
