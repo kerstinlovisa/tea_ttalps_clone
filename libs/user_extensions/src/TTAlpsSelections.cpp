@@ -18,28 +18,9 @@ void TTAlpsSelections::RegisterSignalLikeSelections(shared_ptr<CutFlowManager> c
 }
 
 bool TTAlpsSelections::PassesSignalLikeSelections(const shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  
-  auto looseMuons = event->GetCollection("LooseMuons");
-  auto looseDsaMuons = event->GetCollection("LooseDSAMuons");
+  auto allMuons = asNanoEvent(event)->GetAllMuons(0.01);
 
-  PhysicsObjects allMuons;
-
-  for(auto muonObj : *looseMuons){
-    auto muon = asMuon(muonObj);
-    auto muonP4 = muon->GetFourVector();
-
-    allMuons.push_back(muonObj);
-
-    for(auto dsaMuonObj : *looseDsaMuons){
-      auto dsaMuon = asMuon(dsaMuonObj);
-      auto dsaMuonP4 = dsaMuon->GetFourVector();
-      
-      if(muonP4.DeltaR(dsaMuonP4) < 0.01) continue;
-      allMuons.push_back(dsaMuonObj);
-    }
-  }
-
-  if(allMuons.size() < 3) return false;
+  if(allMuons->size() < 3) return false;
   cutFlowManager->UpdateCutFlow("nLooseMuonsOrDSAMuons");
 
   return true;
