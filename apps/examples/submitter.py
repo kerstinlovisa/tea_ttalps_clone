@@ -59,7 +59,15 @@ def update_config(path, key, value):
       if line.strip().startswith(key.strip()):
         line = f"{key} {value}"
       f.write(line)
-
+      
+def comment_out_line(path, key):
+  with open(path, "r") as f:
+    lines = f.readlines()
+  with open(path, "w") as f:
+    for line in lines:
+      if line.strip().startswith(key.strip()):
+        line = f"# {line}"
+      f.write(line)
 
 def prepare_tmp_files(args):
   hash_string = str(uuid.uuid4().hex[:6])
@@ -118,6 +126,21 @@ def main():
       
       update_config(tmp_files_config_path, "dataset = ", f"\"{dataset}\"\n")
       update_config(tmp_files_config_path, "output_dir = ", f"\"{output_dir}\"\n")
+      comment_out_line(tmp_files_config_path, "input_directory = ")
+      
+      tmp_configs_paths.append((tmp_config_path, tmp_files_config_path))
+  elif hasattr(files_config, "input_output_dirs"):
+    input_output_dirs = files_config.input_output_dirs
+    
+    for input_dir, output_dir in input_output_dirs:
+      tmp_config_path, tmp_files_config_path = prepare_tmp_files(args)
+      
+      for name, apply in applyScaleFactors.items():
+          update_config(tmp_config_path, f"  \"{name}\":", False if "collision" in sample else f"{apply},\n")
+      
+      update_config(tmp_files_config_path, "input_directory = ", f"\"{input_dir}\"\n")
+      update_config(tmp_files_config_path, "output_dir = ", f"\"{output_dir}\"\n")
+      comment_out_line(tmp_files_config_path, "dataset = ")
       
       tmp_configs_paths.append((tmp_config_path, tmp_files_config_path))
   else:
