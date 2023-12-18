@@ -331,16 +331,15 @@ void TTAlpsHistogramFiller::FillCustomTTAlpsVariables(const shared_ptr<Event> ev
   FillDiumonClosestToZhistgrams(event);
   FillMuonMetHistograms(event);
   FillJetHistograms(event);
+}
+
+void TTAlpsHistogramFiller::FillCustomTTAlpsVariablesFromLLPNanoAOD(const shared_ptr<Event> event) {
   FillLooseDSAMuonsHistograms(event);
   FillAllLooseMuonsHistograms(event);
 }
 
 void TTAlpsHistogramFiller::FillGenMuonsFromALPs(const std::shared_ptr<Event> event) {
-  float weight = 1.0;
-  try {
-    weight = GetEventWeight(event);
-  } catch (...) {
-  }
+  float weight = GetEventWeight(event);
 
   auto genParticles = event->GetCollection("GenPart");
   for(auto genpart : *genParticles)
@@ -374,103 +373,3 @@ void TTAlpsHistogramFiller::FillGenMuonsFromALPs(const std::shared_ptr<Event> ev
   }
 }
 
-void TTAlpsHistogramFiller::FillCustomLLPNanoAODVariables(const std::shared_ptr<Event> event) {
-
-  float weight = 1.0;
-  try {
-    weight = GetEventWeight(event);
-  } catch (...) {
-  }
-  
-  // GenMuons from ALPs
-  FillGenMuonsFromALPs(event);
-
-  // DSAMuon variables
-
-  int nDSAMuons = 0;
-  int nDSAMuons_pt5 = 0;
-  auto dsamuons = event->GetCollection("DSAMuon");
-  for(auto dsamuon : *dsamuons)
-  {
-    float chi2 = dsamuon->Get("chi2");
-    float ndof = dsamuon->Get("ndof");
-    histogramsHandler->Fill("DSAMuon_chi2overndof", chi2/ndof, weight);
-    float ptErr = dsamuon->Get("ptErr");
-    float pt = dsamuon->Get("pt");
-    histogramsHandler->Fill("DSAMuon_ptErroverpt", chi2/ndof, weight);
-    int displacedId = dsamuon->Get("displacedId");
-    histogramsHandler->Fill("DSAMuon_displacedId", displacedId, weight);
-
-    // auto DSAMuon = asDSAMuon(dsamuon);
-    // if(DSAMuon->passesDSAID()) nDSAMuons = nDSAMuons + 1;
-    // if(DSAMuon->passesDSAID(5)) nDSAMuons_pt5 = nDSAMuons_pt5 + 1;
-
-    float dxy = dsamuon->Get("dxy");
-    float dz = dsamuon->Get("dz");
-
-    // eta regions
-    float eta = dsamuon->Get("eta");
-    if(eta <0.9){
-      histogramsHandler->Fill("DSAMuon_dxy_eta-max0p9", dxy, weight);
-      histogramsHandler->Fill("DSAMuon_dz_eta-max0p9", dz, weight);
-    }
-    else if(eta <1.2){
-      histogramsHandler->Fill("DSAMuon_dxy_eta-max1p2", dxy, weight);
-      histogramsHandler->Fill("DSAMuon_dz_eta-max1p2", dz, weight);
-    } 
-    else if(eta <2.4){
-      histogramsHandler->Fill("DSAMuon_dxy_eta-max2p4", dxy, weight);
-      histogramsHandler->Fill("DSAMuon_dz_eta-max2p4", dz, weight);
-    }
-
-  }
-  histogramsHandler->Fill("nDSAMuonID", nDSAMuons, weight);
-  histogramsHandler->Fill("nDSAMuonIDPt5", nDSAMuons_pt5, weight);
-
-  // Muons
-  int j = 0;
-  auto muons = event->GetCollection("Muon");
-  auto muons_extended = event->GetCollection("MuonExtended");
-  for(auto muon : *muons){
-    auto muon_extended = muons_extended->at(j);
-    float dxy = muon->Get("dxy");
-    float dz = muon->Get("dz");
-    float dxy_extended = muon_extended->Get("dxyPV");
-    float dz_extended = muon_extended->Get("dzPV");
-    histogramsHandler->Fill("MuonDxyDiff", dxy-dxy_extended, weight);
-    histogramsHandler->Fill("MuonDzDiff", dz-dz_extended, weight);
-    float eta = muon->Get("eta");
-    float eta_extended = muon->Get("eta");
-    histogramsHandler->Fill("MuonEtaDiff", eta-eta_extended, weight);
-
-    // eta regions
-    if(eta < 0.9){
-      histogramsHandler->Fill("Muon_dxy_eta-max0p9", dxy, weight);
-      histogramsHandler->Fill("Muon_dz_eta-max0p9", dz, weight);
-    }
-    else if(eta < 1.2){
-      histogramsHandler->Fill("Muon_dxy_eta-max1p2", dxy, weight);
-      histogramsHandler->Fill("Muon_dz_eta-max1p2", dz, weight);
-    } 
-    else if(eta < 2.4){
-      histogramsHandler->Fill("Muon_dxy_eta-max2p4", dxy, weight);
-      histogramsHandler->Fill("Muon_dz_eta-max2p4", dz, weight);
-    }
-    if(eta_extended < 0.9){
-      histogramsHandler->Fill("MuonExtended_dxy_eta-max0p9", dxy_extended, weight);
-      histogramsHandler->Fill("MuonExtended_dz_eta-max0p9", dz_extended, weight);
-    }
-    else if(eta_extended < 1.2){
-      histogramsHandler->Fill("MuonExtended_dxy_eta-max1p2", dxy_extended, weight);
-      histogramsHandler->Fill("MuonExtended_dz_eta-max1p2", dz_extended, weight);
-    } 
-    else if(eta_extended < 2.4){
-      histogramsHandler->Fill("MuonExtended_dxy_eta-max2p4", dxy_extended, weight);
-      histogramsHandler->Fill("MuonExtended_dz_eta-max2p4", dz_extended, weight);
-    }
-
-    j++;
-
-  }
-
-}

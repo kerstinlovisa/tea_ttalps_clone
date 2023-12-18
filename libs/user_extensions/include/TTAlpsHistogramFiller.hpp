@@ -22,9 +22,9 @@ class TTAlpsHistogramFiller {
 
   void FillDefaultVariables(const std::shared_ptr<Event> event);
   void FillCustomTTAlpsVariables(const std::shared_ptr<Event> event);
+  void FillCustomTTAlpsVariablesFromLLPNanoAOD(const std::shared_ptr<Event> event);
 
   void FillGenMuonsFromALPs(const std::shared_ptr<Event> event);
-  void FillCustomLLPNanoAODVariables(const std::shared_ptr<Event> event);
 
   void FillNormCheck(const std::shared_ptr<Event> event);
 

@@ -35,10 +35,11 @@ int main(int argc, char **argv) {
   auto histogramFiller = make_unique<HistogramsFiller>(histogramsHandler);
   auto ttalpsHistogramsFiller = make_unique<TTAlpsHistogramFiller>(histogramsHandler);
 
-  bool runDefaultHistograms, runTriggerHistograms, runPileupHistograms;
+  bool runDefaultHistograms, runTriggerHistograms, runPileupHistograms, runLLPNanoAODHistograms;
   config.GetValue("runDefaultHistograms", runDefaultHistograms);
   config.GetValue("runTriggerHistograms", runTriggerHistograms);
   config.GetValue("runPileupHistograms", runPileupHistograms);
+  config.GetValue("runLLPNanoAODHistograms", runLLPNanoAODHistograms);
 
   if (runPileupHistograms) cutFlowManager->RegisterCut("initial");
   
@@ -51,6 +52,10 @@ int main(int argc, char **argv) {
       ttalpsHistogramsFiller->FillNormCheck(event);
       histogramFiller->FillDefaultVariables(event);
       ttalpsHistogramsFiller->FillCustomTTAlpsVariables(event);
+    }
+
+    if (runLLPNanoAODHistograms) {
+      ttalpsHistogramsFiller->FillCustomTTAlpsVariablesFromLLPNanoAOD(event);
     }
 
     if (runTriggerHistograms) {
@@ -66,6 +71,7 @@ int main(int argc, char **argv) {
       cutFlowManager->UpdateCutFlow("initial");
       histogramFiller->FillDefaultVariables(event);
     }
+
   }
 
   if(runTriggerHistograms) ttalpsHistogramsFiller->FillTriggerEfficiencies();

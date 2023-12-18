@@ -6,8 +6,8 @@ max_files = -1
 # dataset = "/ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
 # output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ttWJets/skimmed_looseSemileptonic/"
 
-# dataset = "/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM"
-# output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/TTToSemiLeptonic/skimmed_looseSemileptonic/"
+dataset = "/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM"
+output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/TTToSemiLeptonic/skimmed_looseSemileptonic/"
 
 # dataset = "/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5CR1_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
 # output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/backgrounds2018/ST_tW_antitop/skimmed_looseSemileptonic/"
@@ -37,13 +37,4 @@ max_files = -1
 
 # dataset = "/SingleMuon/Run2018D-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD"
 # output_dir = "/nfs/dust/cms/user/jniedzie/ttalps_cms/collision_data2018/SingleMuon2018D/skimmed_looseSemileptonic/"
-
-# dataset = "/nfs/dust/cms/user/lrygaard/ttalps_cms/backgrounds18/TTToSemiLeptonic/LLPNanoAOD"
-# output_dir = "/nfs/dust/cms/user/lrygaard/ttalps_cms/backgrounds18/TTToSemiLeptonic/LLPNanoAOD/skimmed_looseSemileptonic/"
-
-# dataset = "/nfs/dust/cms/user/lrygaard/ttalps_cms/backgrounds18/TTToSemiLeptonic/LLPNanoAOD"
-# output_dir = "/nfs/dust/cms/user/lrygaard/ttalps_cms/backgrounds18/TTToSemiLeptonic/LLPNanoAOD/skimmed_looseSemimuonic/"
-
-dataset = "/nfs/dust/cms/user/lrygaard/ttalps_cms/signal/tta_mAlp-0p35GeV_ctau-1e1mm_nEvents-100/LLPNanoAOD"
-output_dir = "/nfs/dust/cms/user/lrygaard/ttalps_cms/signal/tta_mAlp-0p35GeV_ctau-1e1mm_nEvents-100/LLPNanoAOD/skimmed_looseSemimuonic/"
 

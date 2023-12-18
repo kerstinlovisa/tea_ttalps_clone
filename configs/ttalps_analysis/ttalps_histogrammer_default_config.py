@@ -7,6 +7,7 @@ printEveryNevents = 10000
 runDefaultHistograms = True
 runTriggerHistograms = False
 runPileupHistograms = False
+runLLPNanoAODHistograms = False
 
 weightsBranchName = "genWeight"
 
@@ -28,14 +29,14 @@ defaultHistParams = (
   ("Event"              , "nMuon"               , 50    , 0     , 50    , ""  ),
   ("Muon"               , "pt"                  , 2000  , 0     , 1000  , ""  ),
   ("Muon"               , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("Muon"               , "dxy"                 , 1600  , -20   , 20    , ""  ),
-  ("Muon"               , "dz"                  , 1600  , -20   , 20    , ""  ),
+  ("Muon"               , "dxy"                 , 1600  , -400  , 400   , ""  ),
+  ("Muon"               , "dz"                  , 1600  , -400  , 400   , ""  ),
   
   ("Event"              , "nTightMuons"         , 50    , 0     , 50    , ""  ),
   ("TightMuons"         , "pt"                  , 2000  , 0     , 1000  , ""  ),
   ("TightMuons"         , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("TightMuons"         , "dxy"                 , 1600  , -20   , 20    , ""  ),
-  ("TightMuons"         , "dz"                  , 1600  , -20   , 20    , ""  ),
+  ("TightMuons"         , "dxy"                 , 1600  , -400  , 400   , ""  ),
+  ("TightMuons"         , "dz"                  , 1600  , -400  , 400   , ""  ),
   ("TightMuons"         , "pfRelIso04_all"      , 2000  , -10   , 10    , ""  ),
   ("TightMuons"         , "pfRelIso03_chg"      , 2000  , -10   , 10    , ""  ),
   ("TightMuons"         , "pfRelIso03_all"      , 2000  , -10   , 10    , ""  ),
@@ -48,8 +49,8 @@ defaultHistParams = (
   ("Event"              , "nLooseMuons"         , 50    , 0     , 50    , ""  ),
   ("LooseMuons"         , "pt"                  , 2000  , 0     , 1000  , ""  ),
   ("LooseMuons"         , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("LooseMuons"         , "dxy"                 , 1600  , -20   , 20    , ""  ),
-  ("LooseMuons"         , "dz"                  , 1600  , -20   , 20    , ""  ),
+  ("LooseMuons"         , "dxy"                 , 1600  , -400  , 400   , ""  ),
+  ("LooseMuons"         , "dz"                  , 1600  , -400  , 400   , ""  ),
   ("LooseMuons"         , "pfRelIso04_all"      , 2000  , -10   , 10    , ""  ),
   ("LooseMuons"         , "pfRelIso03_chg"      , 2000  , -10   , 10    , ""  ),
   ("LooseMuons"         , "pfRelIso03_all"      , 2000  , -10   , 10    , ""  ),
@@ -61,20 +62,20 @@ defaultHistParams = (
   # ("Event"              , "nLooseDSAMuons"      , 50    , 0     , 50    , ""  ),
   # ("LooseDSAMuons"      , "pt"                  , 2000  , 0     , 1000  , ""  ),
   # ("LooseDSAMuons"      , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
-  # ("LooseDSAMuons"      , "dxy"                 , 1600  , -20   , 20    , ""  ),
-  # ("LooseDSAMuons"      , "dz"                  , 1600  , -20   , 20    , ""  ),
+  # ("LooseDSAMuons"      , "dxy"                 , 1600  , -400  , 400   , ""  ),
+  # ("LooseDSAMuons"      , "dz"                  , 1600  , -400  , 400   , ""  ),
   
   ("Event"              , "nElectron"           , 50    , 0     , 50    , ""  ),
   ("Electron"           , "pt"                  , 2000  , 0     , 1000  , ""  ),
   ("Electron"           , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("Electron"           , "dxy"                 , 1600  , -20   , 20    , ""  ),
-  ("Electron"           , "dz"                  , 1600  , -20   , 20    , ""  ),
+  ("Electron"           , "dxy"                 , 1600  , -400  , 400   , ""  ),
+  ("Electron"           , "dz"                  , 1600  , -400  , 400   , ""  ),
   
   ("Event"              , "nLooseElectrons"     , 50    , 0     , 50    , ""  ),
   ("LooseElectrons"     , "pt"                  , 2000  , 0     , 1000  , ""  ),
   ("LooseElectrons"     , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
-  ("LooseElectrons"     , "dxy"                 , 1600  , -20   , 20    , ""  ),
-  ("LooseElectrons"     , "dz"                  , 1600  , -20   , 20    , ""  ),
+  ("LooseElectrons"     , "dxy"                 , 1600  , -400  , 400   , ""  ),
+  ("LooseElectrons"     , "dz"                  , 1600  , -400  , 400   , ""  ),
   
   ("Event"              , "nJet"                , 50    , 0     , 50    , ""  ),
   ("Jet"                , "pt"                  , 2000  , 0     , 1000  , ""  ),
@@ -102,7 +103,41 @@ defaultHistParams = (
   ("GoodNonTightBtaggedJets"  , "phi"                 , 100   , -2.5  , 2.5   , ""  ),
   ("GoodNonTightBtaggedJets"  , "btagDeepB"           , 200   , -1    , 1     , ""  ),
   ("GoodNonTightBtaggedJets"  , "btagDeepFlavB"       , 200   , -1    , 1     , ""  ),
+
 )
+
+LLPNanoAOD_defaultHistParams = (
+
+  ("Event"              , "nDSAMuon"            , 50    , 0     , 50    , ""  ),
+  ("DSAMuon"            , "pt"                  , 2000  , 0     , 1000  , ""  ),
+  ("DSAMuon"            , "eta"                 , 100   , -2.5  , 2.5   , ""  ),
+  ("DSAMuon"            , "dxy"                 , 1600  , -400  , 400   , ""  ),
+  ("DSAMuon"            , "dz"                  , 1600  , -400  , 400   , ""  ),
+
+  ("Event"              , "nMuonVertex"         , 50    , 0     , 50    , ""  ),
+  ("MuonVertex"         , "chi2"                , 500   , 0     , 500   , ""  ),
+  ("MuonVertex"         , "vxy"                 , 500   , 0     , 500   , ""  ),
+  ("MuonVertex"         , "vxySigma"            , 500   , 0     , 500   , ""  ),
+  ("MuonVertex"         , "vz"                  , 1000  , -500  , 500   , ""  ),
+  ("MuonVertex"         , "dR"                  , 500   , 0     , 10    , ""  ),
+
+  ("Event"              , "nDSAMuonVertex"      , 50    , 0     , 50    , ""  ),
+  ("DSAMuonVertex"      , "chi2"                , 500   , 0     , 500   , ""  ),
+  ("DSAMuonVertex"      , "vxy"                 , 500   , 0     , 500   , ""  ),
+  ("DSAMuonVertex"      , "vxySigma"            , 500   , 0     , 500   , ""  ),
+  ("DSAMuonVertex"      , "vz"                  , 1000  , -500  , 500   , ""  ),
+  ("DSAMuonVertex"      , "dR"                  , 500   , 0     , 10    , ""  ),
+
+  ("Event"              , "nMuonCombVertex"     , 50    , 0     , 50    , ""  ),
+  ("MuonCombVertex"     , "chi2"                , 500   , 0     , 500   , ""  ),
+  ("MuonCombVertex"     , "vxy"                 , 500   , 0     , 500   , ""  ),
+  ("MuonCombVertex"     , "vxySigma"            , 500   , 0     , 500   , ""  ),
+  ("MuonCombVertex"     , "vz"                  , 1000  , -500  , 500   , ""  ),
+  ("MuonCombVertex"     , "dR"                  , 500   , 0     , 10    , ""  ),
+)
+
+if runLLPNanoAODHistograms:
+  defaultHistParams = defaultHistParams + LLPNanoAOD_defaultHistParams
 
 histParams = (
 #  collection         variable                      bins   xmin   xmax    dir
@@ -130,20 +165,25 @@ histParams = (
   ("GoodJets"       , "minvBjet2jets"             , 2000  , 0   , 2000  , ""  ),
   ("TightMuons"     , "deltaPhiMuonMET"           , 200   , -4  , 4     , ""  ),
   ("TightMuons"     , "minvMuonMET"               , 1000  , 0   , 1000  , ""  ),
+  
+  ("Event"          , "normCheck"                 , 1     , 0   , 1     , ""  ),
+)
 
+LLPNanoAOD_histParams = (
   ("Event"          , "nAllLooseMuons"            , 50    , 0     , 50    , ""  ),
   ("AllLooseMuons"  , "pt"                        , 2000  , 0     , 1000  , ""  ),
   ("AllLooseMuons"  , "eta"                       , 100   , -2.5  , 2.5   , ""  ),
-  ("AllLooseMuons"  , "dxy"                       , 1600  , -20   , 20    , ""  ),
-  ("AllLooseMuons"  , "dz"                        , 1600  , -20   , 20    , ""  ),
+  ("AllLooseMuons"  , "dxy"                       , 1600  , -400  , 400   , ""  ),
+  ("AllLooseMuons"  , "dz"                        , 1600  , -400  , 400   , ""  ),
   ("AllLooseMuons"  , "deltaR"                    , 500   , 0     , 50    , ""  ),
   ("AllLooseMuons"  , "minDeltaR"                 , 500   , 0     , 50    , ""  ),
 
   ("Event"          , "nLooseDSAMuons"            , 50    , 0     , 50    , ""  ),
   ("LooseDSAMuons"  , "pt"                        , 2000  , 0     , 1000  , ""  ),
   ("LooseDSAMuons"  , "eta"                       , 100   , -2.5  , 2.5   , ""  ),
-  ("LooseDSAMuons"  , "dxy"                       , 1600  , -20   , 20    , ""  ),
-  ("LooseDSAMuons"  , "dz"                        , 1600  , -20   , 20    , ""  ),
-  
-  ("Event"          , "normCheck"                 , 1     , 0   , 1     , ""  ),
+  ("LooseDSAMuons"  , "dxy"                       , 1600  , -400  , 400   , ""  ),
+  ("LooseDSAMuons"  , "dz"                        , 1600  , -400  , 400   , ""  ),
 )
+
+if runLLPNanoAODHistograms:
+  histParams = histParams + LLPNanoAOD_histParams
